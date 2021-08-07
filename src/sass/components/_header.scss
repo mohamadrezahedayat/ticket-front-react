@@ -1,0 +1,95 @@
+.header {
+  background-image: linear-gradient(
+      rgba($color-secondary, 0.53),
+      rgba($color-secondary, 0.53)
+    ),
+    url(../../img/tickets.jpg);
+  background-position: center;
+  grid-column: full-start / col-end 6;
+  color: $color-white;
+  padding: 4rem;
+  &__card {
+    background-image: url(../../img/show-red.jpg);
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5rem;
+    display: flex;
+    padding: 1rem;
+
+    &::after {
+      display: block;
+      content: '';
+      background-image: url(../../img/show-red.jpg);
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      clip-path: circle(5%);
+
+      transform: translateX(-25%);
+      filter: brightness(60%);
+    }
+  }
+
+  &__disk {
+    border-radius: 50%;
+    max-height: 100%;
+    max-width: 50%;
+    align-self: center;
+    box-shadow: 3px 5px 2px rgba($color: #000000, $alpha: 0.7);
+    transition: transform 1s ease-in-out;
+
+    &:hover {
+      transform: rotate(360deg);
+    }
+  }
+  &__heading {
+    text-transform: uppercase;
+    font-size: 4rem;
+    font-weight: 300;
+    line-height: 1.2;
+    & span {
+      font-size: 3rem;
+    }
+  }
+  &__text {
+    line-height: 1.3;
+    margin-top: 3rem;
+    padding: 0 1rem;
+    font-weight: 200;
+    font-size: 1.7rem;
+    text-align: justify;
+  }
+  &__footer {
+    position: absolute;
+
+    font-size: 1.9rem;
+    width: 60%;
+    text-align: right;
+    bottom: 3rem;
+    right: 3rem;
+  }
+  &__date {
+    font-size: 2rem;
+    font-weight: 300;
+  }
+  &__ticket {
+    position: absolute;
+    width: 10rem;
+    bottom: -3rem;
+    left: 2rem;
+    transform-origin: right;
+    transition: transform 0.3s ease-in-out;
+    &:hover {
+      transform: rotate(-20deg);
+      cursor: pointer;
+      filter: hue-rotate(80deg);
+    }
+  }
+}

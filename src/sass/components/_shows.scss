@@ -1,0 +1,92 @@
+.shows {
+  grid-column: center-start / center-end;
+  margin: 15rem 5rem;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 0.4fr));
+  grid-row: 5rem;
+  grid-gap: 5rem;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  object-position: center;
+  border-radius: 1.5rem 3rem 3rem 1.5rem;
+  box-shadow: 0.5rem 1rem 1rem rgba($color: $color-black, $alpha: 0.6);
+  &__image-container {
+    width: 100%;
+    height: 100%;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    transition: 0.3s;
+  }
+
+  &__details {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    background: $color-secondary;
+    background-image: linear-gradient(
+        to right bottom,
+        rgba($color-primary-light, 0.4),
+        rgba($color-primary-dark, 0.4)
+      ),
+      url(../../img/concert-cover.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    transition: 0.5s;
+    transform-origin: left;
+    transform: perspective(2000px) rotateY(-90deg);
+    border-radius: 1.5rem;
+  }
+  &__detail-center {
+    padding: 2rem;
+    text-align: center;
+    background: $color-white;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    & h1 {
+      margin: 0;
+      padding: 0;
+      color: $color-primary;
+      line-height: 2rem;
+      font-size: 2rem;
+      text-transform: uppercase;
+    }
+
+    & h1 span {
+      font-size: 14px;
+      color: $color-secondary-dark;
+    }
+    & p {
+      margin: 10px 0;
+      padding: 0;
+      color: $color-secondary-dark;
+    }
+  }
+  &__detail-link {
+    text-decoration: none;
+    color: $color-white;
+    background-color: $color-tertiary;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.3rem 0.5rem rgba($color: $color-black, $alpha: 0.6);
+  }
+}
+
+.card:hover .card__image {
+  filter: brightness(0.3);
+}
+
+.card:hover .card__details {
+  transform: perspective(2000px) rotateY(0deg);
+}
