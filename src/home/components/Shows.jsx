@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, imageAddress } from '../apis/server';
+import { api, imageAddress } from '../../shared/apis/server';
 
 const Shows = () => {
   const [shows, setshows] = useState([]);

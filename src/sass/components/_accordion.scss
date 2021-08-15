@@ -1,3 +1,8 @@
+.acount-nav {
+  height: 100%;
+  grid-column: full-start / col-end 2;
+  margin: 1rem;
+}
 .accordion input {
   position: absolute;
   opacity: 0;
@@ -5,14 +10,15 @@
 }
 .accordion-wrapper {
   overflow: hidden;
-  box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 4px -2px rgba($color-black, 0.5);
   width: 100%;
+  // height: 100vh;
 }
 .accordion {
   width: 100%;
-  color: white;
+  color: $color-white;
   overflow: hidden;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
 }
 .accordion:last-child {
   margin-bottom: 0;
@@ -21,19 +27,19 @@
   display: flex;
   -webkit-box-pack: justify;
   justify-content: space-between;
-  padding: 16px;
-  background: rgba(4, 57, 94, 0.8);
-  font-weight: bold;
+  padding: 5px;
+  background: rgba($color-primary, 0.8);
+  font-weight: 400;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1.5rem;
 }
 .accordion-label:hover {
-  background: rgba(4, 57, 94, 1);
+  background: rgba($color-primary, 1);
 }
 .accordion-label::after {
   content: '\276F';
-  width: 16px;
-  height: 16px;
+  width: 1.5rem;
+  height: 1.5rem;
   text-align: center;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
@@ -41,18 +47,18 @@
 .accordion-content {
   max-height: 0;
   // padding: 0 16px;
-  color: rgba(4, 57, 94, 1);
-  background: white;
+  color: rgba($color-primary, 1);
+  background: $color-white;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
 .accordion-content p {
   margin: 0;
-  color: rgba(4, 57, 94, 0.7);
-  font-size: 18px;
+  color: rgba($color-primary, 0.7);
+  font-size: 1.5rem;
 }
 input:checked + .accordion-label {
-  background: rgba(4, 57, 94, 1);
+  background: rgba($color-primary, 1);
 }
 input:checked + .accordion-label::after {
   -webkit-transform: rotate(90deg);
@@ -63,9 +69,15 @@ input:checked ~ .accordion-content {
   // padding: 16px;
 }
 
-.accordion-content ul li {
-  padding: 1rem;
-  font-size: 1.2rem;
-  display: block;
-  border-bottom: 1px solid black;
+.accordion-content ul {
+  li,
+  a {
+    padding: 0.5rem;
+    font-size: 1.4rem;
+    display: block;
+    border-bottom: 1px solid $color-black;
+    text-transform: capitalize;
+    text-decoration: none;
+    cursor: pointer;
+  }
 }

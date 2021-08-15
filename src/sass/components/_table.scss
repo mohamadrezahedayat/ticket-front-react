@@ -1,0 +1,52 @@
+#title {
+  text-align: center;
+}
+
+#employee {
+  border-collapse: collapse;
+  border: 3px solid #ddd;
+}
+
+#employee td,
+#employee th {
+  border: 1px solid #ddd;
+  padding: 12px;
+}
+td img {
+  height: 50%;
+  width: 50%;
+  border-radius: 100%;
+}
+#employee tr {
+  background-color: rgba($color-grey-light, $alpha: 0.4);
+}
+#employee tr:hover {
+  background-color: #ddd;
+}
+
+#employee th {
+  padding: 10px;
+  text-align: center;
+  background-color: $color-primary;
+  color: white;
+}
+
+.opration {
+  text-align: center;
+}
+
+.opration__button {
+  border: none;
+  outline: none;
+  font-size: 11px;
+  color: $color-secondary;
+  padding: 3px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid $color-secondary;
+  background-color: transparent;
+}
+
+.opration__button:active {
+  border: 1px solid $color-primary;
+}

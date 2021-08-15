@@ -1,6 +1,6 @@
 import React from 'react';
-import singer from '../img/singer-rec.jpg';
-import ticket from '../img/ticket-badge.png';
+import singer from '../..//img/singer-rec.jpg';
+import ticket from '../../img/ticket-badge.png';
 
 const Header = () => {
   return (

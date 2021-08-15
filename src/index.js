@@ -1,17 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Artists from './layouts/Artists';
-import Header from './layouts/Header';
-import Sidebar from './layouts/Sidebar';
-import Shows from './layouts/Shows';
+
 import './sass/main.scss';
+import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Sidebar />
-    <Header />
-    <Artists />
-    <Shows />
+    <App />
   </React.StrictMode>,
-  document.querySelector('.container')
+  document.querySelector('#root')
 );

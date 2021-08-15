@@ -1,0 +1,28 @@
+.sign-form-container {
+  display: inline-block;
+  background-color: rgba($color-grey-light-1, 0.3);
+  padding: 3rem;
+  border-radius: 2rem;
+  box-shadow: 1rem 1rem 1rem rgba($color-black, 0.3);
+  align-self: center;
+}
+
+.acount-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  &__photo {
+    border-radius: 50%;
+    width: 30%;
+    margin-bottom: 3rem;
+  }
+  &__detail {
+    margin-bottom: 2rem;
+    h3 {
+      font-size: 2rem;
+      color: $color-primary;
+      text-transform: uppercase;
+    }
+  }
+}

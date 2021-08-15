@@ -55,7 +55,7 @@
   align-items: center;
   grid-row-gap: 2rem;
   justify-items: center;
-  overflow-y: scroll;
+  overflow: hidden;
   &__list {
     display: grid;
     grid-template-columns: min-content max-content;
