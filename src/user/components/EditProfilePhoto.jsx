@@ -27,7 +27,7 @@ const EditProfilePhoto = ({ onFinish }) => {
 
     try {
       const formData = new FormData();
-      formData.append('photo', formState.inputs.image.value);
+      formData.append('photo', formState.inputs.image.value[0]);
       const responseData = await sendRequest(
         `${baseURL}/users/updateMe`,
         'PATCH',

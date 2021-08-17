@@ -108,6 +108,9 @@ const Auth = () => {
     } else {
       try {
         const formData = new FormData();
+        if (formState.inputs.image.value)
+          formData.append('photo', formState.inputs.image.value[0]);
+
         formData.append('email', formState.inputs.email.value);
         formData.append('name', formState.inputs.name.value);
         formData.append('mobile', formState.inputs.mobile.value);
@@ -116,7 +119,6 @@ const Auth = () => {
           'passwordConfirm',
           formState.inputs.passwordConfirm.value
         );
-        formData.append('photo', formState.inputs.image.value);
         const responseData = await sendRequest(
           `${baseURL}/users/signup`,
           'POST',

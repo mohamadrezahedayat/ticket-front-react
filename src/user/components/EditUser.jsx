@@ -1,7 +1,5 @@
-import React, { useState, useContext, Fragment } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { Fragment, useContext } from 'react';
 
-import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '../../shared/hooks/form-hook';
 import Input from '../../shared/components/FormElements/Input';
@@ -9,84 +7,73 @@ import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
-import { baseURL, imageAddress } from '../../shared/apis/server';
-
+import { baseURL, randomApi } from '../../shared/apis/server';
+import { imageAddress } from '../../shared/apis/server';
+import { AuthContext } from '../../shared/context/auth-context';
 import {
   VALIDATOR_EMAIL,
-  VALIDATOR_MINLENGTH,
   VALIDATOR_MOBILE,
 } from '../../shared/util/validators';
 
-const AddUser = () => {
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+const EditUser = ({ user, onSubmit }) => {
+  const { token } = useContext(AuthContext);
+  const { isLoading, error, clearError, sendRequest } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
       name: {
-        value: '',
-        isValid: true,
+        value: null,
+        isValid: false,
       },
       email: {
-        value: '',
-        isValid: false,
-      },
-      password: {
-        value: '',
-        isValid: false,
-      },
-      passwordConfirm: {
-        value: '',
-        isValid: false,
+        value: null,
+        isValid: true,
       },
       mobile: {
-        value: '',
-        isValid: false,
+        value: null,
+        isValid: true,
       },
       role: {
-        value: 'user',
+        value: null,
         isValid: true,
       },
       image: {
-        value: '',
+        value: null,
         isValid: true,
       },
     },
-    false
+    true
   );
 
-  const authSubmitHandler = async (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     try {
       const formData = new FormData();
-      formData.append('email', formState.inputs.email.value);
+      if (formState.inputs.image.value)
+        formData.append('photo', formState.inputs.image.value[0]);
+      formData.append('role', formState.inputs.role.value);
       formData.append('name', formState.inputs.name.value);
+      formData.append('email', formState.inputs.email.value);
       formData.append('mobile', formState.inputs.mobile.value);
-      formData.append('password', formState.inputs.password.value);
-      formData.append(
-        'passwordConfirm',
-        formState.inputs.passwordConfirm.value
-      );
-      formData.append('role', formState.inputs.password.value);
-      formData.append('photo', formState.inputs.image.value);
-      const responseData = await sendRequest(
-        `${baseURL}/users/signup`,
-        'POST',
-        formData
-      );
+
+      await sendRequest(`${baseURL}/users/${user._id}`, 'PATCH', formData, {
+        authorization: `Bearer ${token}`,
+      });
     } catch (err) {}
+    onSubmit();
   };
 
   return (
     <Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      <form className='form' onSubmit={authSubmitHandler}>
-        <h3 className='heading-3'>Create A New User</h3>
+      <form className='form' onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
         <Input
           element='input'
           id='name'
           type='text'
           label='Name'
+          initialValue={user.name}
           initialValid={true}
           validators={[]}
           onInput={inputHandler}
@@ -96,6 +83,8 @@ const AddUser = () => {
           id='email'
           type='email'
           label='E-Mail'
+          initialValid={true}
+          initialValue={user.email}
           validators={[VALIDATOR_EMAIL()]}
           errorText='Please enter a valid email address.'
           onInput={inputHandler}
@@ -105,6 +94,8 @@ const AddUser = () => {
           id='mobile'
           type='mobile'
           label='Mobile'
+          initialValue={user.mobile}
+          initialValid={true}
           placeholder='+98-9120000000'
           validators={[VALIDATOR_MOBILE()]}
           errorText='Please enter a valid mobile number.'
@@ -115,34 +106,19 @@ const AddUser = () => {
           id='role'
           type='text'
           label='Role'
-          initialValue='user'
+          initialValue={user.role}
           initialValid={true}
           validators={[]}
           errorText='valid types are: user, show-manager, admin, super-admin'
           onInput={inputHandler}
         />
-        <Input
-          element='input'
-          id='password'
-          type='password'
-          label='Password'
-          autoComplete='current-password'
-          validators={[VALIDATOR_MINLENGTH(8)]}
-          errorText='Please enter a valid password, at least 8 characters.'
-          onInput={inputHandler}
-        />
-        <Input
-          element='input'
-          id='passwordConfirm'
-          type='password'
-          label='Password Confirm'
-          au
-          autoComplete='current-password'
-          validators={[VALIDATOR_MINLENGTH(8)]}
-          errorText='Please confirm your password, at least 8 characters.'
-          onInput={inputHandler}
-        />
+
         <ImageUpload
+          imageUrl={
+            user.photo && user.photo !== 'default.jpg'
+              ? `${imageAddress}users/${user.photo}`
+              : randomApi(user._id)
+          }
           center
           id='image'
           initialValid={true}
@@ -154,11 +130,11 @@ const AddUser = () => {
           disabled={!formState.isValid}
           className='form__submit'
         >
-          Create A New User
+          Edit User
         </Button>
       </form>
     </Fragment>
   );
 };
 
-export default AddUser;
+export default EditUser;

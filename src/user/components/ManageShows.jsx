@@ -5,7 +5,6 @@ import React, {
   useCallback,
   Fragment,
 } from 'react';
-
 import {
   api,
   baseURL,
@@ -15,35 +14,42 @@ import {
 import { AuthContext } from '../../shared/context/auth-context';
 import AddEditArtgroup from './AddEditArtgroup';
 
-const ManageUsers = () => {
+const ManageShows = () => {
   const { token } = useContext(AuthContext);
-  const [users, setusers] = useState([]);
+  const [shows, setshows] = useState([]);
   const [editMode, seteditMode] = useState(false);
-  const [activeUser, setactiveUser] = useState(null);
+  const [activeShow, setactiveShow] = useState(false);
 
-  const getUsers = useCallback(async () => {
-    const response = await api.get(`${baseURL}/users`, {
+  const getShows = useCallback(async () => {
+    const response = await api.get(`${baseURL}/shows`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setusers(response.data.data.data);
+    setshows(response.data.data.data);
   }, [token]);
 
-  useEffect(() => {
-    getUsers();
-  }, [getUsers, editMode]);
+  const deleteShowHandler = async (show) => {
+    await api.delete(`${baseURL}/shows/${show._id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    getShows();
+  };
 
-  const editUserHandler = (user) => {
+  useEffect(() => {
+    getShows();
+  }, [getShows, editMode]);
+
+  const editShowHandler = (show) => {
     seteditMode(true);
-    setactiveUser(user);
+    setactiveShow(show);
   };
 
   const renderHeader = () => {
     let headerElement = [
-      'role',
-      'username',
-      'email',
-      'phone',
-      'profile',
+      'name',
+      'description',
+      'artGroup',
+      'manager',
+      'imageCover',
       'operation',
     ];
 
@@ -54,20 +60,20 @@ const ManageUsers = () => {
 
   const renderBody = () => {
     return (
-      users &&
-      users.map((user) => {
+      shows &&
+      shows.map((show) => {
         return (
-          <tr key={user._id}>
-            <td>{user.role}</td>
-            <td>{user.name}</td>
-            <td>{user.email}</td>
-            <td>{user.mobile}</td>
+          <tr key={show._id}>
+            <td>{show.name}</td>
+            <td>{show.description}</td>
+            <td>{show.artGroup}</td>
+            <td>{show.manager}</td>
             <td>
               <img
                 src={
-                  user.photo && user.photo !== 'default.jpg'
-                    ? `${imageAddress}/users/${user.photo}`
-                    : randomApi(user._id)
+                  show.images.length !== 0 && show.imageCover !== 'default.jpg'
+                    ? `${imageAddress}/shows/${show.imageCover}`
+                    : randomApi(show._id)
                 }
                 alt='profile'
               />
@@ -75,9 +81,15 @@ const ManageUsers = () => {
             <td className='opration'>
               <button
                 className='opration__button'
-                onClick={() => editUserHandler(user)}
+                onClick={() => editShowHandler(show)}
               >
                 Edit
+              </button>
+              <button
+                className='opration__button--danger'
+                onClick={() => deleteShowHandler(show)}
+              >
+                Delete
               </button>
             </td>
           </tr>
@@ -96,20 +108,19 @@ const ManageUsers = () => {
       </table>
     );
   };
-
   return (
     <Fragment>
-      <h3 className='heading-3'>Manage Users</h3>
-
+      <h3 className='heading-3'>{`${!editMode ? 'Manage Show' : ''}`}</h3>
       {!editMode && renderTable()}
       {editMode && (
         <AddEditArtgroup
-          user={activeUser}
-          onSubmit={() => seteditMode(false)}
+          editMode='true'
+          show={activeShow}
+          onEdit={() => seteditMode(false)}
         />
       )}
     </Fragment>
   );
 };
 
-export default ManageUsers;
+export default ManageShows;

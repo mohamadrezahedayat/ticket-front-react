@@ -1,19 +1,26 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { imageAddress } from '../../apis/server';
+import { imageAddress, randomApi } from '../../apis/server';
 import sprite from '../../../img/sprite.svg';
 import { AuthContext } from '../../context/auth-context';
 
 const Sidebar = () => {
-  const { isLoggedIn, userPhoto, username } = useContext(AuthContext);
+  const { isLoggedIn, userPhoto, username, userId } = useContext(AuthContext);
 
   const profileIcon = !isLoggedIn ? (
     <svg>
       <use xlinkHref={`${sprite}#icon-user`} />
     </svg>
   ) : (
-    <img src={`${imageAddress}users/${userPhoto}`} alt={username} />
+    <img
+      src={
+        userPhoto && userPhoto !== 'default.jpg'
+          ? `${imageAddress}users/${userPhoto}`
+          : randomApi(userId)
+      }
+      alt={username}
+    />
   );
   return (
     <div className='sidebar'>

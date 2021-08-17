@@ -11,30 +11,33 @@ const Shows = () => {
     })();
   }, []);
 
-  const renderShows = shows.map((show) => (
-    <div key={show._id} className='card'>
-      <div className='card__image-container'>
-        <img
-          className='card__image'
-          alt={show.name}
-          src={`${imageAddress}shows/${show.imageCover}`}
-        />
-      </div>
-      <div className='card__details'>
-        <div className='card__detail-center'>
-          <h1>
-            {`Concert of ${show.artGroup.name}`}
-            <br />
-            <span>is available</span>
-          </h1>
-          <p>{show.description}</p>
-          <a className='card__detail-link' href='#'>
-            More Details
-          </a>
+  const renderShows = () => {
+    if (shows.length !== 0)
+      return shows.map((show) => (
+        <div key={show._id} className='card'>
+          <div className='card__image-container'>
+            <img
+              className='card__image'
+              alt={show.name}
+              src={`${imageAddress}shows/${show.imageCover}`}
+            />
+          </div>
+          <div className='card__details'>
+            <div className='card__detail-center'>
+              <h1>
+                {`Concert of ${show.artGroup.name}`}
+                <br />
+                <span>is available</span>
+              </h1>
+              <p>{show.description}</p>
+              <a className='card__detail-link' href='#'>
+                More Details
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  ));
+      ));
+  };
 
   return <div className='shows'>{renderShows} </div>;
 };

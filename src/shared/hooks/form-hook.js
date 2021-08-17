@@ -1,7 +1,5 @@
 import { useCallback, useReducer } from 'react';
 
-//  reducer: a switch/case expression returns new state
-// const [state, dispatch] = useReducer(reducer, initialArg, init);
 const formReducer = (state, action) => {
   switch (action.type) {
     case 'INPUT_CHANGE':

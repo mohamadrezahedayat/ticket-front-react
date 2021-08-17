@@ -8,11 +8,11 @@ body {
 %heading {
   font-family: $font-display;
   font-weight: 400;
+  color: $color-primary;
 }
 .heading-1 {
   @extend %heading;
   font-size: 4.5rem;
-  color: $color-grey-light;
   line-height: 1;
 }
 .heading-2 {
@@ -21,21 +21,19 @@ body {
   font-style: italic;
   line-height: 1;
   &--light {
-    color: $color-grey-light;
+    color: $color-primary-light;
   }
   &--dark {
-    color: $color-grey-dark;
+    color: $color-primary-dark;
   }
 }
 .heading-3 {
   @extend %heading;
-  font-size: 1.8rem;
-  color: $color-white;
-  text-transform: uppercase;
+  font-size: 2.5rem;
 }
 .heading-4 {
   @extend %heading;
-  font-size: 1.9rem;
+  font-size: 1.7rem;
 
   &--light {
     color: $color-grey-light;
