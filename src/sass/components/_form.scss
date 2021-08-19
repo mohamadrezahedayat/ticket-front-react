@@ -62,4 +62,59 @@
     cursor: pointer;
     margin-left: 0.5rem;
   }
+  &__image-uplader-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 2rem;
+  }
+  &__select-container {
+    border: 1px solid $color-secondary;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 1.5rem 0 0;
+    align-items: center;
+    padding: 3px;
+    margin: 2rem 0;
+  }
+
+  &__input--sidebyside {
+    margin: 0.4rem 0;
+    display: inline-block;
+    width: 50%;
+    & input,
+    & select {
+      width: 90%;
+    }
+  }
+  &__number-input {
+    padding: 1rem 0;
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type='number'] {
+      -moz-appearance: textfield;
+    }
+  }
+  &__inline-button {
+    position: absolute;
+    top: 3rem;
+    right: 2rem;
+    margin: 1rem;
+    float: right;
+    background: transparent;
+    border: none;
+    color: $color-primary;
+    width: 10rem;
+    height: 3rem;
+    border-radius: 1rem;
+    &:hover {
+      box-shadow: 2px 2px 2px rgba($color: #000000, $alpha: 0.3);
+    }
+  }
 }

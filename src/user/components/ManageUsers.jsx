@@ -13,7 +13,7 @@ import {
   randomApi,
 } from '../../shared/apis/server';
 import { AuthContext } from '../../shared/context/auth-context';
-import AddEditArtgroup from './AddEditArtgroup';
+import EditUser from './EditUser';
 
 const ManageUsers = () => {
   const { token } = useContext(AuthContext);
@@ -103,10 +103,7 @@ const ManageUsers = () => {
 
       {!editMode && renderTable()}
       {editMode && (
-        <AddEditArtgroup
-          user={activeUser}
-          onSubmit={() => seteditMode(false)}
-        />
+        <EditUser user={activeUser} onSubmit={() => seteditMode(false)} />
       )}
     </Fragment>
   );

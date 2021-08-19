@@ -5,12 +5,16 @@ import Accordion from '../components/Accordion';
 import EditAccountForm from '../components/EditAccountForm';
 import { imageAddress, randomApi } from '../../shared/apis/server';
 import EditProfilePhoto from '../components/EditProfilePhoto';
+import ManageUsers from '../components/ManageUsers';
 import ChangePassword from '../components/ChangePassword';
 import AddEditArtgroup from '../components/AddEditArtgroup';
 import ManageArtgroups from '../components/ManageArtgroups';
 import AddEditShow from '../components/AddEditShow';
 import ManageShows from '../components/ManageShows';
-import ManageUsers from '../components/ManageUsers';
+import AddEditLocation from '../components/AddEditLocation';
+import ManageLocations from '../components/ManageLocations';
+import AddEditEvent from '../components/AddEditEvent';
+import ManageEvents from '../components/ManageEvents';
 
 const Account = () => {
   const { logout, username, userPhoto, role, userId } = useContext(AuthContext);
@@ -37,6 +41,16 @@ const Account = () => {
         return <AddEditShow onFinish={() => setFormName('ManageShows')} />;
       case 'ManageShows':
         return <ManageShows />;
+      case 'AddEditLocation':
+        return (
+          <AddEditLocation onFinish={() => setFormName('ManageLocations')} />
+        );
+      case 'ManageLocations':
+        return <ManageLocations />;
+      case 'AddEditEvent':
+        return <AddEditEvent onFinish={() => setFormName('ManageEvents')} />;
+      case 'ManageEvents':
+        return <ManageEvents />;
 
       default:
         return (
@@ -118,7 +132,7 @@ const Account = () => {
             ]}
           />
           <Accordion
-            id='9'
+            id='3'
             label='Artgroups Settings'
             items={[
               {
@@ -132,7 +146,7 @@ const Account = () => {
             ]}
           />
           <Accordion
-            id='3'
+            id='4'
             label='Show Settings'
             items={[
               {
@@ -145,28 +159,13 @@ const Account = () => {
               },
             ]}
           />
-
-          <Accordion
-            id='4'
-            label='Event Settings'
-            items={[
-              {
-                title: 'Add New Event',
-                onClick: () => setFormName('AddEvent'),
-              },
-              {
-                title: 'Manage Events',
-                onClick: () => setFormName('ManageEvents'),
-              },
-            ]}
-          />
           <Accordion
             id='5'
             label='Location Settings'
             items={[
               {
                 title: 'Add New Location',
-                onClick: () => setFormName('AddLocation'),
+                onClick: () => setFormName('AddEditLocation'),
               },
               {
                 title: 'Manage Locations',
@@ -176,16 +175,31 @@ const Account = () => {
           />
           <Accordion
             id='6'
+            label='Event Settings'
+            items={[
+              {
+                title: 'Add New Event',
+                onClick: () => setFormName('AddEditEvent'),
+              },
+              {
+                title: 'Manage Events',
+                onClick: () => setFormName('ManageEvents'),
+              },
+            ]}
+          />
+
+          <Accordion
+            id='7'
             label='ticket Settings'
             items={[{ title: 'edit account information', to: '' }]}
           />
           <Accordion
-            id='7'
+            id='8'
             label='review Settings'
             items={[{ title: 'edit account information', to: '' }]}
           />
           <Accordion
-            id='8'
+            id='9'
             label='other Settings'
             items={[{ title: 'edit account information', to: '' }]}
           />

@@ -1,13 +1,25 @@
-import React, { Fragment, useContext } from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '../../shared/hooks/form-hook';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
+// import DateTimeInput from '../../shared/components/FormElements/DateTimeInput';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
-import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
+import {
+  baseURL,
+  randomApi,
+  imageAddress,
+  api,
+} from '../../shared/apis/server';
 import { AuthContext } from '../../shared/context/auth-context';
 import {
   VALIDATOR_MAXLENGTH,
@@ -17,22 +29,22 @@ import {
 const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
   const { token } = useContext(AuthContext);
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
+  const [artgroups, setartgroups] = useState([]);
+  const [artgroup, setartgroup] = useState();
+  const [managers, setmanagers] = useState([]);
+  const [manager, setmanager] = useState();
   const [formState, inputHandler] = useForm(
     {
       name: {
         value: editMode ? show.name : '',
         isValid: editMode,
       },
-      leader: {
-        value: editMode ? show.leader : '',
-        isValid: editMode,
-      },
-      crew: {
-        value: editMode ? show.crew : '',
-        isValid: true,
-      },
       description: {
         value: editMode ? show.description : '',
+        isValid: true,
+      },
+      imageCover: {
+        value: null,
         isValid: true,
       },
       images: {
@@ -43,24 +55,37 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
     editMode
   );
 
+  const getArtgroups = useCallback(async () => {
+    const response = await api.get(`${baseURL}/artgroups?fields=name,_id`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+    setartgroups(response.data.data.data);
+    setartgroup(response.data.data.data[0]._id);
+  }, [token]);
+
+  const getManagers = useCallback(async () => {
+    const response = await api.get(
+      `${baseURL}/users?role=show-manager&fields=name,_id`,
+      {
+        headers: { authorization: `Bearer ${token}` },
+      }
+    );
+    setmanagers(response.data.data.data);
+    setmanager(response.data.data.data[0]._id);
+  }, [token]);
+
+  useEffect(() => {
+    getArtgroups();
+    getManagers();
+  }, [getArtgroups, getManagers]);
+
   const submitHandler = async (event) => {
     event.preventDefault();
 
     try {
       const formData = new FormData();
       formData.append('name', formState.inputs.name.value);
-      formData.append('leader', formState.inputs.leader.value);
-      if (formState.inputs.crew.value.length !== 0) {
-        let crew;
-        if (typeof formState.inputs.crew.value === 'string') {
-          crew = formState.inputs.crew.value.split(',');
-        } else {
-          crew = formState.inputs.crew.value;
-        }
-        crew.forEach((cr) => {
-          formData.append('crew', cr);
-        });
-      }
+
       if (formState.inputs.description.value)
         formData.append('description', formState.inputs.description.value);
 
@@ -68,6 +93,11 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
         for (let i = 0; i < formState.inputs.images.value.length; i++) {
           formData.append('images', formState.inputs.images.value[i]);
         }
+      if (formState.inputs.imageCover.value)
+        formData.append('imageCover', formState.inputs.imageCover.value[0]);
+
+      formData.append('manager', manager);
+      formData.append('artGroup', artgroup);
 
       if (!editMode) {
         await sendRequest(`${baseURL}/shows/`, 'POST', formData, {
@@ -121,61 +151,70 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
           validators={[]}
           onInput={inputHandler}
         />
-        <ImageUpload
-          imageUrl={
-            editMode
-              ? `${imageAddress}/shows/${show.images[0]}`
-              : randomApi('show')
-          }
-          initialValid={editMode}
-          center
-          id='imageCover'
-          onInput={inputHandler}
-          errorText='Please provide at least one image.'
-        />
-        <ImageUpload
-          imageUrl={
-            editMode
-              ? `${imageAddress}/shows/${show.images[0]}`
-              : randomApi('images')
-          }
-          initialValid={editMode}
-          multiple={true}
-          center
-          id='images'
-          onInput={inputHandler}
-          errorText='Please provide at least one image.'
-        />
-        <Input
-          element='input'
-          id='dates'
-          type='date'
-          label='Dates'
-          initialValue={editMode && show.dates}
-          initialValid={editMode}
-          validators={[VALIDATOR_MAXLENGTH(40), VALIDATOR_MINLENGTH(3)]}
-          errorText='Please enter a valid name.'
-          onInput={inputHandler}
-        />
-        <Input
-          initialValid={true}
-          initialValue={editMode && show.artgroup}
-          type='select'
-          id='artgroup'
-          label='Artgroup'
-          validators={[]}
-          onInput={inputHandler}
-        />
-        <Input
-          initialValid={true}
-          initialValue={editMode && show.manager}
-          type='select'
-          id='manager'
-          label='Manager'
-          validators={[]}
-          onInput={inputHandler}
-        />
+        <div className='form__image-uplader-container'>
+          <ImageUpload
+            className='form__input--inline'
+            imageUrl={
+              editMode
+                ? `${imageAddress}/shows/${show.images[0]}`
+                : randomApi('show')
+            }
+            initialValid={editMode}
+            center
+            id='imageCover'
+            onInput={inputHandler}
+            errorText='Select show image cover.'
+          />
+          <ImageUpload
+            className='form__input--inline'
+            imageUrl={
+              editMode
+                ? `${imageAddress}/shows/${show.images[0]}`
+                : randomApi('images')
+            }
+            initialValid={editMode}
+            multiple={true}
+            center
+            id='images'
+            onInput={inputHandler}
+            errorText='Select Show Images.'
+          />
+        </div>
 
+        <div className='form__select-container'>
+          <div className='form__input--sidebyside'>
+            <label htmlFor='artgroup'>Artgroup</label>
+            <select
+              id='artgroup'
+              value={artgroup}
+              onChange={(e) => setartgroup(e.target.value)}
+            >
+              {artgroups &&
+                artgroups.map((artgroup, i) => (
+                  <option value={artgroup._id} key={artgroup._id}>
+                    {artgroup.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className='form__input--sidebyside'>
+            <label htmlFor='manager'>Manager</label>
+            <select
+              id='manager'
+              value={manager}
+              onChange={(e) => {
+                setmanager(e.target.value);
+              }}
+            >
+              {managers &&
+                managers.map((manager) => (
+                  <option value={manager._id} key={manager._id}>
+                    {manager.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </div>
         <Button
           type='submit'
           disabled={!formState.isValid}

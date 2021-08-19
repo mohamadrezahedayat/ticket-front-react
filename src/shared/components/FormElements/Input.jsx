@@ -22,13 +22,27 @@ const inputReducer = (state, action) => {
 };
 
 const Input = (props) => {
+  const {
+    onInput,
+    id,
+    type,
+    placeholder,
+    className,
+    label,
+    errorText,
+    validators,
+    rows,
+    initialValue,
+    initialValid,
+    element,
+  } = props;
+
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: props.initialValue || '',
+    value: initialValue || '',
     isTouched: false,
-    isValid: props.initialValid || false,
+    isValid: initialValid || false,
   });
 
-  const { id, onInput } = props;
   const { value, isValid } = inputState;
 
   useEffect(() => {
@@ -39,7 +53,7 @@ const Input = (props) => {
     dispatch({
       type: 'CHANGE',
       val: event.target.value,
-      validators: props.validators,
+      validators: validators,
     });
   };
 
@@ -49,20 +63,20 @@ const Input = (props) => {
     });
   };
 
-  const element =
-    props.element === 'input' ? (
+  const inputElement =
+    element === 'input' ? (
       <input
-        id={props.id}
-        type={props.type}
-        placeholder={props.placeholder}
+        id={id}
+        type={type}
+        placeholder={placeholder}
         onChange={changeHandler}
         onBlur={touchHandler}
         value={inputState.value}
       />
     ) : (
       <textarea
-        id={props.id}
-        rows={props.rows || 3}
+        id={id}
+        rows={rows || 3}
         onChange={changeHandler}
         onBlur={touchHandler}
         value={inputState.value}
@@ -71,13 +85,13 @@ const Input = (props) => {
 
   return (
     <div
-      className={`form-control ${
+      className={`${className || 'form-control'} ${
         !inputState.isValid && inputState.isTouched && 'form-control--invalid'
       }`}
     >
-      <label htmlFor={props.id}>{props.label}</label>
-      {element}
-      {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
+      <label htmlFor={id}>{label}</label>
+      {inputElement}
+      {!inputState.isValid && inputState.isTouched && <p>{errorText}</p>}
     </div>
   );
 };

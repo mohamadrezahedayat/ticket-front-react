@@ -9,6 +9,7 @@ const ImageUpload = (props) => {
 
   const filePickerRef = useRef();
 
+  // each time files state updated runs to update imagePreview state
   useEffect(() => {
     if (!files) {
       return;
@@ -41,14 +42,16 @@ const ImageUpload = (props) => {
   const pickImageHandler = () => {
     filePickerRef.current.click();
   };
+
   const renderImagePreview = () => {
     if (previewUrl) return <img src={previewUrl} alt='Preview' />;
     if (props.imageUrl) {
       return <img src={props.imageUrl} alt='profile' />;
     } else return <p>Please pick an image.</p>;
   };
+
   return (
-    <div className='form-control'>
+    <div className={props.className || 'form-control'}>
       <input
         id={props.id}
         multiple={props.multiple}

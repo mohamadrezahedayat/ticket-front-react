@@ -12,44 +12,44 @@ import {
   randomApi,
 } from '../../shared/apis/server';
 import { AuthContext } from '../../shared/context/auth-context';
-import AddEditShow from './AddEditShow';
+import AddEditLocation from './AddEditLocation';
 
-const ManageShows = () => {
+const ManageLocations = () => {
   const { token } = useContext(AuthContext);
-  const [shows, setshows] = useState([]);
+  const [locations, setlocations] = useState([]);
   const [editMode, seteditMode] = useState(false);
-  const [activeShow, setactiveShow] = useState(false);
+  const [activeLocation, setactiveLocation] = useState(false);
 
-  const getShows = useCallback(async () => {
-    const response = await api.get(`${baseURL}/shows`, {
+  const getLocations = useCallback(async () => {
+    const response = await api.get(`${baseURL}/locations`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setshows(response.data.data.data);
+    setlocations(response.data.data.data);
   }, [token]);
 
-  const deleteShowHandler = async (show) => {
-    await api.delete(`${baseURL}/shows/${show._id}`, {
+  const deleteLocationHandler = async (location) => {
+    await api.delete(`${baseURL}/locations/${location._id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    getShows();
+    getLocations();
   };
 
   useEffect(() => {
-    getShows();
-  }, [getShows, editMode]);
+    getLocations();
+  }, [getLocations, editMode]);
 
-  const editShowHandler = (show) => {
+  const editLocationHandler = (location) => {
     seteditMode(true);
-    setactiveShow(show);
+    setactiveLocation(location);
   };
 
   const renderHeader = () => {
     let headerElement = [
       'name',
+      'type',
+      'address',
       'description',
-      'artGroup',
-      'manager',
-      'imageCover',
+      'image',
       'operation',
     ];
 
@@ -60,34 +60,35 @@ const ManageShows = () => {
 
   const renderBody = () => {
     return (
-      shows &&
-      shows.map((show) => {
+      locations &&
+      locations.map((location) => {
         return (
-          <tr key={show._id}>
-            <td>{show.name}</td>
-            <td>{show.description}</td>
-            <td>{show.artGroup && show.artGroup.name}</td>
-            <td>{show.manager && show.manager[0] && show.manager[0].name}</td>
+          <tr key={location._id}>
+            <td>{location.name}</td>
+            <td>{location.type}</td>
+            <td>{location.address}</td>
+            <td>{location.description}</td>
             <td>
               <img
                 src={
-                  show.images.length !== 0 && show.imageCover !== 'default.jpg'
-                    ? `${imageAddress}/shows/${show.imageCover}`
-                    : randomApi(show._id)
+                  location.images.length !== 0 &&
+                  location.images[0] !== 'default.jpg'
+                    ? `${imageAddress}/locations/${location.images[0]}`
+                    : randomApi(location._id)
                 }
-                alt='profile'
+                alt='location'
               />
             </td>
             <td className='opration'>
               <button
                 className='opration__button'
-                onClick={() => editShowHandler(show)}
+                onClick={() => editLocationHandler(location)}
               >
                 Edit
               </button>
               <button
                 className='opration__button--danger'
-                onClick={() => deleteShowHandler(show)}
+                onClick={() => deleteLocationHandler(location)}
               >
                 Delete
               </button>
@@ -110,12 +111,12 @@ const ManageShows = () => {
   };
   return (
     <Fragment>
-      <h3 className='heading-3'>{`${!editMode ? 'Manage Show' : ''}`}</h3>
+      <h3 className='heading-3'>{`${!editMode ? 'Manage Location' : ''}`}</h3>
       {!editMode && renderTable()}
       {editMode && (
-        <AddEditShow
+        <AddEditLocation
           editMode='true'
-          show={activeShow}
+          location={activeLocation}
           onEdit={() => seteditMode(false)}
         />
       )}
@@ -123,4 +124,4 @@ const ManageShows = () => {
   );
 };
 
-export default ManageShows;
+export default ManageLocations;
