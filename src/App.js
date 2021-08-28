@@ -12,8 +12,11 @@ import Auth from './user/pages/Auth';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
 import Account from './user/pages/Account';
+import ShowDetail from './show/pages/ShowDetail';
+import EventDetail from './event/pages/EventDetail';
 
 const App = () => {
+  // just to fill initial values and function in context, (used only one time in on place[here])
   const {
     userId,
     userPhoto,
@@ -26,7 +29,6 @@ const App = () => {
     logout,
   } = useAuth();
 
-  // let routes;
   const routes = () => {
     if (token) {
       return (
@@ -37,6 +39,12 @@ const App = () => {
 
           <Route path='/auth'>
             <Auth />
+          </Route>
+          <Route path='/showDetail/:showId' exact>
+            <ShowDetail />
+          </Route>
+          <Route path='/eventDetail/:eventId' exact>
+            <EventDetail />
           </Route>
 
           <Route path='/account'>
@@ -52,7 +60,12 @@ const App = () => {
           <Route path='/' exact>
             <Home />
           </Route>
-
+          <Route path='/showDetail/:showId' exact>
+            <ShowDetail />
+          </Route>
+          <Route path='/eventDetail/:eventId' exact>
+            <EventDetail />
+          </Route>
           <Route path='/auth'>
             <Auth />
           </Route>

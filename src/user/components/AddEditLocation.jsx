@@ -9,6 +9,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
 import { AuthContext } from '../../shared/context/auth-context';
+import ZoneInputs from './ZoneInputs';
 import {
   VALIDATOR_MIN,
   VALIDATOR_MAX,
@@ -19,9 +20,28 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
   const [locationType, setlocationType] = useState(
     !editMode ? 'concert' : location.type
   );
-
   const { token } = useContext(AuthContext);
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
+  const [zoneInputs, setzoneInputs] = useState(
+    editMode ? location.capacity.map((cap, i) => 'zone' + (i + 1)) : []
+  );
+
+  const initialZoneValState = () => {
+    const { capacity } = location;
+    const types = capacity.map((cap) => cap.type);
+    const valueArray = capacity.map((cap) => Object.values(cap.layout));
+    valueArray.map((lay, i) => lay.unshift(types[i]));
+
+    const ids = capacity.map((cap, i) => 'zone' + (i + 1));
+    const values = valueArray.map((val) => val.join(','));
+    const initialState = [];
+    for (let i = 0; i < ids.length; i++) {
+      initialState.push({ id: ids[i], value: values[i] });
+    }
+    return initialState;
+  };
+  const [zonesVal, setZonesVal] = useState(editMode ? initialZoneValState : []);
+
   const [formState, inputHandler] = useForm(
     {
       name: {
@@ -48,17 +68,19 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
         value: null,
         isValid: true,
       },
-      zones: {
-        value: null,
-        isValid: true,
-      },
-      capacities: {
-        value: null,
-        isValid: true,
-      },
     },
     editMode
   );
+
+  const addZoneHandler = (id, value) => {
+    const zones = zonesVal.filter((val) => id !== val[Object.keys(val)[0]]);
+    setZonesVal([...zones, { id, value }]);
+  };
+
+  const removeZoneHandler = (id) => {
+    setzoneInputs(zoneInputs.filter((zone) => zone !== id));
+    setZonesVal(zonesVal.filter((val) => id !== val[Object.keys(val)[0]]));
+  };
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -90,23 +112,46 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
           formData.append('images', formState.inputs.images.value[i]);
         }
 
-      if (formState.inputs.zones.value && formState.inputs.capacities.value) {
-        const zones = formState.inputs.zones.value.split(',');
-        const caps = formState.inputs.capacities.value.split(',');
-        if (zones.length !== caps.length) return;
-
-        const capacityArray = zones.map((zone, i) => {
-          const seats = [];
-          for (let j = 0; j < caps[i] * 1; j++) {
-            seats.push({ code: `${zone}-${j + 1}` });
+      // calculate capacity
+      const zones = [];
+      const layouts = [];
+      if (zonesVal && zonesVal.length !== 0) {
+        zonesVal.forEach((zone) => {
+          if (zone.value.split(',').length === 5) {
+            zones.push(zone.value.split(',')[0].trim());
+            layouts.push([
+              zone.value.split(',')[1].trim() * 1,
+              zone.value.split(',')[2].trim() * 1,
+              zone.value.split(',')[3].trim() * 1,
+              zone.value.split(',')[4].trim() * 1,
+            ]);
           }
-          return {
-            type: zone,
-            seats,
-          };
         });
-        formData.append('capacity', JSON.stringify(capacityArray));
       }
+
+      // i for each zone
+      const capacityArray = zones.map((zone, i) => {
+        const seats = [];
+
+        // j for each row
+        for (let j = 0; j < layouts[i][0] * 1; j++) {
+          // k for each columns
+          for (let k = 0; k < layouts[i][1]; k++) {
+            seats.push({ code: `${zone}-${j + 1}-${k + 1}` });
+          }
+        }
+        return {
+          type: zone,
+          layout: {
+            rows: layouts[i][0],
+            columns: layouts[i][1],
+            startRow: layouts[i][2],
+            startColumn: layouts[i][3],
+          },
+          seats,
+        };
+      });
+      formData.append('capacity', JSON.stringify(capacityArray));
 
       if (!editMode) {
         await sendRequest(`${baseURL}/locations/`, 'POST', formData, {
@@ -180,29 +225,14 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
         <select
           className='form__number-input'
           id='locationType'
-          value={locationType}
+          value={editMode ? locationType : 'concert'}
           onChange={(e) => {
             setlocationType(e.target.value);
           }}
         >
-          <option
-            value='concert'
-            selected={locationType === 'concert' || !editMode ? true : false}
-          >
-            Concert
-          </option>
-          <option
-            value='club'
-            selected={locationType === 'club' ? true : false}
-          >
-            Club
-          </option>
-          <option
-            value='boat'
-            selected={locationType === 'boat' ? true : false}
-          >
-            Boat
-          </option>
+          <option value='concert'>Concert</option>
+          <option value='club'>Club</option>
+          <option value='boat'>Boat</option>
         </select>
 
         <Input
@@ -241,37 +271,25 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
             errorText='Select Location Images.'
           />
         </div>
-        <div className='form__select-container'>
-          <Input
-            element='input'
-            id='zones'
-            type='text'
-            label='Zones'
-            validators={[]}
-            placeholder='vip, left, right, center'
-            initialValid={true}
-            initialValue={
-              editMode && location.capacity.map((cap) => cap.type).join(',')
-            }
-            onInput={inputHandler}
-            errorText='Divide zones by commas.'
+
+        <button
+          type='button'
+          className='button button--inverse u-margin-bottom-small '
+          onClick={() =>
+            setzoneInputs([...zoneInputs, `zone${zoneInputs.length + 1}`])
+          }
+        >
+          Add New Zone
+        </button>
+        {zoneInputs.map((zone, i) => (
+          <ZoneInputs
+            id={zone}
+            key={zone}
+            initialValue={editMode && zonesVal[i] && zonesVal[i].value}
+            onInput={addZoneHandler}
+            onRemove={removeZoneHandler}
           />
-          <Input
-            element='input'
-            id='capacities'
-            type='text'
-            label='Capacities'
-            placeholder='30, 25, 18, 50'
-            validators={[]}
-            initialValid={true}
-            initialValue={
-              editMode &&
-              location.capacity.map((cap) => cap.seats.length).join(',')
-            }
-            onInput={inputHandler}
-            errorText='Divide capacities by commas.'
-          />
-        </div>
+        ))}
         <Button
           type='submit'
           disabled={!formState.isValid}

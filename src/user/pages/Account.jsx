@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+
 import { AuthContext } from '../../shared/context/auth-context';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
 import Accordion from '../components/Accordion';
@@ -50,7 +51,7 @@ const Account = () => {
       case 'AddEditEvent':
         return <AddEditEvent onFinish={() => setFormName('ManageEvents')} />;
       case 'ManageEvents':
-        return <ManageEvents />;
+        return <ManageEvents onFinish={() => setFormName('ManageEvents')} />;
 
       default:
         return (

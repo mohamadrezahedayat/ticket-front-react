@@ -15,7 +15,7 @@ export const useAuth = () => {
   const login = useCallback(
     (userId, email, mobile, username, photo, token, expDate, role) => {
       const tokenExpirationDate =
-        expDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+        expDate || new Date(new Date().getTime() + 1000 * 8 * 60 * 60);
       setTokenExpirationDate(tokenExpirationDate);
       setUserId(userId);
       setEmail(email);
@@ -50,7 +50,7 @@ export const useAuth = () => {
     setMobile(null);
     setEmail(null);
     setTokenExpirationDate(null);
-    setRole('user');
+    setRole(null);
     localStorage.removeItem('userData');
   }, []);
 
