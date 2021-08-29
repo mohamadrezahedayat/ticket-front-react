@@ -44,7 +44,7 @@ export const setFlex = ({
 };
 
 export const setBackground = ({ img, color = 'rgba(0,0,0,0)' }) => {
-  return `background: linear-gradient(${color},${color}), url(${img}) center/cover fixed no-repeat`;
+  return `background: linear-gradient(${color},${color}), url("${img}") center/cover fixed no-repeat`;
 };
 
 export const setRem = (number = '16') => {
@@ -86,3 +86,5 @@ export const setAbsPos = ({ x = 'top,0', y = 'left,0' } = {}) =>
   `position:absolute; 
   ${x.split(',')[0]}: ${x.split(',')[1]};
   ${y.split(',')[0]}: ${y.split(',')[1]};`;
+
+export const setBorderRadius = (radius) => `border-radius:${radius};`;

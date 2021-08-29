@@ -1,18 +1,18 @@
 import React, { Fragment, useContext } from 'react';
 
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { useForm } from '../../shared/hooks/form-hook';
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
-import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
 import {
   VALIDATOR_MAXLENGTH,
   VALIDATOR_MINLENGTH,
 } from '../../shared/util/validators';
+import { useForm } from '../../shared/hooks/form-hook';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import Input from '../../shared/components/FormElements/Input';
+import { AuthContext } from '../../shared/context/auth-context';
+import Button from '../../shared/components/FormElements/Button';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const AddEditArtgroup = ({ editMode, artGroup, onFinish, onEdit }) => {
   const { token } = useContext(AuthContext);
@@ -73,8 +73,9 @@ const AddEditArtgroup = ({ editMode, artGroup, onFinish, onEdit }) => {
         await sendRequest(`${baseURL}/artgroups/`, 'POST', formData, {
           authorization: `Bearer ${token}`,
         });
+        onFinish();
       } else {
-        const resp = await sendRequest(
+        await sendRequest(
           `${baseURL}/artgroups/${artGroup._id}`,
           'PATCH',
           formData,
@@ -82,12 +83,6 @@ const AddEditArtgroup = ({ editMode, artGroup, onFinish, onEdit }) => {
             authorization: `Bearer ${token}`,
           }
         );
-        console.log('response', resp.data.data);
-      }
-
-      if (!editMode) {
-        onFinish();
-      } else {
         onEdit();
       }
     } catch (err) {}
@@ -161,6 +156,13 @@ const AddEditArtgroup = ({ editMode, artGroup, onFinish, onEdit }) => {
           className='form__submit'
         >
           {!editMode ? 'Add New Artgroup' : 'Edit Artgroup'}
+        </Button>
+        <Button
+          type='button'
+          onClick={() => (editMode ? onEdit() : onFinish())}
+          inverse={true}
+        >
+          Cancel
         </Button>
       </form>
     </Fragment>

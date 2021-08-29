@@ -12,7 +12,7 @@ import Auth from './user/pages/Auth';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
 import Account from './user/pages/Account';
-import ShowDetail from './show/pages/ShowDetail';
+
 import EventDetail from './event/pages/EventDetail';
 
 const App = () => {
@@ -40,9 +40,7 @@ const App = () => {
           <Route path='/auth'>
             <Auth />
           </Route>
-          <Route path='/showDetail/:showId' exact>
-            <ShowDetail />
-          </Route>
+
           <Route path='/eventDetail/:eventId' exact>
             <EventDetail />
           </Route>
@@ -59,9 +57,6 @@ const App = () => {
         <Switch>
           <Route path='/' exact>
             <Home />
-          </Route>
-          <Route path='/showDetail/:showId' exact>
-            <ShowDetail />
           </Route>
           <Route path='/eventDetail/:eventId' exact>
             <EventDetail />

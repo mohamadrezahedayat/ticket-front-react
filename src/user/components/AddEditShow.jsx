@@ -6,40 +6,40 @@ import React, {
   useEffect,
 } from 'react';
 
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { useForm } from '../../shared/hooks/form-hook';
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import {
+  VALIDATOR_MAXLENGTH,
+  VALIDATOR_MINLENGTH,
+} from '../../shared/util/validators';
 import {
   baseURL,
   randomApi,
   imageAddress,
   api,
 } from '../../shared/apis/server';
+import { useForm } from '../../shared/hooks/form-hook';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import Input from '../../shared/components/FormElements/Input';
 import { AuthContext } from '../../shared/context/auth-context';
-import {
-  VALIDATOR_MAXLENGTH,
-  VALIDATOR_MINLENGTH,
-} from '../../shared/util/validators';
+import Button from '../../shared/components/FormElements/Button';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
-  const { token } = useContext(AuthContext);
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
+  const [artgroup, setartgroup] = useState(editMode && show.artGroup._id);
+  const [manager, setmanager] = useState(editMode && show.manager[0]._id);
   const [artgroups, setartgroups] = useState([]);
-  const [artgroup, setartgroup] = useState();
   const [managers, setmanagers] = useState([]);
-  const [manager, setmanager] = useState();
+  const { token } = useContext(AuthContext);
   const [formState, inputHandler] = useForm(
     {
       name: {
-        value: editMode ? show.name : '',
+        value: editMode && show.name,
         isValid: editMode,
       },
       description: {
-        value: editMode ? show.description : '',
+        value: editMode && show.description,
         isValid: true,
       },
       imageCover: {
@@ -53,15 +53,14 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
     },
     editMode
   );
-
+  // get list of artgroups to render artgroup lists
   const getArtgroups = useCallback(async () => {
-    const response = await api.get(`${baseURL}/artgroups?fields=name,_id`, {
-      headers: { authorization: `Bearer ${token}` },
-    });
+    const response = await api.get(`${baseURL}/artgroups?fields=name,_id`);
     setartgroups(response.data.data.data);
-    setartgroup(response.data.data.data[0]._id);
-  }, [token]);
+    !editMode && setartgroup(response.data.data.data[0]._id);
+  }, [editMode]);
 
+  // get list of managers to render manager lists
   const getManagers = useCallback(async () => {
     const response = await api.get(
       `${baseURL}/users?role=show-manager&fields=name,_id`,
@@ -70,14 +69,16 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
       }
     );
     setmanagers(response.data.data.data);
-    setmanager(response.data.data.data[0]._id);
-  }, [token]);
+    !editMode && setmanager(response.data.data.data[0]._id);
+  }, [token, editMode]);
 
+  // set artgroups and managers state in first render
   useEffect(() => {
     getArtgroups();
     getManagers();
   }, [getArtgroups, getManagers]);
 
+  // submit form
   const submitHandler = async (event) => {
     event.preventDefault();
 
@@ -102,21 +103,11 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
         await sendRequest(`${baseURL}/shows/`, 'POST', formData, {
           authorization: `Bearer ${token}`,
         });
-      } else {
-        const resp = await sendRequest(
-          `${baseURL}/shows/${show._id}`,
-          'PATCH',
-          formData,
-          {
-            authorization: `Bearer ${token}`,
-          }
-        );
-        console.log('response', resp.data.data);
-      }
-
-      if (!editMode) {
         onFinish();
       } else {
+        await sendRequest(`${baseURL}/shows/${show._id}`, 'PATCH', formData, {
+          authorization: `Bearer ${token}`,
+        });
         onEdit();
       }
     } catch (err) {}
@@ -124,9 +115,9 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
 
   return (
     <Fragment>
-      <h3 className='heading-3'>{`${
-        !editMode ? 'Add New Show' : 'Edit Show'
-      }`}</h3>
+      <h3 className='heading-3'>
+        {`${!editMode ? 'Add New Show' : 'Edit Show'}`}
+      </h3>
       <ErrorModal error={error} onClear={clearError} />
       <form className='form' onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
@@ -155,7 +146,7 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
             className='form__input--inline'
             imageUrl={
               editMode
-                ? `${imageAddress}/shows/${show.images[0]}`
+                ? `${imageAddress}/shows/${show.imageCover}`
                 : randomApi('show')
             }
             initialValid={editMode}
@@ -185,7 +176,7 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
             <label htmlFor='artgroup'>Artgroup</label>
             <select
               id='artgroup'
-              value={artgroup}
+              value={editMode ? show.artGroup._id : artgroup}
               onChange={(e) => setartgroup(e.target.value)}
             >
               {artgroups &&
@@ -200,7 +191,7 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
             <label htmlFor='manager'>Manager</label>
             <select
               id='manager'
-              value={manager}
+              value={editMode ? show.manager[0]._id : manager}
               onChange={(e) => {
                 setmanager(e.target.value);
               }}
@@ -220,6 +211,13 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
           className='form__submit'
         >
           {!editMode ? 'Add New Show' : 'Edit Show'}
+        </Button>
+        <Button
+          type='button'
+          onClick={() => (editMode ? onEdit() : onFinish())}
+          inverse={true}
+        >
+          Cancel
         </Button>
       </form>
     </Fragment>

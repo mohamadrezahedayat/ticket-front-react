@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import {
   Colors,
+  setAbsPos,
   setBorder,
+  setBorderRadius,
   setBoxShadow,
   setMargin,
   setPadding,
@@ -16,16 +18,17 @@ const Button = styled.button`
     props.border
       ? setBorder({ width: '1px', color: props.border })
       : setBorder({ width: '1px', color: props.bgcolor })};
+  ${(props) => props.absPosition && setAbsPos(props.absPosition)}
   ${(props) => props.margin && setMargin(props.margin)}
+   ${(props) =>
+    props.borderRadius ? setBorderRadius(props.borderRadius) : '4px'} 
   ${(props) =>
     props.boxShadow ? setBoxShadow() : setBoxShadow(props.boxShadow)}
-  border-radius: 4px;
   background: ${(props) => props.bgcolor || Colors.primary};
   color: ${(props) => props.color || Colors.white};
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
-
   &:focus {
     outline: none;
   }

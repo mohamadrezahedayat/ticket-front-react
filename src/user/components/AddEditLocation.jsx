@@ -1,20 +1,20 @@
 import React, { Fragment, useContext, useState } from 'react';
 
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { useForm } from '../../shared/hooks/form-hook';
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
-import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
-import ZoneInputs from './ZoneInputs';
 import {
   VALIDATOR_MIN,
   VALIDATOR_MAX,
   VALIDATOR_REQUIRE,
 } from '../../shared/util/validators';
+import ZoneInputs from './ZoneInputs';
+import { useForm } from '../../shared/hooks/form-hook';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import Input from '../../shared/components/FormElements/Input';
+import { AuthContext } from '../../shared/context/auth-context';
+import Button from '../../shared/components/FormElements/Button';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
   const [locationType, setlocationType] = useState(
@@ -296,6 +296,13 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
           className='form__submit'
         >
           {!editMode ? 'Add New Location' : 'Edit Location'}
+        </Button>
+        <Button
+          type='button'
+          onClick={() => (editMode ? onEdit() : onFinish())}
+          inverse={true}
+        >
+          Cancel
         </Button>
       </form>
     </Fragment>
