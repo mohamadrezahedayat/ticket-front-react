@@ -47,6 +47,8 @@ export const setBackground = ({ img, color = 'rgba(0,0,0,0)' }) => {
   return `background: linear-gradient(${color},${color}), url("${img}") center/cover fixed no-repeat`;
 };
 
+export const setBackgroundColor = (color) => `background-color:${color};`;
+
 export const setRem = (number = '16') => {
   return `${number / 16}rem`;
 };
@@ -55,8 +57,11 @@ export const setBorder = ({
   width = '2px',
   style = 'solid',
   color = 'black',
+  position = '',
 } = {}) => {
-  return `border:${width} ${style} ${color};`;
+  return `border${
+    position !== '' ? '-' + position : ''
+  }:${width} ${style} ${color};`;
 };
 
 export const setMargin = (input) => {
@@ -74,6 +79,7 @@ export const setPadding = (input) => {
 };
 
 export const setHeight = (height) => `height: ${height};`;
+export const setWidth = (width) => `width: ${width};`;
 
 export const setBoxShadow = ({
   x = '.1rem',
@@ -88,3 +94,5 @@ export const setAbsPos = ({ x = 'top,0', y = 'left,0' } = {}) =>
   ${y.split(',')[0]}: ${y.split(',')[1]};`;
 
 export const setBorderRadius = (radius) => `border-radius:${radius};`;
+
+export const setZindex = (z) => `z-index:${z};`;
