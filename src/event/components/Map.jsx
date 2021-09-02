@@ -35,27 +35,14 @@ export default function Map({ location }) {
   return (
     <MapWrapper>
       <div ref={mapContainer} className='map-container' />
-      <Button
-        absPosition={{ x: 'bottom,0', y: 'left,50%' }}
-        className='buy'
-        fontsize='3rem'
-        borderRadius='2.5rem'
-        padding='1.5rem 10rem'
-      >
-        Buy Ticket
-      </Button>
     </MapWrapper>
   );
 }
 const MapWrapper = styled.div`
   grid-column: full-start/full-end;
   grid-row: 5 / span 2;
-  position: relative;
   .map-container {
     height: 40rem;
     width: 100%;
-  }
-  .buy {
-    transform: translateX(-50%) translateY(50%);
   }
 `;

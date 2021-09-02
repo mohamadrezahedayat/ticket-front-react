@@ -8,24 +8,28 @@ import LocationImages from '../components/LocationImages';
 import Footer from '../../shared/styledComponent/Footer';
 import ShowImages from '../components/ShowImages';
 import ShowCover from '../components/ShowCover';
+import Banner from '../components/Banner';
 import Date from '../components/Date';
 import Map from '../components/Map';
-import Banner from '../components/Banner';
+import Button from '../../shared/styledComponent/Button';
 
 const EventDetail = () => {
   let { eventId } = useParams();
-  const [events, setevents] = useState(false);
   const [show, setshow] = useState(false);
+  const [events, setevents] = useState(false);
   const [location, setlocation] = useState(false);
+
   const getEvent = useCallback(async () => {
     const res = await api.get(`${baseURL}/events?show=${eventId}`);
     setevents(res.data.data.data);
     setshow(res.data.data.data[0].show);
     setlocation(res.data.data.data[0].location);
   }, [eventId]);
+
   useEffect(() => {
     getEvent();
   }, [getEvent]);
+
   return (
     <EventDetailWrapper>
       <Sidebar />
@@ -43,12 +47,21 @@ const EventDetail = () => {
 
       {location && <Map location={location.location.coordinates} />}
       {events && <Date dates={events.map((event) => event.startDate)} />}
+      <Button
+        className='buy'
+        fontsize='3rem'
+        borderRadius='2.5rem'
+        padding='1.5rem 1.5rem'
+      >
+        Buy Ticket
+      </Button>
       <Footer />
     </EventDetailWrapper>
   );
 };
 
 const EventDetailWrapper = styled.div`
+  overflow: hidden;
   display: grid;
   grid-template-rows: 80vh min-content 8rem min-content 8rem repeat(
       4,
@@ -60,8 +73,13 @@ const EventDetailWrapper = styled.div`
       [col-start] minmax(min-content, 14rem) [col-end]
     )
     [center-end] 1fr [full-end];
-
-  overflow: hidden;
+  & .buy {
+    z-index: 20;
+    grid-row-start: 6;
+    grid-column: col-start 4 / span 2;
+    align-self: end;
+    transform: translateY(50%);
+  }
 `;
 
 export default EventDetail;
