@@ -22,6 +22,7 @@ export default ShowCover;
 
 const Container = styled.div`
   grid-column: full-start/full-end;
+  grid-row-start: 1;
   position: relative;
 
   ${(props) =>

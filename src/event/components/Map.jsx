@@ -19,7 +19,7 @@ export default function Map({ location }) {
       container: mapContainer.current,
       style: 'mapbox://styles/mohamadrezahedayat/cksyx7fdf6s5718o7sjmdgvq3',
       center: [lng, lat],
-      zoom: zoom,
+      zoom,
     });
   });
 
@@ -36,11 +36,11 @@ export default function Map({ location }) {
     <MapWrapper>
       <div ref={mapContainer} className='map-container' />
       <Button
+        absPosition={{ x: 'bottom,0', y: 'left,50%' }}
         className='buy'
-        absPosition={{ x: 'right,50%', y: 'bottom,2rem' }}
         fontsize='3rem'
-        borderRadius='5rem'
-        padding='1rem 10rem'
+        borderRadius='2.5rem'
+        padding='1.5rem 10rem'
       >
         Buy Ticket
       </Button>
@@ -48,13 +48,14 @@ export default function Map({ location }) {
   );
 }
 const MapWrapper = styled.div`
-  transform: translateY(-55%);
   grid-column: full-start/full-end;
+  grid-row: 5 / span 2;
+  position: relative;
   .map-container {
     height: 40rem;
     width: 100%;
   }
   .buy {
-    transform: translateX(50%);
+    transform: translateX(-50%) translateY(50%);
   }
 `;

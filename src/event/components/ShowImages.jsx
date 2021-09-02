@@ -25,9 +25,10 @@ export default ShowImages;
 
 const Wrapper = styled.div`
   z-index: 3;
-
-  grid-column: full-start/full-end;
-  ${setFlex({ justifyContent: 'space-evenly' })}
+  margin-top: 8rem;
+  grid-column: center-start/center-end;
+  grid-row: 2 / span 2;
+  ${setFlex({ justifyContent: 'space-between' })}
   position: relative;
   & img {
     width: 25rem;
