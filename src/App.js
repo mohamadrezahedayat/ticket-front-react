@@ -1,28 +1,26 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
   Route,
-  Redirect,
   Switch,
+  Redirect,
+  BrowserRouter as Router,
 } from 'react-router-dom';
 
 import Home from './home/pages/Home';
 import Auth from './user/pages/Auth';
-
-import { AuthContext } from './shared/context/auth-context';
-import { useAuth } from './shared/hooks/auth-hook';
 import Account from './user/pages/Account';
-
+import BookEvent from './event/pages/BookEvent';
+import { useAuth } from './shared/hooks/auth-hook';
 import EventDetail from './event/pages/EventDetail';
+import { AuthContext } from './shared/context/auth-context';
 
 const App = () => {
-  // just to fill initial values and function in context, (used only one time in on place[here])
   const {
-    userId,
     userPhoto,
     username,
-    email,
+    userId,
     mobile,
+    email,
     token,
     role,
     login,
@@ -30,56 +28,37 @@ const App = () => {
   } = useAuth();
 
   const routes = () => {
-    if (token) {
-      return (
-        <Switch>
-          <Route path='/' exact>
-            <Home />
-          </Route>
-
-          <Route path='/auth'>
-            <Auth />
-          </Route>
-
-          <Route path='/eventDetail/:eventId' exact>
-            <EventDetail />
-          </Route>
-
-          <Route path='/account'>
-            <Account />
-          </Route>
-
-          <Redirect to='/' exact />
-        </Switch>
-      );
-    } else {
-      return (
-        <Switch>
-          <Route path='/' exact>
-            <Home />
-          </Route>
-          <Route path='/eventDetail/:eventId' exact>
-            <EventDetail />
-          </Route>
-          <Route path='/auth'>
-            <Auth />
-          </Route>
-
-          <Redirect to='/auth' />
-        </Switch>
-      );
-    }
+    return (
+      <Switch>
+        <Route path='/' exact>
+          <Home />
+        </Route>
+        <Route path='/auth'>
+          <Auth />
+        </Route>
+        <Route path='/account'>
+          {token ? <Account /> : <Redirect to='/auth' exact />}
+        </Route>
+        <Route path='/eventDetail/:showId' exact>
+          <EventDetail />
+        </Route>
+        <Route path='/bookEvent/:showId' exact>
+          <BookEvent />
+        </Route>
+        <Redirect to='/' exact />
+      </Switch>
+    );
   };
 
   return (
     <AuthContext.Provider
       value={{
         isLoggedIn: !!token,
-        userId,
         userPhoto,
         username,
-        email,
         mobile,
+        userId,
+        email,
         token,
         role,
         login,

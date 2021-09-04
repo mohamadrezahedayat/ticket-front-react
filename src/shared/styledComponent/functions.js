@@ -43,8 +43,20 @@ export const setFlex = ({
           flex-direction:${flexDirection};`;
 };
 
+export const setflexSelf = ({
+  flex = '',
+  alignSelf = '',
+  justifySelf = '',
+}) => {
+  let string = '';
+  if (flex !== '') string = string + `flex:${flex};`;
+  if (alignSelf !== '') string = string + `align-self:${alignSelf};`;
+  if (justifySelf !== '') string = string + `justify-self:${justifySelf};`;
+  return string;
+};
+
 export const setBackground = ({ img, color = 'rgba(0,0,0,0)' }) => {
-  return `background: linear-gradient(${color},${color}), url("${img}") center/cover fixed no-repeat`;
+  return `background: linear-gradient(${color},${color}), url("${img}") center/cover fixed no-repeat;`;
 };
 
 export const setBackgroundColor = (color) => `background-color:${color};`;
@@ -69,8 +81,9 @@ export const setMargin = (input) => {
   return `margin:${x} ${y ? y : ''} ${z ? z : ''} ${w ? w : ''};`;
 };
 
-export const setSingleMargin = (x, side) => {
-  return `margin-${side}:x`;
+export const setSingleMargin = (string) => {
+  const [side, len] = string.split(',');
+  return `margin-${side}:${len};`;
 };
 
 export const setPadding = (input) => {
@@ -78,7 +91,13 @@ export const setPadding = (input) => {
   return `padding:${x} ${y ? y : ''} ${z ? z : ''} ${w ? w : ''};`;
 };
 
+export const setSinglePadding = (string) => {
+  const [side, len] = string.split(',');
+  return `padding-${side}:${len};`;
+};
+
 export const setHeight = (height) => `height: ${height};`;
+
 export const setWidth = (width) => `width: ${width};`;
 
 export const setBoxShadow = ({
@@ -96,3 +115,11 @@ export const setAbsPos = ({ x = 'top,0', y = 'left,0' } = {}) =>
 export const setBorderRadius = (radius) => `border-radius:${radius};`;
 
 export const setZindex = (z) => `z-index:${z};`;
+
+export const transform = (params) => {
+  let string = 'transform:';
+  for (let i = 0; i < params.length; i++) {
+    string += params[i] + ';';
+  }
+  return string;
+};

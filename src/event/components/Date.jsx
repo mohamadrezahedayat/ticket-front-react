@@ -1,27 +1,40 @@
-import React from 'react';
 import styled from 'styled-components';
-import Div from '../../shared/styledComponent/Div';
-import { Colors } from '../../shared/styledComponent/functions';
+import React, { useState } from 'react';
 
-const Date = ({ dates }) => {
+import {
+  Colors,
+  setBackgroundColor,
+} from '../../shared/styledComponent/functions';
+import Div from '../../shared/styledComponent/Div';
+
+const Date = ({ dates, className, onDateSelect, enable }) => {
+  const [selected, setselected] = useState(0);
+  const onClickHandler = (date, i) => {
+    onDateSelect(date);
+    if (enable) setselected(i);
+  };
   return (
-    <Wrapper>
+    <Wrapper className={className} enable={enable}>
       {dates.map((date, i) => (
         <Div
-          bgcolor={`${Colors.primaryDark}`}
+          onClick={() => onClickHandler(date, i)}
+          bgcolor={
+            selected === i || !enable
+              ? `${Colors.primaryDark}`
+              : `${Colors.secondaryDark}`
+          }
           borderRadius='2rem'
           height='15rem'
           padding='2rem'
           width='15rem'
-          zIndex='40'
           key={i}
         >
           <Div
             border={{
-              position: 'bottom',
-              style: 'solid',
-              color: Colors.white,
               size: '1px',
+              style: 'solid',
+              position: 'bottom',
+              color: Colors.white,
             }}
             height='50%'
           >
@@ -41,22 +54,28 @@ const Date = ({ dates }) => {
 export default Date;
 
 const Wrapper = styled.div`
-  grid-row-start: 5;
-  transform: translateY(-50%);
-  align-self: start;
-  grid-column: center-start/center-end;
   z-index: 20;
   display: flex;
   justify-content: space-between;
 
-  p {
+  & > div {
+    ${(props) => props.enable && 'cursor: pointer;'};
+
+    &:hover {
+      ${(props) => props.enable && setBackgroundColor(Colors.tertiary)};
+    }
+  }
+
+  & p {
     color: white;
   }
-  p.top {
+
+  & p.top {
     font-size: 5rem;
     transform: translateY(-2rem);
   }
-  p.bottom {
+
+  & p.bottom {
     font-size: 4.5rem;
     text-align: right;
   }

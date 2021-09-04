@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { manageSeatsContext } from '../../shared/context/manage-seats-context';
-import Zone from '../../event/components/Zone';
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { baseURL } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import Label from '../../shared/styledComponent/Label';
-import Radio from '../../shared/styledComponent/Radio';
-import Div from '../../shared/styledComponent/Div';
-import Button from '../../shared/styledComponent/Button';
-import Input from '../../shared/styledComponent/Input';
+import { manageSeatsContext } from '../../shared/context/manage-seats-context';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import { AuthContext } from '../../shared/context/auth-context';
 import { Colors } from '../../shared/styledComponent/functions';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import Button from '../../shared/styledComponent/Button';
+import Label from '../../shared/styledComponent/Label';
+import Input from '../../shared/styledComponent/Input';
+import Radio from '../../shared/styledComponent/Radio';
+import { baseURL } from '../../shared/apis/server';
+import Div from '../../shared/styledComponent/Div';
+import Zone from '../../event/components/Zone';
 
 const EditSeats = ({ event, onEdit }) => {
   const { capacity } = event;
@@ -31,6 +32,7 @@ const EditSeats = ({ event, onEdit }) => {
     selectByZone,
     setInitialCapacity,
   } = useContext(manageSeatsContext);
+
   const [_price, set_price] = useState();
 
   // fill initial capacity state so we can process user seat configurations
@@ -79,41 +81,41 @@ const EditSeats = ({ event, onEdit }) => {
       return (
         <Div>
           <Button
-            bgcolor='#373737'
-            activecolor={Colors.tertiary}
+            value='free'
             color='#fff'
             margin='.5rem,1rem'
-            value='free'
+            bgcolor='#373737'
+            activecolor={Colors.tertiary}
             onClick={(e) => changeStatusHandler(e)}
           >
             Set Free
           </Button>
           <Button
+            color='#fff'
             value='inactive'
+            margin='.5rem,1rem'
             bgcolor={Colors.grey}
             activecolor={Colors.tertiary}
-            color='#fff'
-            margin='.5rem,1rem'
             onClick={(e) => changeStatusHandler(e)}
           >
             set inactive
           </Button>
           <Button
-            value='reserved'
-            bgcolor={Colors.secondaryLight}
-            activecolor={Colors.tertiary}
             color='#fff'
+            value='reserved'
             margin='.5rem,1rem'
+            activecolor={Colors.tertiary}
+            bgcolor={Colors.secondaryLight}
             onClick={(e) => changeStatusHandler(e)}
           >
             set reserved
           </Button>
           <Button
             value='sold'
-            bgcolor='#1b2b17'
-            activecolor={Colors.tertiary}
             color='#fff'
+            bgcolor='#1b2b17'
             margin='.5rem,1rem'
+            activecolor={Colors.tertiary}
             onClick={(e) => changeStatusHandler(e)}
           >
             set sold
@@ -124,7 +126,12 @@ const EditSeats = ({ event, onEdit }) => {
       return (
         <Div rowLeft margin='1rem 0 0 0'>
           <Input
+            width='10rem'
+            padding='.5rem'
+            singleMargin='right,.5rem'
+            type='number'
             id='price'
+            min='0'
             value={_price}
             onChange={(e) => set_price(e.target.value)}
           />
@@ -147,17 +154,17 @@ const EditSeats = ({ event, onEdit }) => {
         <Label>Select Mode:</Label>
         <Radio
           id='byZone'
-          name='selectMode'
-          label='by Zone'
-          checked={selectByZone}
           value='byZone'
+          label='by Zone'
+          name='selectMode'
+          checked={selectByZone}
           onChange={() => setselectByZone(!selectByZone)}
         />
         <Radio
           id='bySeat'
-          name='selectMode'
-          label='by Seat'
           value='bySeat'
+          label='by Seat'
+          name='selectMode'
           checked={!selectByZone}
           onChange={(e) => {
             setselectByZone(!selectByZone);
@@ -167,24 +174,24 @@ const EditSeats = ({ event, onEdit }) => {
       <Div>
         <Label>Config Mode:</Label>
         <Radio
+          value='status'
           id='statusMode'
           name='configMode'
           label='Status Mode'
-          checked={configMode === 'status'}
-          value='status'
           onChange={(e) => {
             changeConfigModeHandler(e);
           }}
+          checked={configMode === 'status'}
         />
         <Radio
+          value='price'
           id='priceMode'
           name='configMode'
           label='Price Mode'
-          value='price'
-          checked={configMode === 'price'}
           onChange={(e) => {
             changeConfigModeHandler(e);
           }}
+          checked={configMode === 'price'}
         />
       </Div>
       <Div>{renderConfigInput()}</Div>
@@ -196,10 +203,10 @@ const EditSeats = ({ event, onEdit }) => {
           Save
         </Button>
         <Button
+          onClick={onEdit}
           bgcolor='transparent'
           border={Colors.primaryDark}
           color={Colors.primaryDark}
-          onClick={onEdit}
         >
           Cancel
         </Button>

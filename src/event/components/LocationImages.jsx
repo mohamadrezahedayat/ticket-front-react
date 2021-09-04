@@ -2,11 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { imageAddress } from '../../shared/apis/server';
-import {
-  setAbsPos,
-  setBoxShadow,
-  setFlex,
-} from '../../shared/styledComponent/functions';
+import { setBoxShadow, setFlex } from '../../shared/styledComponent/functions';
 
 const LocationImages = ({ images }) => {
   return (

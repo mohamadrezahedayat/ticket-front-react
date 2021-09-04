@@ -23,12 +23,17 @@ const ManageEvents = () => {
   const [editMode, seteditMode] = useState(false);
   const [editSeatsMode, seteditSeatsMode] = useState(false);
   const [activeEvent, setactiveEvent] = useState(false);
+
+  // *=====
+  // *======
+  // !=======
+  // *======
   const {
-    selectedSeats,
-    selectedZones,
-    selectByZone,
-    tooltipMode,
     configMode,
+    tooltipMode,
+    selectedZones,
+    selectedSeats,
+    selectByZone,
     seatsState,
     addZone,
     addSeat,
@@ -162,12 +167,12 @@ const ManageEvents = () => {
       {editSeatsMode && (
         <manageSeatsContext.Provider
           value={{
-            seatsState,
             configMode,
             tooltipMode,
-            selectByZone,
             selectedSeats,
             selectedZones,
+            selectByZone,
+            seatsState,
             addZone,
             addSeat,
             setPrice,

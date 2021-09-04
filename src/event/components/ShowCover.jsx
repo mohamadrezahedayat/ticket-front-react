@@ -1,21 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Button from '../../shared/styledComponent/Button';
 import { Colors, setBackground } from '../../shared/styledComponent/functions';
 const ShowCover = (props) => {
-  return (
-    <Container image={props.image}>
-      <Button
-        absPosition={{ x: 'right,5rem', y: 'bottom,5rem' }}
-        fontsize='2rem'
-        borderRadius='3rem'
-        padding='1rem 2rem'
-      >
-        Buy Ticket Now
-      </Button>
-    </Container>
-  );
+  return <Container image={props.image}></Container>;
 };
 
 export default ShowCover;
@@ -23,8 +11,6 @@ export default ShowCover;
 const Container = styled.div`
   grid-column: full-start/full-end;
   grid-row-start: 1;
-  position: relative;
-
   ${(props) =>
     setBackground({
       img: props.image,

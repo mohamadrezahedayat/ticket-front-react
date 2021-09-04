@@ -1,25 +1,24 @@
 import React, { useContext, useState } from 'react';
 
-import { AuthContext } from '../../shared/context/auth-context';
-import Sidebar from '../../shared/components/UIElements/Sidebar';
 import Accordion from '../components/Accordion';
-import EditAccountForm from '../components/EditAccountForm';
-import { imageAddress, randomApi } from '../../shared/apis/server';
-import EditProfilePhoto from '../components/EditProfilePhoto';
-import ManageUsers from '../components/ManageUsers';
-import ChangePassword from '../components/ChangePassword';
-import AddEditArtgroup from '../components/AddEditArtgroup';
-import ManageArtgroups from '../components/ManageArtgroups';
 import AddEditShow from '../components/AddEditShow';
 import ManageShows from '../components/ManageShows';
-import AddEditLocation from '../components/AddEditLocation';
-import ManageLocations from '../components/ManageLocations';
+import ManageUsers from '../components/ManageUsers';
 import AddEditEvent from '../components/AddEditEvent';
 import ManageEvents from '../components/ManageEvents';
+import ChangePassword from '../components/ChangePassword';
+import EditAccountForm from '../components/EditAccountForm';
+import AddEditArtgroup from '../components/AddEditArtgroup';
+import ManageArtgroups from '../components/ManageArtgroups';
+import ManageLocations from '../components/ManageLocations';
+import AddEditLocation from '../components/AddEditLocation';
+import EditProfilePhoto from '../components/EditProfilePhoto';
+import { AuthContext } from '../../shared/context/auth-context';
+import Sidebar from '../../shared/components/UIElements/Sidebar';
+import { imageAddress, randomApi } from '../../shared/apis/server';
 
 const Account = () => {
   const { logout, username, userPhoto, role, userId } = useContext(AuthContext);
-
   const [formName, setFormName] = useState(false);
 
   const renderForm = () => {

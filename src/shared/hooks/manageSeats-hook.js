@@ -34,10 +34,10 @@ const seatsReducer = (state, action) => {
   }
 };
 export const useSeats = () => {
+  const [seatsState, dispatch] = useReducer(seatsReducer, []);
   const [selectByZone, setselectByZone] = useState(false);
   const [selectedSeats, setselectedSeats] = useState([]);
   const [selectedZones, setselectedZones] = useState([]);
-  const [seatsState, dispatch] = useReducer(seatsReducer, []);
   const [configMode, setconfigMode] = useState('status');
   const [tooltipMode, settooltipMode] = useState(true);
 

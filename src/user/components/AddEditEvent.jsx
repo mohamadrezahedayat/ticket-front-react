@@ -1,33 +1,33 @@
 import React, {
-  Fragment,
   useCallback,
   useContext,
+  Fragment,
   useState,
   useEffect,
 } from 'react';
 
-import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '../../shared/hooks/form-hook';
+import { baseURL, api } from '../../shared/apis/server';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
+import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import { baseURL, api } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
 
 const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
-  const { token } = useContext(AuthContext);
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
-  const [shows, setshows] = useState([]);
-  const [show, setshow] = useState();
   const [locations, setlocations] = useState([]);
   const [location, setlocation] = useState();
+  const { token } = useContext(AuthContext);
+  const [shows, setshows] = useState([]);
+  const [show, setshow] = useState();
 
   if (event) {
     var [date, time] = new Date(event.startDate).toLocaleString().split(',');
-    var [mon, day, year] = date.split('/');
+    var [month, day, year] = date.split('/');
     var [hour, min, sec] = time.split(':');
-    if (+mon < 10) mon = 0 + mon;
+    if (+month < 10) month = 0 + month;
     if (sec.includes('PM')) hour = +hour + 12;
   }
 
@@ -42,7 +42,7 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
         isValid: true,
       },
       date: {
-        value: editMode && `${year}-${mon}-${day}`,
+        value: editMode && `${year}-${month}-${day}`,
         isValid: true,
       },
       time: {
@@ -80,11 +80,11 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    try {
-      const date = new Date(
-        `${formState.inputs.time.value} ${formState.inputs.date.value}`
-      ).toISOString();
+    const date = new Date(
+      `${formState.inputs.time.value} ${formState.inputs.date.value}`
+    ).toISOString();
 
+    try {
       if (!editMode) {
         await sendRequest(
           `${baseURL}/events/`,
@@ -115,19 +115,15 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
         );
       }
 
-      if (!editMode) {
-        onFinish();
-      } else {
-        onEdit();
-      }
+      !editMode ? onFinish() : onEdit();
     } catch (err) {}
   };
 
   return (
     <Fragment>
-      <h3 className='heading-3'>{`${
-        !editMode ? 'Add New Event' : 'Edit Event'
-      }`}</h3>
+      <h3 className='heading-3'>
+        {`${!editMode ? 'Add New Event' : 'Edit Event'}`}
+      </h3>
       <ErrorModal error={error} onClear={clearError} />
       <form className='form' onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
@@ -143,8 +139,8 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
               {shows &&
                 shows.map((show, i) => (
                   <option
-                    value={show._id}
                     key={show._id}
+                    value={show._id}
                     selected={editMode && show._id === event.show._id}
                   >
                     {show.name}
@@ -175,44 +171,44 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
         <div className='form__select-container'>
           <div className='form__input--sidebyside'>
             <Input
-              element='input'
               id='date'
               type='date'
               label='Date'
+              element='input'
               validators={[]}
-              initialValid={editMode}
-              initialValue={editMode && `${year}-${mon}-${day}`}
               onInput={inputHandler}
+              initialValid={editMode}
               errorText='Please enter a valid date.'
+              initialValue={editMode && `${year}-${month}-${day}`}
             />
           </div>
           <div className='form__input--sidebyside'>
             <Input
-              element='input'
               id='time'
               type='time'
               label='Time'
+              element='input'
               validators={[]}
-              initialValid={editMode}
-              initialValue={editMode && `${hour}:${min}`}
               onInput={inputHandler}
+              initialValid={editMode}
               errorText='Please enter a valid time.'
+              initialValue={editMode && `${hour}:${min}`}
             />
           </div>
         </div>
 
         <Button
           type='submit'
-          disabled={!formState.isValid}
           className='form__submit'
+          disabled={!formState.isValid}
         >
           {!editMode ? 'Add New Event' : 'Edit Event'}
         </Button>
 
         <Button
           type='button'
-          onClick={() => (editMode ? onEdit() : onFinish())}
           inverse={true}
+          onClick={() => (editMode ? onEdit() : onFinish())}
         >
           Cancel
         </Button>
