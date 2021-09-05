@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import {
   Colors,
@@ -7,43 +8,23 @@ import {
   setBoxShadow,
 } from '../../shared/styledComponent/functions';
 
-const Seat = ({ unit, seat }) => {
-  const {
-    addSeat,
-    removeSeat,
-    configMode,
-    tooltipMode,
-    selectByZone,
-    selectedSeats,
-  } = useContext(manageSeatsContext);
+const SeatV2 = ({ unit, seat }) => {
+  const { addSeat, removeSeat, configMode, tooltipMode, selectedSeats } =
+    useContext(manageSeatsContext);
   const [selected, setselected] = useState(false);
   const [fillcolor, setfillcolor] = useState('#373737');
 
-  const calcRgb = (price) => {
-    if (price * 1 === 0) return `rgb(0,0,0)`;
-    if (price * 1 < 256) return `rgb(0,0,${price})`;
-    if (price * 1 < 512) return `rgb(0,${price % 255},0)`;
-    if (price * 1 < 768) return `rgb(${price % 255},0,0)`;
-    if (price * 1 < 1024) return `rgb(${price % 255},255,0)`;
-    if (price * 1 < 1280) return `rgb(${price % 255},0,255)`;
-    if (price * 1 < 1536) return `rgb(255,${price % 255},255)`;
-    if (price * 1 > 1790) return `rgb(255,50,50)`;
-  };
   // to change color if status changed
   useEffect(() => {
-    if (selected && !selectByZone) {
+    if (selected) {
       setfillcolor('#37c2c2');
     } else if (configMode === 'status') {
       if (seat.status === 'free') setfillcolor('#373737');
       if (seat.status === 'sold') setfillcolor('#1b2b17');
       if (seat.status === 'inactive') setfillcolor('#6a666e');
       if (seat.status === 'reserved') setfillcolor('#a56789');
-    } else {
-      seat.status !== 'inactive'
-        ? setfillcolor(calcRgb(seat.price))
-        : setfillcolor('#6a666e');
     }
-  }, [selected, seat.status, configMode, seat.price, selectByZone]);
+  }, [selected, seat.status, configMode, seat.price]);
 
   // reset state if selection reset in outside
   useEffect(() => {
@@ -57,7 +38,6 @@ const Seat = ({ unit, seat }) => {
 
   // update internal state and context state by selecting each seat
   const onClickHandler = () => {
-    if (selectByZone) return;
     if (!selectedSeats.includes(seat._id)) {
       setselected(true);
       addSeat(seat._id);
@@ -66,6 +46,7 @@ const Seat = ({ unit, seat }) => {
       removeSeat(seat._id);
     }
   };
+
   return (
     <SeatWrapper
       unit={unit}
@@ -126,7 +107,7 @@ const Seat = ({ unit, seat }) => {
   );
 };
 
-export default Seat;
+export default SeatV2;
 
 const SeatWrapper = styled.div`
   height: ${(props) => props.unit}rem;

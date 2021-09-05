@@ -1,21 +1,23 @@
 import React, { useEffect, useState, useContext } from 'react';
 
-import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import Seat from './Seat';
+import Div from '../../shared/styledComponent/Div';
+import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const Zone = ({ zone, unit, offsetX, offsetY }) => {
   const { selectByZone, selectedZones, addZone, removeZone } =
     useContext(manageSeatsContext);
-  const [selected, setselected] = useState(false);
   const { columns, rows, startColumn, startRow } = zone.layout;
-  const width = `${columns * unit + 0.2 * unit}rem`;
-  const height = `${rows * unit + 0.2 * unit}rem`;
+  const [selected, setselected] = useState(false);
+  const color = selectByZone && selected ? 'rgb(55,200,55)' : 'rgb(55,55,55)';
   const left = `${startColumn * unit + offsetX}rem`;
   const top = `${startRow * unit + offsetY}rem`;
-  const color = selectByZone && selected ? 'rgb(55,200,55)' : 'rgb(55,55,55)';
+  const width = `${columns * unit + 0.4}rem`;
+  const height = `${rows * unit + 0.4}rem`;
 
   // reset state if selection reset in outside
   useEffect(() => {
+    if (!selectedZones) return;
     if (selectedZones.includes(zone._id)) {
       setselected(true);
     } else {
@@ -37,32 +39,20 @@ const Zone = ({ zone, unit, offsetX, offsetY }) => {
     }
   };
   return (
-    <div
-      style={{
-        width,
-        height,
-        left,
-        top,
-        border: `2px solid ${color}`,
-        background: color,
-        position: 'absolute',
-      }}
+    <Div
+      width={width}
+      padding='2px'
+      height={height}
       onClick={onClickHandler}
+      background={{ color: color }}
+      absPosition={{ x: `left,${left}`, y: `top,${top}` }}
     >
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexWrap: 'wrap',
-        }}
-      >
+      <Div width='100%' height='100%' rowWrap>
         {zone.seats.map((seat, id) => (
           <Seat unit={unit} seat={seat} key={id} />
         ))}
-      </div>
-    </div>
+      </Div>
+    </Div>
   );
 };
 

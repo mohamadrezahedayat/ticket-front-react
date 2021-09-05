@@ -11,6 +11,7 @@ import {
   setBorder,
   setPadding,
   setflexSelf,
+  setOverflow,
   setBoxShadow,
   setBackground,
   setBorderRadius,
@@ -20,6 +21,7 @@ import {
 } from './functions';
 
 const Div = styled.div`
+  position: relative;
   ${(props) => props.row && setFlex()}
   ${(props) => props.width && setWidth(props.width)}
   ${(props) => props.border && setBorder(props.border)}
@@ -27,6 +29,7 @@ const Div = styled.div`
   ${(props) => props.height && setHeight(props.height)} 
   ${(props) => props.margin && setMargin(props.margin)}
   ${(props) => props.padding && setPadding(props.padding)}
+  ${(props) => props.overflow && setOverflow(props.overflow)}
   ${(props) => props.flexSelf && setflexSelf(props.flexSelf)}
   ${(props) => props.rowWrap && setFlex({ flexWrap: 'wrap' })}
   ${(props) => props.transforms && transform(props.transforms)}

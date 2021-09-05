@@ -8,6 +8,8 @@ const Checkbox = styled.input.attrs((props) => ({
   type: 'checkbox',
   name: props.name,
   value: props.value,
+  checked: props.checked,
+  onChange: props.onChange,
 }))`
   outline: 'none';
   cursor: pointer;

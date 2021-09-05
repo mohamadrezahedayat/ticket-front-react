@@ -123,3 +123,11 @@ export const transform = (params) => {
   }
   return string;
 };
+
+export const setOverflow = (string) => {
+  const params = string.split(',');
+  if (params.length === 1) return `overflow:${params[0]};`;
+  if (params.length === 2) return `overflow-${params[0]}:${params[1]};`;
+  if (params.length === 4)
+    return `overflow-${params[0]}:${params[1]};overflow-${params[2]}:${params[3]};`;
+};

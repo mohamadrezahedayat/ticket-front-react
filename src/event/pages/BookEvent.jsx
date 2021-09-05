@@ -16,6 +16,7 @@ const BookEvent = () => {
     selectedSeats,
     tooltipMode,
     seatsState,
+    configMode,
     addSeat,
     removeSeat,
     changeStatus,
@@ -24,12 +25,13 @@ const BookEvent = () => {
     setInitialCapacity,
   } = useSeats();
   let { showId } = useParams();
+  const [date, setdate] = useState();
   const [show, setshow] = useState(false);
   const [events, setevents] = useState(false);
-  const [date, setdate] = useState(events && events[0].startDate);
 
   const getEvents = useCallback(async () => {
     const res = await api.get(`${baseURL}/events?show=${showId}`);
+    setdate(res.data.data.data[0].startDate);
     setshow(res.data.data.data[0].show);
     setevents(res.data.data.data);
   }, [showId]);
@@ -55,6 +57,7 @@ const BookEvent = () => {
           selectedSeats,
           tooltipMode,
           seatsState,
+          configMode,
           addSeat,
           removeSeat,
           changeStatus,
@@ -63,7 +66,13 @@ const BookEvent = () => {
           setInitialCapacity,
         }}
       >
-        <SeatSelection className='seat-selection' date={date} events={events} />
+        {events && (
+          <SeatSelection
+            className='seat-selection'
+            date={date}
+            events={events}
+          />
+        )}
       </manageSeatsContext.Provider>
       <Footer />
     </BookEventWrapper>
