@@ -131,3 +131,5 @@ export const setOverflow = (string) => {
   if (params.length === 4)
     return `overflow-${params[0]}:${params[1]};overflow-${params[2]}:${params[3]};`;
 };
+
+export const setCursor = (val) => `cursor:${val};`;

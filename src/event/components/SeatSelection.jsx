@@ -10,18 +10,24 @@ import { Colors } from '../../shared/styledComponent/functions';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const SeatSelection = ({ className, events, date }) => {
+  const {
+    seatsState,
+    ticketCount,
+    selectByGroup,
+    setticketCount,
+    settooltipMode,
+    setselectedSeats,
+    setselectByGroup,
+    setInitialCapacity,
+  } = useContext(manageSeatsContext);
   const [unit, setunit] = useState();
   const [width, setwidth] = useState();
   const [offsetX, setoffsetX] = useState();
   const [columnMax, setcolumnMax] = useState();
   const [activeEvent, setactiveEvent] = useState();
-  const [ticketCount, setticketCount] = useState(2);
   const [afterrender, setafterrender] = useState(false);
-  const [selectByGroup, setselectByGroup] = useState(true);
   const [rightPanelWidth, setrightPanelWidth] = useState();
   const [seatWrapperWidth, setseatWrapperWidth] = useState();
-  const { setselectedSeats, seatsState, setInitialCapacity } =
-    useContext(manageSeatsContext);
 
   // resize eventHandler
   useEffect(() => {
@@ -40,6 +46,11 @@ const SeatSelection = ({ className, events, date }) => {
       window.removeEventListener('resize', resizeListener);
     };
   }, []);
+
+  // disable tooltip mode
+  useEffect(() => {
+    settooltipMode(false);
+  }, [settooltipMode]);
 
   // set active event based on selected date
   useEffect(() => {

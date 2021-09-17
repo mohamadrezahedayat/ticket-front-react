@@ -5,12 +5,23 @@ import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import {
   Colors,
   setAbsPos,
+  setCursor,
   setBoxShadow,
 } from '../../shared/styledComponent/functions';
 
 const SeatV2 = ({ unit, seat }) => {
-  const { addSeat, removeSeat, configMode, tooltipMode, selectedSeats } =
-    useContext(manageSeatsContext);
+  const {
+    addSeat,
+    removeSeat,
+    configMode,
+    tooltipMode,
+    hoveredSeats,
+    selectedSeats,
+    seatHoverHandler,
+  } = useContext(manageSeatsContext);
+
+  const [hovered, sethovered] = useState();
+  const [cursorType, setcursorType] = useState();
   const [selected, setselected] = useState(false);
   const [fillcolor, setfillcolor] = useState('#373737');
 
@@ -18,13 +29,18 @@ const SeatV2 = ({ unit, seat }) => {
   useEffect(() => {
     if (selected) {
       setfillcolor('#37c2c2');
+    } else if (hovered) {
+      setfillcolor(Colors.tertiary);
     } else if (configMode === 'status') {
       if (seat.status === 'free') setfillcolor('#373737');
       if (seat.status === 'sold') setfillcolor('#1b2b17');
       if (seat.status === 'inactive') setfillcolor('#6a666e');
       if (seat.status === 'reserved') setfillcolor('#a56789');
     }
-  }, [selected, seat.status, configMode, seat.price]);
+    seat.status === 'free'
+      ? setcursorType('pointer')
+      : setcursorType('not-allowed');
+  }, [selected, seat.status, configMode, seat.price, hovered]);
 
   // reset state if selection reset in outside
   useEffect(() => {
@@ -34,11 +50,21 @@ const SeatV2 = ({ unit, seat }) => {
       setselected(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSeats]);
+  }, [selectedSeats, seat.status]);
+
+  // reset state if hover state changed outside
+  useEffect(() => {
+    if (hoveredSeats.includes(seat.code)) {
+      sethovered(true);
+    } else {
+      sethovered(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hoveredSeats, seat.status]);
 
   // update internal state and context state by selecting each seat
   const onClickHandler = () => {
-    if (!selectedSeats.includes(seat._id)) {
+    if (!selectedSeats.includes(seat._id) && seat.status === 'free') {
       setselected(true);
       addSeat(seat._id);
     } else {
@@ -52,7 +78,10 @@ const SeatV2 = ({ unit, seat }) => {
       unit={unit}
       bgcolor={fillcolor}
       onClick={onClickHandler}
+      onMouseOver={() => seatHoverHandler(seat)}
+      // onMouseLeave={() => sethovered(false)}
       tooltipMode={tooltipMode}
+      cursorType={cursorType}
     >
       <div className='tooltip'>
         <ul>
@@ -131,6 +160,12 @@ const SeatWrapper = styled.div`
       list-style: none;
     }
   }
+
+  &:hover #cover {
+    fill: ${(props) => props.bgcolor};
+    ${(props) => props.cursorType && setCursor(props.cursorType)};
+  }
+
   &:hover .tooltip {
     ${(props) => props.tooltipMode && 'display: inline-block'};
   }
