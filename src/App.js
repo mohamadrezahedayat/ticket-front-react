@@ -43,7 +43,7 @@ const App = () => {
           <EventDetail />
         </Route>
         <Route path='/bookEvent/:showId' exact>
-          <BookEvent />
+          {token ? <BookEvent /> : <Redirect to='/auth' exact />}
         </Route>
         <Redirect to='/' exact />
       </Switch>
