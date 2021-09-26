@@ -8,12 +8,15 @@ import Slider from '../../shared/styledComponent/Slider';
 import Checkbox from '../../shared/styledComponent/Checkbox';
 import { Colors } from '../../shared/styledComponent/functions';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
+import ReservedTicket from './ReservedTicket';
 
 const SeatSelection = ({ className, events, date }) => {
   const {
     seatsState,
     ticketCount,
+    activeEvent,
     selectByGroup,
+    setactiveEvent,
     setticketCount,
     settooltipMode,
     setselectedSeats,
@@ -24,7 +27,6 @@ const SeatSelection = ({ className, events, date }) => {
   const [width, setwidth] = useState();
   const [offsetX, setoffsetX] = useState();
   const [columnMax, setcolumnMax] = useState();
-  const [activeEvent, setactiveEvent] = useState();
   const [afterrender, setafterrender] = useState(false);
   const [rightPanelWidth, setrightPanelWidth] = useState();
   const [seatWrapperWidth, setseatWrapperWidth] = useState();
@@ -55,6 +57,7 @@ const SeatSelection = ({ className, events, date }) => {
   // set active event based on selected date
   useEffect(() => {
     setactiveEvent(events.filter((event) => event.startDate === date)[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, events]);
 
   // fill Initial capacity and calculate row max and column max
@@ -71,7 +74,7 @@ const SeatSelection = ({ className, events, date }) => {
     );
     setcolumnMax(colMax);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeEvent]);
+  }, [activeEvent, setInitialCapacity]);
 
   // after render get div widthes
   const seatsWrapper = useRef();
@@ -118,12 +121,14 @@ const SeatSelection = ({ className, events, date }) => {
             offsetY={10}
             key={zone._id}
             offsetX={offsetX}
+            date={date}
           />
         ))}
       </Div>
       {/* right panel */}
       <Div
         boxShadow
+        // height='100%'
         padding='2rem'
         borderRadius='3rem'
         ref={rightPanelWrapper}
@@ -165,6 +170,19 @@ const SeatSelection = ({ className, events, date }) => {
               height={`${rightPanelWidth * 0.5 * 0.1 * 0.2}rem`}
               onChange={() => setselectByGroup(!selectByGroup)}
             />
+          </Div>
+          <Div
+            width='100%'
+            height='100rem'
+            padding='1rem'
+            margin='2rem 0'
+            overflow='y,auto'
+            border={{ width: '1px', style: 'dashed', color: 'purple' }}
+            borderRadius='2rem'
+            bgcolor={`${Colors.white}3`}
+          >
+            <Label>Your Reserved Seats:</Label>
+            <ReservedTicket />
           </Div>
         </Div>
       </Div>

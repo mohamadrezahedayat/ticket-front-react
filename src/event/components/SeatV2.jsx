@@ -11,15 +11,13 @@ import {
 
 const SeatV2 = ({ unit, seat }) => {
   const {
-    addSeat,
-    removeSeat,
     configMode,
     tooltipMode,
     hoveredSeats,
     selectedSeats,
     seatHoverHandler,
+    seatClickHandler,
   } = useContext(manageSeatsContext);
-
   const [hovered, sethovered] = useState();
   const [cursorType, setcursorType] = useState();
   const [selected, setselected] = useState(false);
@@ -44,7 +42,7 @@ const SeatV2 = ({ unit, seat }) => {
 
   // reset state if selection reset in outside
   useEffect(() => {
-    if (selectedSeats.includes(seat._id)) {
+    if (selectedSeats.includes(seat.code)) {
       setselected(true);
     } else {
       setselected(false);
@@ -62,22 +60,22 @@ const SeatV2 = ({ unit, seat }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hoveredSeats, seat.status]);
 
-  // update internal state and context state by selecting each seat
   const onClickHandler = () => {
-    if (!selectedSeats.includes(seat._id) && seat.status === 'free') {
-      setselected(true);
-      addSeat(seat._id);
-    } else {
-      setselected(false);
-      removeSeat(seat._id);
-    }
+    seatClickHandler(seat);
+    // if (!selectedSeats.includes(seat._id) && seat.status === 'free') {
+    //   setselected(true);
+    //   addSeat(seat._id);
+    // } else {
+    //   setselected(false);
+    //   removeSeat(seat._id);
+    // }
   };
 
   return (
     <SeatWrapper
       unit={unit}
       bgcolor={fillcolor}
-      onClick={onClickHandler}
+      onClick={() => onClickHandler(seat)}
       onMouseOver={() => seatHoverHandler(seat)}
       // onMouseLeave={() => sethovered(false)}
       tooltipMode={tooltipMode}

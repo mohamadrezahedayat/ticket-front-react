@@ -1,10 +1,23 @@
-import { useState, useReducer, useCallback } from 'react';
+import { useState, useReducer, useCallback, useContext } from 'react';
+import { api, baseURL } from '../apis/server';
+import { AuthContext } from '../context/auth-context';
 
 const seatsReducer = (state, action) => {
   switch (action.type) {
     case 'SET_INITIAL_CAPACITY':
       state = undefined;
       state = JSON.parse(JSON.stringify(action.capacity));
+      state.forEach((zone) => {
+        zone.seats.forEach((seat) => {
+          if (
+            seat.status === 'reserved' &&
+            new Date(seat.reserveExpirationTime) < Date.now() + 60 * 1000
+          ) {
+            seat.status = 'free';
+            seat.user = null;
+          }
+        });
+      });
       return state;
 
     case 'STATUS_CHANGE':
@@ -37,6 +50,7 @@ const seatsReducer = (state, action) => {
 
 export const useSeats = () => {
   const [ticketCount, setticketCount] = useState(2);
+  const [activeEvent, setactiveEvent] = useState();
   const [hoveredSeats, sethoveredSeats] = useState([]);
   const [tooltipMode, settooltipMode] = useState(true);
   const [configMode, setconfigMode] = useState('status');
@@ -45,6 +59,8 @@ export const useSeats = () => {
   const [selectByZone, setselectByZone] = useState(false);
   const [selectByGroup, setselectByGroup] = useState(true);
   const [seatsState, dispatch] = useReducer(seatsReducer, []);
+
+  const { userId, token } = useContext(AuthContext);
 
   const setInitialCapacity = useCallback((capacity) => {
     dispatch({
@@ -83,13 +99,13 @@ export const useSeats = () => {
     setselectedZones(selectedZones.filter((selected) => selected !== zoneId));
   };
 
-  const addSeat = (seatId) => {
-    if (!selectByZone) setselectedSeats([...selectedSeats, seatId]);
+  const addSeat = (code) => {
+    if (!selectByZone) setselectedSeats([...selectedSeats, code]);
   };
 
-  const removeSeat = (seatId) => {
+  const removeSeat = (code) => {
     if (!selectByZone)
-      setselectedSeats(selectedSeats.filter((selected) => selected !== seatId));
+      setselectedSeats(selectedSeats.filter((selected) => selected !== code));
   };
 
   const setPrice = (price) => {
@@ -109,11 +125,13 @@ export const useSeats = () => {
     });
     return seats;
   };
+
   const getZoneBySeat = (code) => {
     const zoneType = code.split('-')[0];
     const zone = seatsState.filter((zone) => zone.type === zoneType)[0];
     return zone;
   };
+
   const getSeatByCode = (code) => {
     const res = flattenSeats().filter((seat) => seat.code === code);
     if (res.length === 0) return 'NOT-EXIST';
@@ -132,6 +150,7 @@ export const useSeats = () => {
       getSeatByCode(code).status === 'free'
     );
   };
+
   const calculateNewCode = (code, num, columns) => {
     let [zone, row, col] = code.split('-');
     col = col * 1;
@@ -197,6 +216,7 @@ export const useSeats = () => {
     }
     return true;
   };
+
   const singleHoverHandler = (seat) => {
     if (seat.status !== 'free') return;
 
@@ -271,6 +291,30 @@ export const useSeats = () => {
     }
   };
 
+  const reserveSeats = async (selectedSeats, userId, duration) => {
+    const result = await api.patch(
+      `${baseURL}/events/${activeEvent.id}/reserveSeat`,
+      { selectedSeats, userId, duration },
+      {
+        headers: { authorization: `Bearer ${token}` },
+      }
+    );
+    const { capacity } = result.data.data.data;
+    setInitialCapacity(capacity);
+  };
+
+  const seatClickHandler = (seat) => {
+    seatHoverHandler(seat);
+    setselectedSeats(hoveredSeats);
+    reserveSeats(hoveredSeats, userId, 15 * 60 * 1000);
+    // todo: un hover impliment
+    // todo: single select
+    // todo: ticket design
+    // todo: delete ticket
+    // todo: redesign process
+    // todo: test by multiple users
+  };
+
   return {
     addSeat,
     addZone,
@@ -282,6 +326,7 @@ export const useSeats = () => {
     removeSeat,
     ticketCount,
     getNextSeat,
+    activeEvent,
     tooltipMode,
     getSeatById,
     selectByZone,
@@ -293,9 +338,11 @@ export const useSeats = () => {
     selectedZones,
     setconfigMode,
     settooltipMode,
+    setactiveEvent,
     setticketCount,
     setselectByZone,
     sethoveredSeats,
+    seatClickHandler,
     setselectedZones,
     seatHoverHandler,
     setselectedSeats,
