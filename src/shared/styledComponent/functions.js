@@ -1,3 +1,4 @@
+// variables
 export const Colors = {
   primary: '#340068',
   primaryLight: '#5704aa',
@@ -30,6 +31,37 @@ export const fonts = {
   main: "font-family:'Lato',sans-serif;",
 };
 
+// typography
+export const setFontSize = (fontSize) => `font-size=${fontSize};`;
+export const setColor = (color) => `color=${color};`;
+
+// transform
+export const transform = (params) => {
+  let string = 'transform:';
+  for (let i = 0; i < params.length; i++) {
+    string += params[i] + ';';
+  }
+  return string;
+};
+
+// z-index
+export const setZindex = (z) => `z-index:${z};`;
+
+// overflow
+export const setOverflow = (string) => {
+  const params = string.split(',');
+  if (params.length === 1) return `overflow:${params[0]};`;
+  if (params.length === 2) return `overflow-${params[0]}:${params[1]};`;
+  if (params.length === 4)
+    return `overflow-${params[0]}:${params[1]};overflow-${params[2]}:${params[3]};`;
+};
+
+export const setAbsPos = ({ x = 'top,0', y = 'left,0' } = {}) =>
+  `position:absolute; 
+  ${x.split(',')[0]}: ${x.split(',')[1]};
+  ${y.split(',')[0]}: ${y.split(',')[1]};`;
+
+// flex
 export const setFlex = ({
   alignItems = 'center',
   justifyContent = 'center',
@@ -55,27 +87,7 @@ export const setflexSelf = ({
   return string;
 };
 
-export const setBackground = ({ img, color = 'rgba(0,0,0,0)' }) => {
-  return `background: linear-gradient(${color},${color}), url("${img}") center/cover fixed no-repeat;`;
-};
-
-export const setBackgroundColor = (color) => `background-color:${color};`;
-
-export const setRem = (number = '16') => {
-  return `${number / 16}rem`;
-};
-
-export const setBorder = ({
-  width = '2px',
-  style = 'solid',
-  color = 'black',
-  position = '',
-} = {}) => {
-  return `border${
-    position !== '' ? '-' + position : ''
-  }:${width} ${style} ${color};`;
-};
-
+// padding & margin
 export const setMargin = (input) => {
   const [x, y, z, w] = input.split(',');
   return `margin:${x} ${y ? y : ''} ${z ? z : ''} ${w ? w : ''};`;
@@ -96,10 +108,23 @@ export const setSinglePadding = (string) => {
   return `padding-${side}:${len};`;
 };
 
+// size
 export const setHeight = (height) => `height: ${height};`;
-
 export const setWidth = (width) => `width: ${width};`;
 
+// unit
+export const setRem = (number = '16') => {
+  return `${number / 16}rem`;
+};
+
+// background
+export const setBackground = ({ img, color = 'rgba(0,0,0,0)' }) => {
+  return `background: linear-gradient(${color},${color}), url("${img}") center/cover fixed no-repeat;`;
+};
+
+export const setBackgroundColor = (color) => `background-color:${color};`;
+
+// shadow
 export const setBoxShadow = ({
   x = '.1rem',
   y = '.5rem',
@@ -107,29 +132,19 @@ export const setBoxShadow = ({
   color = 'rgba(0,0,0,.5)',
 } = {}) => `box-shadow: ${x} ${y} ${z} ${color};`;
 
-export const setAbsPos = ({ x = 'top,0', y = 'left,0' } = {}) =>
-  `position:absolute; 
-  ${x.split(',')[0]}: ${x.split(',')[1]};
-  ${y.split(',')[0]}: ${y.split(',')[1]};`;
-
+// border
 export const setBorderRadius = (radius) => `border-radius:${radius};`;
 
-export const setZindex = (z) => `z-index:${z};`;
-
-export const transform = (params) => {
-  let string = 'transform:';
-  for (let i = 0; i < params.length; i++) {
-    string += params[i] + ';';
-  }
-  return string;
+export const setBorder = ({
+  width = '2px',
+  style = 'solid',
+  color = 'black',
+  position = '',
+} = {}) => {
+  return `border${
+    position !== '' ? '-' + position : ''
+  }:${width} ${style} ${color};`;
 };
 
-export const setOverflow = (string) => {
-  const params = string.split(',');
-  if (params.length === 1) return `overflow:${params[0]};`;
-  if (params.length === 2) return `overflow-${params[0]}:${params[1]};`;
-  if (params.length === 4)
-    return `overflow-${params[0]}:${params[1]};overflow-${params[2]}:${params[3]};`;
-};
-
+// coursor
 export const setCursor = (val) => `cursor:${val};`;
