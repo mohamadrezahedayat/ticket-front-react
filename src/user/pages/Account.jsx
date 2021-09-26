@@ -73,7 +73,7 @@ const Account = () => {
   };
 
   const renderAccordions = () => {
-    if (role === 'user') {
+    if (role === 'user' || role === 'show-manager') {
       return (
         <div className='accordion-wrapper'>
           <Accordion
