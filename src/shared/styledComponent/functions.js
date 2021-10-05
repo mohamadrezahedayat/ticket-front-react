@@ -32,8 +32,19 @@ export const fonts = {
 };
 
 // typography
-export const setFontSize = (fontSize) => `font-size=${fontSize};`;
-export const setColor = (color) => `color=${color};`;
+export const setColor = (color) => `color:${color};`;
+export const setFontSize = (fontSize) => `font-size:${fontSize};`;
+export const setDirection = (direction) => `direction:${direction};`;
+export const setFontStyle = (fontStyle) => `font-style:${fontStyle};`;
+export const setTextAlign = (textAlign) => `text-align:${textAlign};`;
+export const setFontWeight = (fontWeight) => `font-weight:${fontWeight};`;
+export const setFontFamily = (fontFamily) => `font-family:${fontFamily};`;
+export const setLineHeight = (lineHeight) => `line-height:${lineHeight};`;
+export const setWordSpacing = (wordSpacing) => `word-spacing:${wordSpacing};`;
+export const setLetterSpacing = (letterSpacing) =>
+  `letter-spacing:${letterSpacing};`;
+export const setTextTransform = (textTransform = 'capitalize') =>
+  `text-transform:${textTransform};`;
 
 // transform
 export const transform = (params) => {
@@ -63,17 +74,15 @@ export const setAbsPos = ({ x = 'top,0', y = 'left,0' } = {}) =>
 
 // flex
 export const setFlex = ({
-  alignItems = 'center',
-  justifyContent = 'center',
   flexWrap = 'nowrap',
   flexDirection = 'row',
-} = {}) => {
-  return `display:flex; 
-          align-items:${alignItems};
-          justify-content:${justifyContent};
-          flex-wrap:${flexWrap};
-          flex-direction:${flexDirection};`;
-};
+  alignItems = 'center',
+  justifyContent = 'center',
+} = {}) => `display:flex; 
+            align-items:${alignItems};
+            justify-content:${justifyContent};
+            flex-wrap:${flexWrap};
+            flex-direction:${flexDirection};`;
 
 export const setflexSelf = ({
   flex = '',
@@ -86,6 +95,15 @@ export const setflexSelf = ({
   if (justifySelf !== '') string = string + `justify-self:${justifySelf};`;
   return string;
 };
+
+// Grid
+export const setGrid = () => 'display: grid;';
+export const setGridRowStart = (rowStart = 1) => `grid-row-start: ${rowStart};`;
+export const setGridColumn = (column = 1 / 2) => `grid-column: ${column};`;
+export const setGridTemplateRows = (gridTemplateRows = '1fr') =>
+  `grid-template-rows: ${gridTemplateRows};`;
+export const setGridTemplateColumns = (gridTemplateColumns = '1fr') =>
+  `grid-template-columns: ${gridTemplateColumns};`;
 
 // padding & margin
 export const setMargin = (input) => {
