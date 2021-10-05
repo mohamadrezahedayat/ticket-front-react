@@ -8,7 +8,7 @@ import Checkbox from '../../shared/styledComponent/Checkbox';
 import { Colors } from '../../shared/styledComponent/functions';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
-const RightPanel = () => {
+const RightPanel = ({ width }) => {
   const rightPanelWrapper = useRef();
 
   const [rightPanelWidth, setrightPanelWidth] = useState();
@@ -23,7 +23,7 @@ const RightPanel = () => {
 
   useEffect(() => {
     setrightPanelWidth(rightPanelWrapper.current.clientWidth);
-  }, []);
+  }, [width]);
 
   const renderReservedTickets = () => {
     if (reservedSeatsOfCurrentUser.length === 0)

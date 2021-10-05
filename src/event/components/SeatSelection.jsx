@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import LeftPanel from './LeftPanel';
 import RightPanel from './RightPanel';
@@ -16,27 +16,28 @@ const SeatSelection = ({ events, date }) => {
     setInitialCapacity,
   } = useContext(manageSeatsContext);
 
-  // eslint-disable-next-line no-unused-vars
-  const [width, setwidth] = useState();
+  const getWidth = useCallback(
+    () =>
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth,
+    []
+  );
+  const [width, setwidth] = useState(getWidth());
   const [columnMax, setcolumnMax] = useState();
 
   // resize eventHandler
   useEffect(() => {
-    const getWidth = () =>
-      window.innerWidth ||
-      document.documentElement.clientWidth ||
-      document.body.clientWidth;
     let timeoutId = null;
     const resizeListener = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => setwidth(getWidth()), 150);
     };
     window.addEventListener('resize', resizeListener);
-
     return () => {
       window.removeEventListener('resize', resizeListener);
     };
-  }, []);
+  }, [getWidth]);
 
   // disable tooltip mode
   useEffect(() => {
@@ -73,8 +74,8 @@ const SeatSelection = ({ events, date }) => {
       gridColumn='full-start/full-end'
       background={{ img: chairs, color: `${Colors.primaryLight}3f` }}
     >
-      <LeftPanel date={date} columnMax={columnMax} />
-      <RightPanel />
+      <LeftPanel date={date} columnMax={columnMax} width={width} />
+      <RightPanel width={width} />
     </Div>
   );
 };

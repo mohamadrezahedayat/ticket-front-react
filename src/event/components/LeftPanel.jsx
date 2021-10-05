@@ -5,18 +5,18 @@ import Div from '../../shared/styledComponent/Div';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import { Colors } from '../../shared/styledComponent/functions';
 
-const LeftPanel = ({ date, columnMax }) => {
+const LeftPanel = ({ date, columnMax, width }) => {
+  const seatsWrapper = useRef();
+
   const [unit, setunit] = useState();
   const [offsetX, setoffsetX] = useState();
   const [seatWrapperWidth, setseatWrapperWidth] = useState();
-
-  const seatsWrapper = useRef();
 
   const { seatsState } = useContext(manageSeatsContext);
 
   useEffect(() => {
     setseatWrapperWidth(seatsWrapper.current.clientWidth);
-  }, []);
+  }, [width]);
 
   // calculate unit
   useEffect(() => {
