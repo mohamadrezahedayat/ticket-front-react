@@ -37,7 +37,7 @@ const SeatsWrapper = ({ zone, unit, offsetX, offsetY, date }) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clicked]);
-
+  console.log(unit, offsetX, offsetY, date);
   return (
     <Div
       width={width}
