@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ReservedTicket = () => {
+import { H } from '../../shared/styledComponent/Typography';
+import { Colors } from '../../shared/styledComponent/functions';
+
+const ReservedTicket = ({ price, code }) => {
   return (
     <TicketWrapper>
       <svg
@@ -12,17 +15,17 @@ const ReservedTicket = () => {
         xmlns='http://www.w3.org/2000/svg'
       >
         <path
-          fill-rule='evenodd'
-          clip-rule='evenodd'
+          fillRule='evenodd'
+          clipRule='evenodd'
           d='M100 8C104.418 8 108 4.41828 108 0H192C192 4.41828 195.582 8 200 8V48C195.582 48 192 51.5817 192 56H108C108 51.5817 104.418 48 100 48V8Z'
           fill='#54005B'
-          fill-opacity='0.6'
+          fillOpacity='0.6'
         />
-        <path d='M100 8V47.5' stroke='black' stroke-dasharray='4 3' />
+        <path d='M100 8V47.5' stroke='black' strokeDasharray='4 3' />
         <mask id='path-3-inside-1' fill='white'>
           <path
-            fill-rule='evenodd'
-            clip-rule='evenodd'
+            fillRule='evenodd'
+            clipRule='evenodd'
             d='M103 10.1429C107.153 10.1429 110.52 6.94489 110.52 3H189.48C189.48 6.94489 192.847 10.1429 197 10.1429V45.8571C192.847 45.8571 189.48 49.0551 189.48 53H110.52C110.52 49.0551 107.153 45.8571 103 45.8571V10.1429Z'
           />
         </mask>
@@ -32,17 +35,17 @@ const ReservedTicket = () => {
           mask='url(#path-3-inside-1)'
         />
         <path
-          fill-rule='evenodd'
-          clip-rule='evenodd'
+          fillRule='evenodd'
+          clipRule='evenodd'
           d='M100 8C95.5817 8 92 4.41828 92 0H8C8 4.41828 4.41828 8 0 8V48C4.41828 48 8 51.5817 8 56H92C92 51.5817 95.5817 48 100 48V8Z'
           fill='#54005B'
-          fill-opacity='0.6'
+          fillOpacity='0.6'
         />
-        <path d='M100 8V47.5' stroke='black' stroke-dasharray='4 3' />
+        <path d='M100 8V47.5' stroke='black' strokeDasharray='4 3' />
         <mask id='path-7-inside-2' fill='white'>
           <path
-            fill-rule='evenodd'
-            clip-rule='evenodd'
+            fillRule='evenodd'
+            clipRule='evenodd'
             d='M97 10.1429C92.8468 10.1429 89.48 6.94489 89.48 3H10.52C10.52 6.94489 7.15318 10.1429 3 10.1429V45.8571C7.15318 45.8571 10.52 49.0551 10.52 53H89.48C89.48 49.0551 92.8468 45.8571 97 45.8571V10.1429Z'
           />
         </mask>
@@ -52,6 +55,49 @@ const ReservedTicket = () => {
           mask='url(#path-7-inside-2)'
         />
       </svg>
+      <H
+        as='h4'
+        color={Colors.white}
+        absPosition={{ x: 'top,10%', y: 'left,10%' }}
+        textTransform='capitalize'
+        letterSpacing='1px'
+        fontSize='1.5rem'
+        fontWeight='100'
+      >
+        price:
+      </H>
+      <H
+        as='h4'
+        color={Colors.white}
+        absPosition={{ x: 'top,40%', y: 'left,20%' }}
+        letterSpacing='1px'
+        fontSize='1.5rem'
+        fontWeight='100'
+      >
+        {`${price}$`}
+      </H>
+      <H
+        as='h4'
+        className='center'
+        color={Colors.white}
+        absPosition={{ x: 'top,15%', y: 'right,25%' }}
+        textTransform='capitalize'
+        fontSize='1rem'
+        fontWeight='100'
+      >
+        Zone | Row | Column
+      </H>
+      <H
+        className='center'
+        as='h4'
+        color={Colors.white}
+        absPosition={{ x: 'top,45%', y: 'right,25%' }}
+        textTransform='capitalize'
+        fontSize='1.4rem'
+        fontWeight='100'
+      >
+        {code}
+      </H>
     </TicketWrapper>
   );
 };
@@ -59,6 +105,12 @@ const ReservedTicket = () => {
 export default ReservedTicket;
 
 const TicketWrapper = styled.div`
-  margin: 2rem 1rem;
+  display: flex;
+  position: relative;
+  margin: 0 1rem;
   color: white;
+  & .center {
+    text-align: center;
+    transform: translateX(50%);
+  }
 `;

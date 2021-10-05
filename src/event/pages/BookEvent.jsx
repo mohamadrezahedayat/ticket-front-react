@@ -39,6 +39,7 @@ const BookEvent = () => {
     setselectByGroup,
     getNextSeatStatus,
     setInitialCapacity,
+    reservedSeatsOfCurrentUser,
   } = useSeats();
   let { showId } = useParams();
   const [date, setdate] = useState();
@@ -96,6 +97,7 @@ const BookEvent = () => {
           setselectByGroup,
           getNextSeatStatus,
           setInitialCapacity,
+          reservedSeatsOfCurrentUser,
         }}
       >
         {events && (
@@ -127,9 +129,5 @@ const BookEventWrapper = styled.div`
     grid-row-start: 2;
     grid-column: center-start/center-end;
     transform: translateY(-50%);
-  }
-  & .seat-selection {
-    grid-row-start: 3;
-    grid-column: full-start/full-end;
   }
 `;

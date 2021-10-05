@@ -49,6 +49,8 @@ const seatsReducer = (state, action) => {
 };
 
 export const useSeats = () => {
+  const { userId, token } = useContext(AuthContext);
+
   const [ticketCount, setticketCount] = useState(2);
   const [activeEvent, setactiveEvent] = useState();
   const [hoveredSeats, sethoveredSeats] = useState([]);
@@ -60,7 +62,9 @@ export const useSeats = () => {
   const [selectByGroup, setselectByGroup] = useState(true);
   const [seatsState, dispatch] = useReducer(seatsReducer, []);
 
-  const { userId, token } = useContext(AuthContext);
+  const [reservedSeatsOfCurrentUser, setReservedSeatsOfCurrentUser] = useState(
+    []
+  );
 
   const setInitialCapacity = useCallback((capacity) => {
     dispatch({
@@ -119,6 +123,15 @@ export const useSeats = () => {
 
   const flattenSeats = () => {
     const seatsCluster = seatsState.map((zone) => zone.seats);
+    let seats = [];
+    seatsCluster.forEach((cluster) => {
+      seats = [...seats, ...cluster];
+    });
+    return seats;
+  };
+
+  const flattenCapacity = (capacity) => {
+    const seatsCluster = capacity.map((zone) => zone.seats);
     let seats = [];
     seatsCluster.forEach((cluster) => {
       seats = [...seats, ...cluster];
@@ -291,7 +304,7 @@ export const useSeats = () => {
     }
   };
 
-  const reserveSeats = async (selectedSeats, userId, duration) => {
+  const reserveSeats = async (selectedSeats, duration) => {
     const result = await api.patch(
       `${baseURL}/events/${activeEvent.id}/reserveSeat`,
       { selectedSeats, userId, duration },
@@ -301,16 +314,27 @@ export const useSeats = () => {
     );
     const { capacity } = result.data.data.data;
     setInitialCapacity(capacity);
+    setReservedSeatsOfCurrentUser(getReservedSeatsOfCurrentUser(capacity));
+  };
+
+  const getReservedSeatsOfCurrentUser = (capacity) => {
+    return flattenCapacity(capacity).filter(
+      (seat) =>
+        seat.user === userId &&
+        new Date(seat.reserveExpirationTime) > Date.now() &&
+        seat.status !== 'free'
+    );
   };
 
   const seatClickHandler = (seat) => {
     seatHoverHandler(seat);
     setselectedSeats(hoveredSeats);
-    reserveSeats(hoveredSeats, userId, 15 * 60 * 1000);
-    // todo: un hover impliment
+    reserveSeats(hoveredSeats, 15 * 60 * 1000);
+    // todo: don't run function getreservedseatsofcurrentuser for every hover
+    // todo: unhover impliment
     // todo: single select
-    // todo: ticket design
     // todo: delete ticket
+    // todo: ticket timer
     // todo: redesign process
     // todo: test by multiple users
   };
@@ -349,5 +373,6 @@ export const useSeats = () => {
     setselectByGroup,
     getNextSeatStatus,
     setInitialCapacity,
+    reservedSeatsOfCurrentUser,
   };
 };
