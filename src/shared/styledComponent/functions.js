@@ -47,11 +47,15 @@ export const setTextTransform = (textTransform = 'capitalize') =>
   `text-transform:${textTransform};`;
 
 // transform
-export const transform = (params) => {
+export const transform = (input = 'translateY(0)') => {
   let string = 'transform:';
-  for (let i = 0; i < params.length; i++) {
-    string += params[i] + ';';
-  }
+  const params = input.split(',');
+
+  params.forEach((param) => {
+    string += param + ' ';
+  });
+
+  string += ';';
   return string;
 };
 
@@ -166,3 +170,11 @@ export const setBorder = ({
 
 // coursor
 export const setCursor = (val) => `cursor:${val};`;
+
+// animation
+export const setTransitions = (transitions = 'all ease .5s') => {
+  let string = 'transition:';
+  const trans = transitions.split(',');
+  trans.forEach((tr) => (string += tr));
+  return string + ';';
+};

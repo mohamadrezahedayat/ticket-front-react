@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import {
   setColor,
+  setMargin,
+  setZindex,
+  transform,
   setAbsPos,
+  setPadding,
   setFontSize,
   setFontStyle,
   setTextAlign,
@@ -10,6 +14,8 @@ import {
   setFontWeight,
   setLineHeight,
   setWordSpacing,
+  setSingleMargin,
+  setSinglePadding,
   setLetterSpacing,
   setTextTransform,
 } from './functions';
@@ -20,13 +26,25 @@ export const H = styled.h1`
   ${(props) => props.direction && setDirection(props.direction)}
   ${(props) => props.fontStyle && setFontStyle(props.fontStyle)}
   ${(props) => props.textAlign && setTextAlign(props.textAlign)}
-  ${(props) => props.absPosition && setAbsPos(props.absPosition)}
   ${(props) => props.fontWeight && setFontWeight(props.fontWeight)}
   ${(props) => props.fontFamily && setFontFamily(props.fontFamily)}
   ${(props) => props.lineHeight && setLineHeight(props.lineHeight)}
   ${(props) => props.wordSpacing && setWordSpacing(props.wordSpacing)}
   ${(props) => props.letterSpacing && setLetterSpacing(props.letterSpacing)}
   ${(props) => props.textTransform && setTextTransform(props.textTransform)}
+  
+  /* position */
+  ${(props) => props.absPosition && setAbsPos(props.absPosition)}
+  ${(props) => props.zIndex && setZindex(props.zIndex)}
+
+  /* transform */
+  ${(props) => props.transforms && transform(props.transforms)}
+
+  /* box model */
+  ${(props) => props.margin && setMargin(props.margin)}
+  ${(props) => props.padding && setPadding(props.padding)}
+  ${(props) => props.SingleMargin && setSingleMargin(props.SingleMargin)}
+  ${(props) => props.SinglePadding && setSinglePadding(props.SinglePadding)}
 `;
 
 // export const P = styled(H)``;
