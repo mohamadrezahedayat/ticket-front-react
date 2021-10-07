@@ -6,7 +6,6 @@ import Div from '../../shared/styledComponent/Div';
 import Label from '../../shared/styledComponent/Label';
 import Slider from '../../shared/styledComponent/Slider';
 import { H } from '../../shared/styledComponent/Typography';
-import Checkbox from '../../shared/styledComponent/Checkbox';
 import { Colors } from '../../shared/styledComponent/functions';
 import { imageAddress, randomApi } from '../../shared/apis/server';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
@@ -22,9 +21,7 @@ const RightPanel = ({ width, event }) => {
     addAgain,
     setaddAgain,
     ticketCount,
-    selectByGroup,
     setticketCount,
-    setselectByGroup,
     deleteUserReservedSeats,
     reservedSeatsOfCurrentUser,
   } = useContext(manageSeatsContext);
@@ -170,28 +167,6 @@ const RightPanel = ({ width, event }) => {
             value={ticketCount}
             SingleMargin='top,1rem'
             onChange={(e) => setticketCount(e.target.value)}
-          />
-        </Div>
-
-        {/* selection mode slider checkbox gadget */}
-        <Div id='group' row>
-          <Label
-            fontSize='1.7rem'
-            htmlFor='selectMode'
-            SingleMargin='right,1rem'
-          >
-            Mode:
-          </Label>
-          <Checkbox
-            spin={5}
-            id='selectMode'
-            active='Group'
-            inactive='One by One '
-            value={selectByGroup}
-            checked={selectByGroup}
-            width={`${rightPanelWidth * 0.5 * 0.1}rem`}
-            height={`${rightPanelWidth * 0.5 * 0.1 * 0.2}rem`}
-            onChange={() => setselectByGroup(!selectByGroup)}
           />
         </Div>
 

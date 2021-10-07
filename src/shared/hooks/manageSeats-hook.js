@@ -68,7 +68,6 @@ export const useSeats = () => {
   const [selectedSeats, setselectedSeats] = useState([]);
   const [selectedZones, setselectedZones] = useState([]);
   const [selectByZone, setselectByZone] = useState(false);
-  const [selectByGroup, setselectByGroup] = useState(true);
   const [reservedSeatsOfCurrentUser, setReservedSeatsOfCurrentUser] = useState(
     []
   );
@@ -290,7 +289,8 @@ export const useSeats = () => {
     return counterArray;
   };
 
-  const groupHoverHandler = (seat) => {
+  const seatHoverHandler = (seat) => {
+    sethoveredSeats([]);
     const isEven = ticketCount % 2 === 0 ? true : false;
     const { layout } = getZoneBySeat(seat.code);
     const counterArray = generateCounterArray();
@@ -332,15 +332,6 @@ export const useSeats = () => {
     }
 
     sethoveredSeats(hoverNominates);
-  };
-
-  const seatHoverHandler = (seat) => {
-    sethoveredSeats([]);
-    if (!selectByGroup || ticketCount === 1) {
-      singleHoverHandler(seat);
-    } else {
-      groupHoverHandler(seat);
-    }
   };
 
   const reserveSeats = async (selectedSeats, duration) => {
@@ -385,7 +376,6 @@ export const useSeats = () => {
     // todo: ticket timer
     // todo: redesign process
     // todo: test by multiple users
-    // todo: update by each click
   };
 
   return {
@@ -410,7 +400,6 @@ export const useSeats = () => {
     changeStatus,
     selectedSeats,
     getSeatByCode,
-    selectByGroup,
     selectedZones,
     setconfigMode,
     settooltipMode,
@@ -422,7 +411,6 @@ export const useSeats = () => {
     setselectedZones,
     seatHoverHandler,
     setselectedSeats,
-    setselectByGroup,
     getNextSeatStatus,
     setInitialCapacity,
     deleteUserReservedSeats,
