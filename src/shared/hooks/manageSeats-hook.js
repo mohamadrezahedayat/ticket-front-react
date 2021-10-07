@@ -58,8 +58,8 @@ export const useSeats = () => {
   const { userId, token } = useContext(AuthContext);
 
   const [clicked, setclicked] = useState(false);
+  const [addAgain, setaddAgain] = useState(false);
   const [isSending, setisSending] = useState(false);
-
   const [ticketCount, setticketCount] = useState(2);
   const [activeEvent, setactiveEvent] = useState();
   const [hoveredSeats, sethoveredSeats] = useState([]);
@@ -364,33 +364,38 @@ export const useSeats = () => {
     );
   };
 
-  // const updateInitialCapacity = async () => {
-  //   const result = await api.get(`${baseURL}/events/${activeEvent.id}`);
-  //   console.log(result);
-  // };
-
+  const deleteUserReservedSeats = () => {
+    setselectedSeats([]);
+    sethoveredSeats([]);
+    if (reservedSeatsOfCurrentUser.length === 0) return;
+    reserveSeats([]);
+    setclicked(true);
+  };
   const seatClickHandler = (seat) => {
-    // updateInitialCapacity();
     seatHoverHandler(seat);
     if (hoveredSeats.length === 0) return;
     setselectedSeats(hoveredSeats);
-    reserveSeats(hoveredSeats, 15 * 60 * 1000);
+    const reserveTime = 15 * 60 * 1000;
+    if (!addAgain) reserveSeats(hoveredSeats, reserveTime);
+    else {
+      const reserved = reservedSeatsOfCurrentUser.map((seat) => seat.code);
+      reserveSeats([...hoveredSeats, ...reserved], reserveTime);
+    }
     // todo: unhover impliment
-    // todo: single select
-    // todo: delete ticket
     // todo: ticket timer
     // todo: redesign process
     // todo: test by multiple users
     // todo: update by each click
-    // todo: user selected state
   };
 
   return {
     addSeat,
     addZone,
     setPrice,
+    addAgain,
     setclicked,
     configMode,
+    setaddAgain,
     seatsState,
     removeZone,
     isSeatFree,
@@ -420,6 +425,7 @@ export const useSeats = () => {
     setselectByGroup,
     getNextSeatStatus,
     setInitialCapacity,
+    deleteUserReservedSeats,
     reservedSeatsOfCurrentUser,
     setReservedSeatsOfCurrentUser,
     getReservedSeatsOfCurrentUser,

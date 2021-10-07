@@ -14,11 +14,13 @@ import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 const BookEvent = () => {
   const {
     addSeat,
+    addAgain,
     setclicked,
     isSeatFree,
     configMode,
     removeSeat,
     seatsState,
+    setaddAgain,
     getSeatById,
     tooltipMode,
     isForbidden,
@@ -40,6 +42,7 @@ const BookEvent = () => {
     setselectByGroup,
     getNextSeatStatus,
     setInitialCapacity,
+    deleteUserReservedSeats,
     reservedSeatsOfCurrentUser,
     setReservedSeatsOfCurrentUser,
     getReservedSeatsOfCurrentUser,
@@ -76,11 +79,13 @@ const BookEvent = () => {
       <manageSeatsContext.Provider
         value={{
           addSeat,
+          addAgain,
           setclicked,
           isSeatFree,
           configMode,
           removeSeat,
           seatsState,
+          setaddAgain,
           isForbidden,
           getSeatById,
           tooltipMode,
@@ -102,6 +107,7 @@ const BookEvent = () => {
           setselectByGroup,
           getNextSeatStatus,
           setInitialCapacity,
+          deleteUserReservedSeats,
           reservedSeatsOfCurrentUser,
           setReservedSeatsOfCurrentUser,
           getReservedSeatsOfCurrentUser,
