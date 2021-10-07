@@ -1,12 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
 
 import { H } from '../../shared/styledComponent/Typography';
 import { Colors } from '../../shared/styledComponent/functions';
+import Div from '../../shared/styledComponent/Div';
 
-const ReservedTicket = ({ price, code }) => {
+const ReservedTicket = ({ price, code, width }) => {
+  // eslint-disable-next-line no-unused-vars
+  const [panelWidth, setpanelWidth] = useState(width);
+
+  useEffect(() => {
+    setpanelWidth(width);
+  }, [width]);
   return (
-    <TicketWrapper>
+    <Div column>
       <svg
         // width='200'
         // height='56'
@@ -57,60 +63,51 @@ const ReservedTicket = ({ price, code }) => {
       </svg>
       <H
         as='h4'
-        color={Colors.white}
-        absPosition={{ x: 'top,10%', y: 'left,10%' }}
-        textTransform='capitalize'
-        letterSpacing='1px'
         fontSize='1.5rem'
         fontWeight='100'
+        letterSpacing='1px'
+        color={Colors.white}
+        textTransform='capitalize'
+        absPosition={{ x: 'top,10%', y: 'left,10%' }}
       >
         price:
       </H>
       <H
         as='h4'
+        fontWeight='100'
+        fontSize='1.5rem'
+        letterSpacing='1px'
         color={Colors.white}
         absPosition={{ x: 'top,40%', y: 'left,20%' }}
-        letterSpacing='1px'
-        fontSize='1.5rem'
-        fontWeight='100'
       >
         {`${price}$`}
       </H>
       <H
         as='h4'
-        className='center'
-        color={Colors.white}
-        absPosition={{ x: 'top,15%', y: 'right,25%' }}
-        textTransform='capitalize'
         fontSize='1rem'
         fontWeight='100'
+        textAlign='center'
+        color={Colors.white}
+        textTransform='capitalize'
+        transforms='translateX(50%)'
+        absPosition={{ x: 'top,15%', y: 'right,25%' }}
       >
         Zone | Row | Column
       </H>
       <H
-        className='center'
         as='h4'
-        color={Colors.white}
-        absPosition={{ x: 'top,45%', y: 'right,25%' }}
-        textTransform='capitalize'
-        fontSize='1.4rem'
         fontWeight='100'
+        fontSize='1.4rem'
+        textAlign='center'
+        color={Colors.white}
+        textTransform='capitalize'
+        transforms='translateX(50%)'
+        absPosition={{ x: 'top,45%', y: 'right,25%' }}
       >
         {code}
       </H>
-    </TicketWrapper>
+    </Div>
   );
 };
 
 export default ReservedTicket;
-
-const TicketWrapper = styled.div`
-  display: flex;
-  position: relative;
-  margin: 0 1rem;
-  color: white;
-  & .center {
-    text-align: center;
-    transform: translateX(50%);
-  }
-`;
