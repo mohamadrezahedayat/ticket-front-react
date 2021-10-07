@@ -14,6 +14,8 @@ const SeatSelection = ({ events, date }) => {
     settooltipMode,
     setselectedSeats,
     setInitialCapacity,
+    setReservedSeatsOfCurrentUser,
+    getReservedSeatsOfCurrentUser,
   } = useContext(manageSeatsContext);
 
   const getWidth = useCallback(
@@ -23,6 +25,7 @@ const SeatSelection = ({ events, date }) => {
       document.body.clientWidth,
     []
   );
+
   const [width, setwidth] = useState(getWidth());
   const [columnMax, setcolumnMax] = useState();
 
@@ -55,6 +58,7 @@ const SeatSelection = ({ events, date }) => {
     if (!activeEvent) return;
     const { capacity } = activeEvent;
     setInitialCapacity(capacity);
+    setReservedSeatsOfCurrentUser(getReservedSeatsOfCurrentUser(capacity));
     setselectedSeats([]);
 
     // calculate maximum columns
@@ -63,8 +67,9 @@ const SeatSelection = ({ events, date }) => {
       ...layouts.map((layout) => layout.columns + layout.startColumn)
     );
     setcolumnMax(colMax);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeEvent, setInitialCapacity]);
+  }, [activeEvent]);
 
   return (
     <Div
@@ -75,7 +80,7 @@ const SeatSelection = ({ events, date }) => {
       background={{ img: chairs, color: `${Colors.primaryLight}3f` }}
     >
       <LeftPanel date={date} columnMax={columnMax} width={width} />
-      <RightPanel width={width} />
+      <RightPanel width={width} event={activeEvent} />
     </Div>
   );
 };

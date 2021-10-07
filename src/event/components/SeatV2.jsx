@@ -11,25 +11,26 @@ import {
 
 const SeatV2 = ({ unit, seat }) => {
   const {
-    configMode,
     tooltipMode,
     hoveredSeats,
     selectedSeats,
     seatHoverHandler,
     seatClickHandler,
+    reservedSeatsOfCurrentUser,
   } = useContext(manageSeatsContext);
+
   const [hovered, sethovered] = useState();
-  const [cursorType, setcursorType] = useState();
+  const [booked, setbooked] = useState(false);
   const [selected, setselected] = useState(false);
+  const [cursorType, setcursorType] = useState();
   const [fillcolor, setfillcolor] = useState('#373737');
 
   // to change color if status changed
   useEffect(() => {
-    if (selected) {
-      setfillcolor('#37c2c2');
-    } else if (hovered) {
-      setfillcolor(Colors.tertiary);
-    } else if (configMode === 'status') {
+    if (booked) setfillcolor('#ffef09f4');
+    else if (selected) setfillcolor('#37c2c2');
+    else if (hovered) setfillcolor(Colors.tertiary);
+    else {
       if (seat.status === 'free') setfillcolor('#373737');
       if (seat.status === 'sold') setfillcolor('#1b2b17');
       if (seat.status === 'inactive') setfillcolor('#6a666e');
@@ -38,27 +39,28 @@ const SeatV2 = ({ unit, seat }) => {
     seat.status === 'free'
       ? setcursorType('pointer')
       : setcursorType('not-allowed');
-  }, [selected, seat.status, configMode, seat.price, hovered]);
+  }, [selected, booked, seat.status, hovered]);
 
   // reset state if selection reset in outside
   useEffect(() => {
-    if (selectedSeats.includes(seat.code)) {
-      setselected(true);
-    } else {
-      setselected(false);
-    }
+    selectedSeats.includes(seat.code) ? setselected(true) : setselected(false);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSeats, seat.status]);
 
   // reset state if hover state changed outside
   useEffect(() => {
-    if (hoveredSeats.includes(seat.code)) {
-      sethovered(true);
-    } else {
-      sethovered(false);
-    }
+    hoveredSeats.includes(seat.code) ? sethovered(true) : sethovered(false);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hoveredSeats, seat.status]);
+
+  useEffect(() => {
+    const reservedCodes = reservedSeatsOfCurrentUser.map((seat) => seat.code);
+    reservedCodes.includes(seat.code) ? setbooked(true) : setbooked(false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reservedSeatsOfCurrentUser]);
 
   const onClickHandler = () => {
     seatClickHandler(seat);

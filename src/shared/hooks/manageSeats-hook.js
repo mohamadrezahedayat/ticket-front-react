@@ -1,4 +1,10 @@
-import { useState, useReducer, useCallback, useContext } from 'react';
+import {
+  useState,
+  useReducer,
+  useCallback,
+  useContext,
+  useEffect,
+} from 'react';
 import { api, baseURL } from '../apis/server';
 import { AuthContext } from '../context/auth-context';
 
@@ -51,6 +57,9 @@ const seatsReducer = (state, action) => {
 export const useSeats = () => {
   const { userId, token } = useContext(AuthContext);
 
+  const [clicked, setclicked] = useState(false);
+  const [isSending, setisSending] = useState(false);
+
   const [ticketCount, setticketCount] = useState(2);
   const [activeEvent, setactiveEvent] = useState();
   const [hoveredSeats, sethoveredSeats] = useState([]);
@@ -60,11 +69,41 @@ export const useSeats = () => {
   const [selectedZones, setselectedZones] = useState([]);
   const [selectByZone, setselectByZone] = useState(false);
   const [selectByGroup, setselectByGroup] = useState(true);
-  const [seatsState, dispatch] = useReducer(seatsReducer, []);
-
   const [reservedSeatsOfCurrentUser, setReservedSeatsOfCurrentUser] = useState(
     []
   );
+
+  const [seatsState, dispatch] = useReducer(seatsReducer, []);
+
+  const getCapacity = useCallback(
+    async () => {
+      if (!activeEvent || isSending) return;
+      setisSending(true);
+      const result = await api.get(`${baseURL}/events/${activeEvent.id}`);
+
+      setisSending(false);
+
+      const { capacity } = result.data.data.data;
+      setInitialCapacity(capacity);
+      setReservedSeatsOfCurrentUser(getReservedSeatsOfCurrentUser(capacity));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeEvent]
+  );
+
+  // update initial capacity after each click or changing active event
+  useEffect(() => {
+    sethoveredSeats([]);
+    if (clicked) setclicked(false);
+    const timeoutId = setTimeout(getCapacity, 1000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (clicked === true) setclicked(false);
+      if (isSending === true) setisSending(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clicked, activeEvent]);
 
   const setInitialCapacity = useCallback((capacity) => {
     dispatch({
@@ -313,7 +352,6 @@ export const useSeats = () => {
       }
     );
     const { capacity } = result.data.data.data;
-    setInitialCapacity(capacity);
     setReservedSeatsOfCurrentUser(getReservedSeatsOfCurrentUser(capacity));
   };
 
@@ -326,23 +364,32 @@ export const useSeats = () => {
     );
   };
 
+  // const updateInitialCapacity = async () => {
+  //   const result = await api.get(`${baseURL}/events/${activeEvent.id}`);
+  //   console.log(result);
+  // };
+
   const seatClickHandler = (seat) => {
+    // updateInitialCapacity();
     seatHoverHandler(seat);
+    if (hoveredSeats.length === 0) return;
     setselectedSeats(hoveredSeats);
     reserveSeats(hoveredSeats, 15 * 60 * 1000);
-    // todo: don't run function getreservedseatsofcurrentuser for every hover
     // todo: unhover impliment
     // todo: single select
     // todo: delete ticket
     // todo: ticket timer
     // todo: redesign process
     // todo: test by multiple users
+    // todo: update by each click
+    // todo: user selected state
   };
 
   return {
     addSeat,
     addZone,
     setPrice,
+    setclicked,
     configMode,
     seatsState,
     removeZone,
@@ -374,5 +421,7 @@ export const useSeats = () => {
     getNextSeatStatus,
     setInitialCapacity,
     reservedSeatsOfCurrentUser,
+    setReservedSeatsOfCurrentUser,
+    getReservedSeatsOfCurrentUser,
   };
 };

@@ -14,6 +14,7 @@ import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 const BookEvent = () => {
   const {
     addSeat,
+    setclicked,
     isSeatFree,
     configMode,
     removeSeat,
@@ -40,17 +41,20 @@ const BookEvent = () => {
     getNextSeatStatus,
     setInitialCapacity,
     reservedSeatsOfCurrentUser,
+    setReservedSeatsOfCurrentUser,
+    getReservedSeatsOfCurrentUser,
   } = useSeats();
+
   let { showId } = useParams();
   const [date, setdate] = useState();
   const [show, setshow] = useState(false);
   const [events, setevents] = useState(false);
 
   const getEvents = useCallback(async () => {
-    const res = await api.get(`${baseURL}/events?show=${showId}`);
-    setdate(res.data.data.data[0].startDate);
-    setshow(res.data.data.data[0].show);
-    setevents(res.data.data.data);
+    const { data } = await api.get(`${baseURL}/events?show=${showId}`);
+    setdate(data.data.data[0].startDate);
+    setshow(data.data.data[0].show);
+    setevents(data.data.data);
   }, [showId]);
 
   useEffect(() => {
@@ -72,6 +76,7 @@ const BookEvent = () => {
       <manageSeatsContext.Provider
         value={{
           addSeat,
+          setclicked,
           isSeatFree,
           configMode,
           removeSeat,
@@ -98,6 +103,8 @@ const BookEvent = () => {
           getNextSeatStatus,
           setInitialCapacity,
           reservedSeatsOfCurrentUser,
+          setReservedSeatsOfCurrentUser,
+          getReservedSeatsOfCurrentUser,
         }}
       >
         {events && (

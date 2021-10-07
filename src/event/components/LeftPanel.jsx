@@ -12,7 +12,7 @@ const LeftPanel = ({ date, columnMax, width }) => {
   const [offsetX, setoffsetX] = useState();
   const [seatWrapperWidth, setseatWrapperWidth] = useState();
 
-  const { seatsState } = useContext(manageSeatsContext);
+  const { seatsState, setclicked } = useContext(manageSeatsContext);
 
   useEffect(() => {
     setseatWrapperWidth(seatsWrapper.current.clientWidth);
@@ -35,6 +35,7 @@ const LeftPanel = ({ date, columnMax, width }) => {
       bgcolor={`${Colors.white}5`}
       margin='3rem 1.5rem 3rem 3rem'
       flexSelf={{ flex: '7', alignSelf: 'stretch' }}
+      onClick={() => setclicked(true)}
     >
       {seatsState.map((zone) => (
         <ZoneV2
