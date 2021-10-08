@@ -10,6 +10,7 @@ import {
   setAbsPos,
   setMargin,
   setZindex,
+  setDisplay,
   setPadding,
   setflexSelf,
   setOverflow,
@@ -29,6 +30,9 @@ import {
 const Div = styled.div`
   /* general */
   position: relative;
+
+  /* display */
+  ${(props) => props.display && setDisplay(props.display)}
 
   /* size */
   ${(props) => props.width && setWidth(props.width)}
@@ -86,6 +90,8 @@ ${(props) => props.transition && setTransitions(props.transition)}
 
 /* hover */
 &:hover {
+    /* display */
+    ${(props) => props.display__hover && setDisplay(props.display__hover)}
     /* size */
     ${(props) => props.width__hover && setWidth(props.width__hover)}
     ${(props) => props.height__hover && setHeight(props.height__hover)} 

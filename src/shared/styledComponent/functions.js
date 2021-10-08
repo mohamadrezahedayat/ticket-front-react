@@ -31,6 +31,9 @@ export const fonts = {
   main: "font-family:'Lato',sans-serif;",
 };
 
+// General
+export const setDisplay = (display = 'block') => `display:${display};`;
+
 // typography
 export const setColor = (color) => `color:${color};`;
 export const setFontSize = (fontSize) => `font-size:${fontSize};`;
