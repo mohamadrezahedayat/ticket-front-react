@@ -203,6 +203,7 @@ export const useSeats = () => {
   };
 
   const calculateNewCode = (code, num, columns) => {
+    if (num === 0) return code;
     let [zone, row, col] = code.split('-');
     col = col * 1;
     row = row * 1;
@@ -251,6 +252,18 @@ export const useSeats = () => {
     return nextSeat !== 'NOT-EXIST' ? nextSeat.status : 'NOT-EXIST';
   };
 
+  const isFreeToSingleSelect = (code, columns) => {
+    if (
+      (getNextSeatStatus(code, -1, columns) === 'free' &&
+        getNextSeatStatus(code, -2, columns) !== 'free') ||
+      (getNextSeatStatus(code, 1, columns) === 'free' &&
+        getNextSeatStatus(code, 2, columns) !== 'free')
+    )
+      return false;
+
+    return true;
+  };
+
   const isFreeToGroupSelect = (code, columns, isNegative) => {
     if (isNegative) {
       if (
@@ -266,12 +279,6 @@ export const useSeats = () => {
         return false;
     }
     return true;
-  };
-
-  const singleHoverHandler = (seat) => {
-    if (seat.status !== 'free') return;
-
-    sethoveredSeats([seat._id]);
   };
 
   const generateCounterArray = () => {
@@ -307,7 +314,9 @@ export const useSeats = () => {
 
       if (nextSeat === 'NOT-EXIST') isValid = false;
 
-      if (isEnds && isValid) {
+      if (counterArray.length === 1) {
+        isValid = isFreeToSingleSelect(nextSeat.code, layout.columns);
+      } else if (isEnds && isValid) {
         isValid = isFreeToGroupSelect(
           nextSeat.code,
           layout.columns,
@@ -362,6 +371,7 @@ export const useSeats = () => {
     reserveSeats([]);
     setclicked(true);
   };
+
   const seatClickHandler = (seat) => {
     seatHoverHandler(seat);
     if (hoveredSeats.length === 0) return;
@@ -372,10 +382,6 @@ export const useSeats = () => {
       const reserved = reservedSeatsOfCurrentUser.map((seat) => seat.code);
       reserveSeats([...hoveredSeats, ...reserved], reserveTime);
     }
-    // todo: unhover impliment
-    // todo: ticket timer
-    // todo: redesign process
-    // todo: test by multiple users
   };
 
   return {
@@ -385,11 +391,11 @@ export const useSeats = () => {
     addAgain,
     setclicked,
     configMode,
-    setaddAgain,
     seatsState,
     removeZone,
     isSeatFree,
     removeSeat,
+    setaddAgain,
     ticketCount,
     getNextSeat,
     activeEvent,

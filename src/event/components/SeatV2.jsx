@@ -14,6 +14,7 @@ const SeatV2 = ({ unit, seat }) => {
     tooltipMode,
     hoveredSeats,
     selectedSeats,
+    sethoveredSeats,
     seatHoverHandler,
     seatClickHandler,
     reservedSeatsOfCurrentUser,
@@ -62,24 +63,13 @@ const SeatV2 = ({ unit, seat }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reservedSeatsOfCurrentUser]);
 
-  const onClickHandler = () => {
-    seatClickHandler(seat);
-    // if (!selectedSeats.includes(seat._id) && seat.status === 'free') {
-    //   setselected(true);
-    //   addSeat(seat._id);
-    // } else {
-    //   setselected(false);
-    //   removeSeat(seat._id);
-    // }
-  };
-
   return (
     <SeatWrapper
       unit={unit}
       bgcolor={fillcolor}
-      onClick={() => onClickHandler(seat)}
+      onClick={() => seatClickHandler(seat)}
       onMouseOver={() => seatHoverHandler(seat)}
-      // onMouseLeave={() => sethovered(false)}
+      onMouseLeave={() => sethoveredSeats([])}
       tooltipMode={tooltipMode}
       cursorType={cursorType}
     >

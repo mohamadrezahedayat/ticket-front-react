@@ -155,7 +155,7 @@ const RightPanel = ({ width, event }) => {
 
       <Div rowWrap margin='0 2rem'>
         {/* ticket count slider gadget */}
-        <Div SingleMargin='bottom,2rem'>
+        <Div margin='2rem,0'>
           <Label SingleMargin='right,1rem' fontSize='1.7rem'>
             {`Ticket Counts: ${ticketCount}`}
           </Label>
