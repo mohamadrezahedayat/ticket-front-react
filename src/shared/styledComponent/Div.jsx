@@ -6,7 +6,6 @@ import {
   setWidth,
   setBorder,
   setHeight,
-  transform,
   setAbsPos,
   setMargin,
   setZindex,
@@ -15,6 +14,7 @@ import {
   setflexSelf,
   setOverflow,
   setBoxShadow,
+  setTransform,
   setGridColumn,
   setBackground,
   setTransitions,
@@ -52,7 +52,7 @@ ${(props) => props.zIndex && setZindex(props.zIndex)}
 ${(props) => props.absPosition && setAbsPos(props.absPosition)}
 
 /* transform */
-${(props) => props.transform && transform(props.transform)}
+${(props) => props.transform && setTransform(props.transform)}
 
 /* bg */
 ${(props) => props.bgcolor && setBackgroundColor(props.bgcolor)} 
@@ -111,7 +111,7 @@ ${(props) => props.transition && setTransitions(props.transition)}
       props.background__hover && setBackground(props.background__hover)}
 
     /* transform */
-    ${(props) => props.transform__hover && transform(props.transform__hover)}
+    ${(props) => props.transform__hover && setTransform(props.transform__hover)}
 
     /* shadow */
     ${(props) => props.boxShadow__hover && setBoxShadow(props.boxShadow__hover)}

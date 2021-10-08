@@ -50,7 +50,7 @@ export const setTextTransform = (textTransform = 'capitalize') =>
   `text-transform:${textTransform};`;
 
 // transform
-export const transform = (input = 'translateY(0)') => {
+export const setTransform = (input = 'translateY(0)') => {
   let string = 'transform:';
   const params = input.split(',');
 

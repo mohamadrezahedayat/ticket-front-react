@@ -3,10 +3,10 @@ import {
   setColor,
   setMargin,
   setZindex,
-  transform,
   setAbsPos,
   setPadding,
   setFontSize,
+  setTransform,
   setFontStyle,
   setTextAlign,
   setDirection,
@@ -38,7 +38,7 @@ export const H = styled.h1`
   ${(props) => props.zIndex && setZindex(props.zIndex)}
 
   /* transform */
-  ${(props) => props.transforms && transform(props.transforms)}
+  ${(props) => props.transforms && setTransform(props.transforms)}
 
   /* box model */
   ${(props) => props.margin && setMargin(props.margin)}
