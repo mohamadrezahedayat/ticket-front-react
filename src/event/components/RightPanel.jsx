@@ -10,12 +10,15 @@ import { Colors } from '../../shared/styledComponent/functions';
 import { imageAddress, randomApi } from '../../shared/apis/server';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
-const RightPanel = ({ width, event }) => {
+const RightPanel = ({ width, event, className }) => {
   const rightPanelWrapper = useRef();
 
+  const [percent, setpercent] = useState(false);
+  const [timerFillColor, settimerFillColor] = useState('rgb(20,255,20)');
+  const [remainingTime, setremainingTime] = useState('15\':00"');
   const [rightPanelWidth, setrightPanelWidth] = useState();
-  const [imageUrl, setimageUrl] = useState(randomApi('artgroup'));
   const [addBtnColor, setaddBtnColor] = useState('#3f5e48');
+  const [imageUrl, setimageUrl] = useState(randomApi('artgroup'));
 
   const {
     addAgain,
@@ -25,6 +28,43 @@ const RightPanel = ({ width, event }) => {
     deleteUserReservedSeats,
     reservedSeatsOfCurrentUser,
   } = useContext(manageSeatsContext);
+
+  useEffect(() => {
+    if (!reservedSeatsOfCurrentUser || reservedSeatsOfCurrentUser.length === 0)
+      return;
+    const calcPercent = () => {
+      const totalSecondRemaining =
+        (new Date(reservedSeatsOfCurrentUser[0].reserveExpirationTime) -
+          Date.now()) /
+        1000;
+      const remainingTimePercent = totalSecondRemaining / (60 * 15);
+
+      const color = `rgb(${Math.round(
+        255 - 255 * remainingTimePercent
+      )},${Math.round(255 * remainingTimePercent)},20)`;
+      settimerFillColor(color);
+
+      setpercent(Math.round(remainingTimePercent * 31.4));
+      let totalMinutesRemaining = Math.floor(totalSecondRemaining / 60);
+      totalMinutesRemaining =
+        totalMinutesRemaining > 9
+          ? totalMinutesRemaining
+          : `0${totalMinutesRemaining}`;
+
+      let secondsRemaining = Math.round(totalSecondRemaining % 60);
+      secondsRemaining =
+        secondsRemaining > 9 ? secondsRemaining : `0${secondsRemaining}`;
+
+      setremainingTime(`${totalMinutesRemaining}':${secondsRemaining}"`);
+    };
+
+    const interval = setInterval(calcPercent, 1000);
+    if (percent < 0) clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reservedSeatsOfCurrentUser, event]);
 
   useEffect(() => {
     if (!event || !event.show || event.show.artGroup.images.length === 0)
@@ -46,13 +86,14 @@ const RightPanel = ({ width, event }) => {
         width={rightPanelWidth}
       />
     ));
+
   const renderReservePanelHeader = () => {
     return (
       <Div flexSelf={{ flex: '70%' }}>
         <H
           as='h3'
           fontWeight='300'
-          fontSize='1.5rem'
+          fontSize='1.3rem'
           textAlign='center'
           lineHeight='4rem'
           letterSpacing='1px'
@@ -69,6 +110,7 @@ const RightPanel = ({ width, event }) => {
       </Div>
     );
   };
+
   const calculatePrices = () => {
     const prices = reservedSeatsOfCurrentUser.map((ticket) => +ticket.price);
     return prices.reduce((ac, a) => ac + a, 0);
@@ -146,8 +188,8 @@ const RightPanel = ({ width, event }) => {
           fontSize='1.2rem'
           letterSpacing='1px'
           color={Colors.white}
-          textTransform='capitalize'
           SingleMargin='left,.5rem'
+          textTransform='capitalize'
         >
           {event && new Date(event.startDate).toLocaleTimeString('tr-TR')}
         </H>
@@ -175,19 +217,19 @@ const RightPanel = ({ width, event }) => {
           width='100%'
           margin='2rem 0'
           overflow='y,auto'
-          borderRadius='2rem 2rem 1rem 1rem'
           bgcolor={`${Colors.white}3`}
+          borderRadius='2rem 2rem 1rem 1rem'
         >
           {/* reserve box panel header */}
           <Div
             row
-            padding='0,2rem'
             width='100%'
             height='4rem'
+            padding='0,2rem'
             bgcolor={`${Colors.primaryDark}c0`}
             bgcolor__hover={`${Colors.primaryDark}ff`}
           >
-            {/* Delete Icon */}
+            {/* Icons */}
             <SvgWrapper>
               <svg
                 onClick={deleteUserReservedSeats}
@@ -207,6 +249,38 @@ const RightPanel = ({ width, event }) => {
               >
                 <path d='M10 1.6c-4.639 0-8.4 3.761-8.4 8.4s3.761 8.4 8.4 8.4 8.4-3.761 8.4-8.4c0-4.639-3.761-8.4-8.4-8.4zM15 11h-4v4h-2v-4h-4v-2h4v-4h2v4h4v2z'></path>
               </svg>
+              {reservedSeatsOfCurrentUser.length !== 0 &&
+                percent &&
+                percent > 0 && (
+                  <>
+                    <svg id='expiration' viewBox='0 0 20 20'>
+                      <circle r='10' cx='10' cy='10' fill='white' />
+                      <circle
+                        r='5'
+                        cx='10'
+                        cy='10'
+                        className='wedge'
+                        stroke={timerFillColor}
+                        strokeWidth='10'
+                        fill='transparent'
+                        strokeDasharray={`${percent} 31.4`}
+                      />
+                    </svg>
+                    <Div
+                      className='timer'
+                      boxShadow
+                      zIndex='3'
+                      padding='5px'
+                      bgcolor={timerFillColor}
+                      borderRadius='1rem'
+                      absPosition={{ x: 'top,.5rem', y: 'left,1.5rem' }}
+                    >
+                      <H as='h4' fontSize='1.5rem'>
+                        {remainingTime}
+                      </H>
+                    </Div>
+                  </>
+                )}
             </SvgWrapper>
             {renderReservePanelHeader()}
           </Div>
@@ -229,12 +303,25 @@ const RightPanel = ({ width, event }) => {
 export default RightPanel;
 
 const SvgWrapper = styled.div`
-  transition: all ease 0.5s;
   flex: '20%';
   display: flex;
   flex-direction: row;
+  transition: all ease 0.5s;
   #icon-circle-with-plus {
     fill: ${(props) => props.fill};
+  }
+  #expiration {
+    transform: scale(0.8);
+  }
+  #expiration:hover {
+    transform: scale(1.1);
+  }
+  & .timer {
+    visibility: hidden;
+    transition: all ease 0.5s;
+  }
+  #expiration:hover + .timer {
+    visibility: visible;
   }
   & svg {
     width: 2.5rem;

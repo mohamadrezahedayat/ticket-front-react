@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { H } from '../../shared/styledComponent/Typography';
 import { Colors } from '../../shared/styledComponent/functions';
@@ -7,10 +7,6 @@ import Div from '../../shared/styledComponent/Div';
 const ReservedTicket = ({ price, code, width }) => {
   // eslint-disable-next-line no-unused-vars
   const [panelWidth, setpanelWidth] = useState(width);
-
-  useEffect(() => {
-    setpanelWidth(width);
-  }, [width]);
 
   return (
     <Div column>
