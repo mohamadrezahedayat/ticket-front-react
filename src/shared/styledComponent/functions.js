@@ -172,7 +172,7 @@ export const setBorder = ({
 };
 
 // coursor
-export const setCursor = (val) => `cursor:${val};`;
+export const setCursor = (val = 'pointer') => `cursor:${val};`;
 
 // animation
 export const setTransitions = (transitions = 'all ease .5s') => {

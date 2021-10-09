@@ -4,6 +4,7 @@ import {
   setGrid,
   setFlex,
   setWidth,
+  setCursor,
   setBorder,
   setHeight,
   setAbsPos,
@@ -31,6 +32,8 @@ const Div = styled.div`
   /* general */
   position: relative;
 
+  /* cursor */
+  ${(props) => props.cursor && setCursor(props.cursor)}
   /* display */
   ${(props) => props.display && setDisplay(props.display)}
 
