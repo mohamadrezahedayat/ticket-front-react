@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { H } from '../../shared/styledComponent/Typography';
 import { Colors } from '../../shared/styledComponent/functions';
@@ -6,11 +6,19 @@ import Div from '../../shared/styledComponent/Div';
 
 const ReservedTicket = ({ price, code, width }) => {
   // eslint-disable-next-line no-unused-vars
-  const [panelWidth, setpanelWidth] = useState(width);
+  const [ticketWidth, setticketWidth] = useState(width);
+  useEffect(() => {
+    setticketWidth(`${width - 80}px`);
+  }, [width]);
 
   return (
-    <Div column>
-      <svg viewBox='0 0 200 56' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <Div row>
+      <svg
+        viewBox='0 0 200 56'
+        fill='none'
+        xmlns='http://www.w3.org/2000/svg'
+        width={ticketWidth}
+      >
         <mask id='path-1-inside-1' fill='white'>
           <path
             fillRule='evenodd'

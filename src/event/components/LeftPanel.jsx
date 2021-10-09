@@ -31,9 +31,10 @@ const LeftPanel = ({ date, columnMax, width }) => {
 
   return (
     <Div
+      column
       boxShadow
       ref={seatsWrapper}
-      overflow='x,auto'
+      overflow='auto'
       borderRadius='3rem'
       bgcolor={`${Colors.white}5`}
       margin='3rem 1.5rem 3rem 3rem'
@@ -52,6 +53,7 @@ const LeftPanel = ({ date, columnMax, width }) => {
         <SvgWrapper>
           {/* ZoomIn Icon*/}
           <svg
+            cursor='zoom-in'
             id='icon-zoom-in'
             viewBox='0 0 32 32'
             width='25px'
@@ -62,26 +64,28 @@ const LeftPanel = ({ date, columnMax, width }) => {
           </svg>
           {/* ZoomOut Icon */}
           <svg
-            id='icon-zoom-out'
-            viewBox='0 0 32 32'
             width='25px'
             height='25px'
+            cursor='zoom-out'
+            id='icon-zoom-out'
+            viewBox='0 0 32 32'
             onClick={() => setzoomedUnit(0.9 * zoomedUnit)}
           >
             <path d='M31.008 27.231l-7.58-6.447c-0.784-0.705-1.622-1.029-2.299-0.998 1.789-2.096 2.87-4.815 2.87-7.787 0-6.627-5.373-12-12-12s-12 5.373-12 12 5.373 12 12 12c2.972 0 5.691-1.081 7.787-2.87-0.031 0.677 0.293 1.515 0.998 2.299l6.447 7.58c1.104 1.226 2.907 1.33 4.007 0.23s0.997-2.903-0.23-4.007zM12 20c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8zM6 10h12v4h-12z'></path>
           </svg>
           {/* reser zoom */}
           <svg
-            id='icon-cycle'
-            viewBox='0 0 20 20'
             width='25px'
             height='25px'
+            id='icon-cycle'
+            viewBox='0 0 20 20'
+            cursor='nesw-resize'
             onClick={() => setzoomedUnit(unit)}
           >
             <path d='M5.516 14.224c-2.262-2.432-2.222-6.244 0.128-8.611 0.962-0.969 2.164-1.547 3.414-1.736l-0.069-2.077c-1.755 0.213-3.452 0.996-4.797 2.351-3.149 3.17-3.187 8.289-0.123 11.531l-1.741 1.752 5.51 0.301-0.015-5.834-2.307 2.323zM12.163 2.265l0.015 5.834 2.307-2.322c2.262 2.434 2.222 6.246-0.128 8.611-0.961 0.969-2.164 1.547-3.414 1.736l0.069 2.076c1.755-0.213 3.452-0.996 4.798-2.35 3.148-3.172 3.186-8.291 0.122-11.531l1.741-1.754-5.51-0.3z'></path>
           </svg>
         </SvgWrapper>
-        {/* scen icon */}
+        {/* scene icon */}
         <Div
           width='60%'
           height='1rem'
@@ -91,16 +95,18 @@ const LeftPanel = ({ date, columnMax, width }) => {
           borderRadius='100% 100% 0 0 '
         />
       </Div>
-      {seatsState.map((zone) => (
-        <ZoneV2
-          unit={zoomedUnit}
-          zone={zone}
-          offsetY={10}
-          key={zone._id}
-          offsetX={offsetX}
-          date={date}
-        />
-      ))}
+      <Div width='100%' height='100%' overflow='auto'>
+        {seatsState.map((zone) => (
+          <ZoneV2
+            unit={zoomedUnit}
+            zone={zone}
+            offsetY={10}
+            key={zone._id}
+            offsetX={offsetX}
+            date={date}
+          />
+        ))}
+      </Div>
     </Div>
   );
 };
