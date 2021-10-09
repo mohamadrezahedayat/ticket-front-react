@@ -9,10 +9,12 @@ import { H } from '../../shared/styledComponent/Typography';
 import { Colors } from '../../shared/styledComponent/functions';
 import { imageAddress, randomApi } from '../../shared/apis/server';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
+import Button from '../../shared/styledComponent/Button';
+import { Link } from 'react-router-dom';
 
 const RightPanel = ({ width, event }) => {
   const rightPanelWrapper = useRef();
-
+  const [paymentLink, setpaymentLink] = useState('');
   const [vertical, setvertical] = useState(true);
   const [percent, setpercent] = useState(false);
   const [timerFillColor, settimerFillColor] = useState('rgb(20,255,20)');
@@ -84,9 +86,10 @@ const RightPanel = ({ width, event }) => {
       (event.show.artGroup.images.length === 0) | imageUrl
     )
       return;
-
+    setpaymentLink(`/payment/${event._id}`);
     setimageUrl(`${imageAddress}/artists/${event.show.artGroup.images[0]}`);
-  }, [event, imageUrl]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [event]);
 
   // width event handler
   useEffect(() => {
@@ -146,6 +149,7 @@ const RightPanel = ({ width, event }) => {
     deleteUserReservedSeats();
     e.stopPropagation();
   };
+
   return (
     <Div
       boxShadow
@@ -235,6 +239,17 @@ const RightPanel = ({ width, event }) => {
             onChange={(e) => setticketCount(e.target.value)}
           />
         </Div>
+        <Link to={paymentLink}>
+          <Button
+            borderRadius='1rem'
+            bgcolor='#2f9723'
+            border='#1e4419'
+            boxShadow
+          >
+            Payment
+          </Button>
+        </Link>
+
         {/* reserves box panel*/}
         <Div
           width='100%'

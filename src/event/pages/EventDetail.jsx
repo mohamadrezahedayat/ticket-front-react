@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { api, baseURL, imageAddress } from '../../shared/apis/server';
-import Sidebar from '../../shared/components/UIElements/Sidebar';
-import LocationImages from '../components/LocationImages';
-import Button from '../../shared/styledComponent/Button';
-import Footer from '../../shared/styledComponent/Footer';
-import ShowImages from '../components/ShowImages';
-import ShowCover from '../components/ShowCover';
-import Banner from '../components/Banner';
-import Date from '../components/Date';
 import Map from '../components/Map';
+import Date from '../components/Date';
+import Banner from '../components/Banner';
+import ShowCover from '../components/ShowCover';
+import ShowImages from '../components/ShowImages';
+import Footer from '../../shared/styledComponent/Footer';
+import Button from '../../shared/styledComponent/Button';
+import LocationImages from '../components/LocationImages';
+import Sidebar from '../../shared/components/UIElements/Sidebar';
+import { api, baseURL, imageAddress } from '../../shared/apis/server';
 
 const EventDetail = () => {
   let { showId } = useParams();

@@ -13,6 +13,7 @@ import BookEvent from './event/pages/BookEvent';
 import { useAuth } from './shared/hooks/auth-hook';
 import EventDetail from './event/pages/EventDetail';
 import { AuthContext } from './shared/context/auth-context';
+import Payment from './payment/pages/Payment';
 
 const App = () => {
   const {
@@ -45,6 +46,10 @@ const App = () => {
         <Route path='/bookEvent/:showId' exact>
           {token ? <BookEvent /> : <Redirect to='/auth' exact />}
         </Route>
+        <Route path='/payment/:eventId' exact>
+          {token ? <Payment /> : <Redirect to='/auth' exact />}
+        </Route>
+
         <Redirect to='/' exact />
       </Switch>
     );
