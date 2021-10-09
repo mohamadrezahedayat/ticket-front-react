@@ -87,6 +87,7 @@ ${(props) =>
 ${(props) =>
     props.gridTemplateColumns &&
     setGridTemplateColumns(props.gridTemplateColumns)}
+
 /* transition */
 ${(props) => props.transition && setTransitions(props.transition)}
 
