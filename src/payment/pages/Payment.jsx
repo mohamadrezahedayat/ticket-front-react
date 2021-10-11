@@ -1,4 +1,5 @@
 import { useParams } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import Div from '../../shared/styledComponent/Div';
@@ -8,8 +9,9 @@ import paymentPage from '../../img/payment_page_temp.png';
 import { AuthContext } from '../../shared/context/auth-context';
 
 const Payment = () => {
+  let history = useHistory();
   const { eventId } = useParams();
-  const { userId } = useContext(AuthContext);
+  const { userId, token } = useContext(AuthContext);
   const [reservedSeats, setreservedSeats] = useState([]);
 
   const getCapacity = useCallback(async () => {
@@ -42,6 +44,7 @@ const Payment = () => {
       const capacity = await getCapacity();
       const flatenedCapacity = flattenCapacity(capacity);
       const resSeats = filterSeats(flatenedCapacity, userId);
+
       setreservedSeats(resSeats);
     },
     [getCapacity]
@@ -52,11 +55,20 @@ const Payment = () => {
     getReservedSeats(userId);
   }, [userId, getReservedSeats]);
 
-  const completePaymentHandler = () => {
+  const completePaymentHandler = async () => {
     if (reservedSeats.length === 0) return;
-    console.log('completing payment for');
-    console.log(reservedSeats);
+
+    // update reservSseats before create booking
+    await getReservedSeats(userId);
+    const data = { eventId, userId, reservedSeats };
+
+    await api.post(`${baseURL}/bookings`, data, {
+      headers: { authorization: `Bearer ${token}` },
+    });
+
+    history.push('/');
   };
+
   return (
     <div>
       <Div width='100vw' height='100vh'>
