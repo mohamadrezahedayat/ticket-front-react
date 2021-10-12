@@ -5,17 +5,18 @@ import React, {
   useCallback,
   Fragment,
 } from 'react';
+
 import {
   api,
   baseURL,
-  imageAddress,
   randomApi,
+  imageAddress,
 } from '../../shared/apis/server';
+import EditSeats from './EditSeats';
+import AddEditEvent from './AddEditEvent';
+import { useSeats } from '../../shared/hooks/manageSeats-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
-import { useSeats } from '../../shared/hooks/manageSeats-hook';
-import AddEditEvent from './AddEditEvent';
-import EditSeats from './EditSeats';
 
 const ManageEvents = () => {
   const { token } = useContext(AuthContext);
@@ -24,23 +25,19 @@ const ManageEvents = () => {
   const [editSeatsMode, seteditSeatsMode] = useState(false);
   const [activeEvent, setactiveEvent] = useState(false);
 
-  // *=====
-  // *======
-  // !=======
-  // *======
   const {
-    configMode,
-    tooltipMode,
-    selectedZones,
-    selectedSeats,
-    selectByZone,
-    seatsState,
     addZone,
     addSeat,
     setPrice,
+    seatsState,
     removeSeat,
+    configMode,
     removeZone,
+    tooltipMode,
+    selectByZone,
     changeStatus,
+    selectedZones,
+    selectedSeats,
     setconfigMode,
     settooltipMode,
     setselectByZone,
@@ -167,18 +164,18 @@ const ManageEvents = () => {
       {editSeatsMode && (
         <manageSeatsContext.Provider
           value={{
-            configMode,
-            tooltipMode,
-            selectedSeats,
-            selectedZones,
-            selectByZone,
-            seatsState,
             addZone,
             addSeat,
             setPrice,
-            removeZone,
+            seatsState,
             removeSeat,
+            configMode,
+            removeZone,
+            tooltipMode,
+            selectByZone,
             changeStatus,
+            selectedZones,
+            selectedSeats,
             setconfigMode,
             settooltipMode,
             setselectByZone,

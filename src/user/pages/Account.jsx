@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 
 import Accordion from '../components/Accordion';
+import MyTickets from '../components/MyTickets';
+import MyPayments from '../components/MyPayments';
 import AddEditShow from '../components/AddEditShow';
 import ManageShows from '../components/ManageShows';
 import ManageUsers from '../components/ManageUsers';
@@ -51,6 +53,10 @@ const Account = () => {
         return <AddEditEvent onFinish={() => setFormName('ManageEvents')} />;
       case 'ManageEvents':
         return <ManageEvents onFinish={() => setFormName('ManageEvents')} />;
+      case 'MyPayments':
+        return <MyPayments />;
+      case 'MyTickets':
+        return <MyTickets />;
 
       default:
         return (
@@ -94,6 +100,20 @@ const Account = () => {
                 onClick: () => setFormName('ChangePassword'),
               },
               { title: 'sign out', onClick: logout },
+            ]}
+          />
+          <Accordion
+            id='7'
+            label='Tickets'
+            items={[
+              {
+                title: 'My Payments',
+                onClick: () => setFormName('MyPayments'),
+              },
+              {
+                title: 'My Tickets',
+                onClick: () => setFormName('MyTickets'),
+              },
             ]}
           />
         </div>
@@ -190,8 +210,17 @@ const Account = () => {
 
           <Accordion
             id='7'
-            label='ticket Settings'
-            items={[{ title: 'edit account information', to: '' }]}
+            label='Tickets'
+            items={[
+              {
+                title: 'My Payments',
+                onClick: () => setFormName('MyPayments'),
+              },
+              {
+                title: 'My Tickets',
+                onClick: () => setFormName('MyTickets'),
+              },
+            ]}
           />
           <Accordion
             id='8'
