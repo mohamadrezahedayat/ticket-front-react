@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Colors, setBackground } from '../../shared/styledComponent/functions';
+import { setBackground } from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 const ShowCover = (props) => {
   return <Container image={props.image}></Container>;
 };

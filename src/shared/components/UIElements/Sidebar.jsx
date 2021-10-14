@@ -60,7 +60,7 @@ const Sidebar = () => {
             </li>
             <li className='navigation__item'>
               <a href='/#' className='navigation__link'>
-                <span>03</span>Buy Ticket
+                <span>03</span>FAQ.
               </a>
             </li>
             <li className='navigation__item'>

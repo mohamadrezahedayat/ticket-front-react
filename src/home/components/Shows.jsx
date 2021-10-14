@@ -4,12 +4,14 @@ import { api, imageAddress } from '../../shared/apis/server';
 
 const Shows = () => {
   const [shows, setshows] = useState(false);
+
   useEffect(() => {
     (async () => {
       const res = await api.get('shows?fields=-_v');
       setshows(res.data.data.data);
     })();
   }, []);
+
   const renderShows = () => {
     return (
       shows &&

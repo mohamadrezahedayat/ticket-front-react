@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
 
-import {
-  Colors,
-  setBackgroundColor,
-} from '../../shared/styledComponent/functions';
+import { setBackgroundColor } from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 import Div from '../../shared/styledComponent/Div';
 
 const Date = ({ dates, className, onDateSelect, enable }) => {

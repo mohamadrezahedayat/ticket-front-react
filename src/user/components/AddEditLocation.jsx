@@ -11,16 +11,17 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
 import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
+import { Heading3 } from '../../shared/styledComponent/Typography';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
+  const { token } = useContext(AuthContext);
   const [locationType, setlocationType] = useState(
     !editMode ? 'concert' : location.type
   );
-  const { token } = useContext(AuthContext);
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
   const [zoneInputs, setzoneInputs] = useState(
     editMode ? location.capacity.map((cap, i) => 'zone' + (i + 1)) : []
@@ -54,6 +55,10 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
       },
       longitude: {
         value: editMode ? location.longitude : '',
+        isValid: true,
+      },
+      city: {
+        value: editMode ? location.city : '',
         isValid: true,
       },
       address: {
@@ -101,8 +106,11 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
 
       formData.append('type', locationType);
 
+      if (formState.inputs.city.value)
+        formData.append('city', formState.inputs.city.value);
+
       if (formState.inputs.address.value)
-        formData.append('address', formState.inputs.description.value);
+        formData.append('address', formState.inputs.address.value);
 
       if (formState.inputs.description.value)
         formData.append('description', formState.inputs.description.value);
@@ -177,9 +185,9 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
   };
   return (
     <Fragment>
-      <h3 className='heading-3'>{`${
+      <Heading3>{`${
         !editMode ? 'Add New Location' : 'Edit Location'
-      }`}</h3>
+      }`}</Heading3>
       <ErrorModal error={error} onClear={clearError} />
       <form className='form' onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
@@ -234,7 +242,16 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
           <option value='club'>Club</option>
           <option value='boat'>Boat</option>
         </select>
-
+        <Input
+          element='input'
+          id='city'
+          type='text'
+          label='City'
+          validators={[]}
+          initialValid={editMode}
+          initialValue={editMode && location.city}
+          onInput={inputHandler}
+        />
         <Input
           element='textarea'
           rows={2}

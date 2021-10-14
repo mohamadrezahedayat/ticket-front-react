@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Ticket from './Ticket';
 import Div from '../../shared/styledComponent/Div';
 import { H } from '../../shared/styledComponent/Typography';
-import { Colors } from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 
 const ReservedTicket = ({ price, code, width }) => {
   const [ticketWidth, setticketWidth] = useState(width);

@@ -45,16 +45,17 @@ const ManageLocations = () => {
 
   const renderHeader = () => {
     let headerElement = [
-      'name',
-      'type',
-      'address',
-      'description',
-      'image',
-      'operation',
+      'Name',
+      'Type',
+      'City',
+      'Address',
+      'Description',
+      'Image',
+      'Operation',
     ];
 
     return headerElement.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
+      return <th key={index}>{key}</th>;
     });
   };
 
@@ -66,6 +67,7 @@ const ManageLocations = () => {
           <tr key={location._id}>
             <td>{location.name}</td>
             <td>{location.type}</td>
+            <td>{location.city}</td>
             <td>{location.address}</td>
             <td>{location.description}</td>
             <td>

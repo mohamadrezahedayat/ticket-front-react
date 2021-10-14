@@ -34,6 +34,7 @@ const Div = styled.div`
 
   /* cursor */
   ${(props) => props.cursor && setCursor(props.cursor)}
+
   /* display */
   ${(props) => props.display && setDisplay(props.display)}
 
@@ -96,9 +97,11 @@ ${(props) => props.transition && setTransitions(props.transition)}
 &:hover {
     /* display */
     ${(props) => props.display__hover && setDisplay(props.display__hover)}
+
     /* size */
     ${(props) => props.width__hover && setWidth(props.width__hover)}
     ${(props) => props.height__hover && setHeight(props.height__hover)} 
+    
     /* box model */
     ${(props) => props.margin__hover && setMargin(props.margin__hover)}
     ${(props) => props.padding__hover && setPadding(props.padding__hover)}
@@ -113,6 +116,11 @@ ${(props) => props.transition && setTransitions(props.transition)}
       props.bgcolor__hover && setBackgroundColor(props.bgcolor__hover)}
     ${(props) =>
       props.background__hover && setBackground(props.background__hover)}
+
+      /* position */
+      ${(props) => props.zIndex__hover && setZindex(props.zIndex__hover)}
+      ${(props) =>
+      props.absPosition__hover && setAbsPos(props.absPosition__hover)}
 
     /* transform */
     ${(props) => props.transform__hover && setTransform(props.transform__hover)}

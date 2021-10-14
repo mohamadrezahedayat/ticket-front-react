@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Div from './Div';
-import { Colors } from './functions';
+import { Colors } from './variables';
 
 const Footer = () => {
   return (

@@ -2,11 +2,11 @@ import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
 import {
-  Colors,
   setAbsPos,
   setCursor,
   setBoxShadow,
 } from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const SeatV2 = ({ unit, seat }) => {

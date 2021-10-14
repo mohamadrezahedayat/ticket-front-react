@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 import spiral from '../../img/spiral.png';
-import { Colors, setHeight, setWidth } from './functions';
+import { setHeight, setWidth } from './functions';
+import { Colors } from './variables';
 
 const Checkbox = styled.input.attrs((props) => ({
   id: props.id,

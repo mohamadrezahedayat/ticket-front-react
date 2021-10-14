@@ -6,7 +6,7 @@ import Div from '../../shared/styledComponent/Div';
 import Label from '../../shared/styledComponent/Label';
 import Slider from '../../shared/styledComponent/Slider';
 import { H } from '../../shared/styledComponent/Typography';
-import { Colors } from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 import { imageAddress, randomApi } from '../../shared/apis/server';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import Button from '../../shared/styledComponent/Button';

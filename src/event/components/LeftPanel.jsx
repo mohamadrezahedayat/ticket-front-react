@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import ZoneV2 from './ZoneV2';
 import Div from '../../shared/styledComponent/Div';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
-import { Colors } from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 import styled from 'styled-components';
 
 const LeftPanel = ({ date, columnMax, width }) => {

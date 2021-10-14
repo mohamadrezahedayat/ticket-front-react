@@ -2,11 +2,10 @@ import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import {
-  Colors,
   setAbsPos,
   setBoxShadow,
 } from '../../shared/styledComponent/functions';
-
+import { Colors } from '../../shared/styledComponent/variables';
 const Seat = ({ unit, seat }) => {
   const {
     addSeat,

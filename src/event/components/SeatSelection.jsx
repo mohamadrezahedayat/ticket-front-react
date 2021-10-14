@@ -4,7 +4,7 @@ import LeftPanel from './LeftPanel';
 import RightPanel from './RightPanel';
 import chairs from '../../img/chairs.jpg';
 import Div from '../../shared/styledComponent/Div';
-import { Colors } from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const SeatSelection = ({ events, date }) => {

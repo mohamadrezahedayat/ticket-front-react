@@ -1,36 +1,3 @@
-// variables
-export const Colors = {
-  primary: '#340068',
-  primaryLight: '#5704aa',
-  primaryDark: '#220142',
-
-  secondary: '#6d435a',
-  secondaryLight: '#a56789',
-  secondaryDark: '#492e3d',
-
-  tertiary: '#ff6978',
-  tertiaryLight: '#fc8692',
-  tertiaryDark: '#e05d6a',
-
-  forth: '#b1ede8',
-  forthLight: '#cef7f3',
-  forthDark: '#95cec9',
-
-  greyLight1: '#f7f7f7',
-  greyLight2: '#eee',
-
-  grey: ' #6a666e',
-  greyLight: '#b7b6b9',
-  greyDark: 'rgb(28, 28, 29)',
-
-  white: '#fff',
-  black: '#000',
-};
-
-export const fonts = {
-  main: "font-family:'Lato',sans-serif;",
-};
-
 // General
 export const setDisplay = (display = 'block') => `display:${display};`;
 
@@ -136,6 +103,10 @@ export const setSinglePadding = (string) => {
 // size
 export const setHeight = (height) => `height: ${height};`;
 export const setWidth = (width) => `width: ${width};`;
+export const setWidthHeight = (width = '5rem', height) => {
+  if (!height) height = width;
+  return `width: ${width};height: ${height};`;
+};
 
 // unit
 export const setRem = (number = '16') => {
@@ -143,8 +114,14 @@ export const setRem = (number = '16') => {
 };
 
 // background
-export const setBackground = ({ img, color = 'rgba(0,0,0,0)' }) => {
-  return `background: linear-gradient(${color},${color}), url("${img}") center/cover fixed no-repeat;`;
+export const setBackground = ({
+  img,
+  color = 'rgba(0,0,0,0)',
+  fixed = true,
+}) => {
+  return `background: linear-gradient(${color},${color}), url("${img}") center/cover ${
+    fixed ? 'fixed' : ''
+  } no-repeat;`;
 };
 
 export const setBackgroundColor = (color) => `background-color:${color};`;

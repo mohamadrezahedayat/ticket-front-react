@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import {
-  Colors,
   setColor,
   setWidth,
   setCursor,
@@ -19,6 +18,7 @@ import {
   setSinglePadding,
   setBackgroundColor,
 } from './functions';
+import { Colors } from './variables';
 
 const Button = styled.button`
   /* general */
@@ -64,7 +64,7 @@ const Button = styled.button`
   /* font */
   font: inherit;
   text-decoration: none;
-  font-size: ${(props) => (props.fontsize ? props.fontsize : '1.2rem')};
+  font-size: ${(props) => (props.fontSize ? props.fontSize : '1.2rem')};
 
   /* border */
   ${(props) =>

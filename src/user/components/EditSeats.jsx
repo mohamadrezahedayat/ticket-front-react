@@ -4,7 +4,7 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { AuthContext } from '../../shared/context/auth-context';
-import { Colors } from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Button from '../../shared/styledComponent/Button';
 import Label from '../../shared/styledComponent/Label';

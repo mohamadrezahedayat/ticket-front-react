@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 import {
-  Colors,
   setMargin,
   setPadding,
   setSingleMargin,
   setSinglePadding,
 } from './functions';
+import { Colors } from './variables';
 
 export const Label = styled.label.attrs((props) => ({
   htmlFor: props.htmlFor,

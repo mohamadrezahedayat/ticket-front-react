@@ -1,12 +1,13 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { QRCode } from 'react-qrcode-logo';
-import Ticket from '../../event/components/Ticket';
 
-import { api, baseURL } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
+import Ticket from '../../event/components/Ticket';
 import Div from '../../shared/styledComponent/Div';
-import { Colors } from '../../shared/styledComponent/functions';
+import { api, baseURL } from '../../shared/apis/server';
 import { H } from '../../shared/styledComponent/Typography';
+import { AuthContext } from '../../shared/context/auth-context';
+import { Colors } from '../../shared/styledComponent/variables';
+
 const MyTickets = () => {
   const { token } = useContext(AuthContext);
   const [tickets, settickets] = useState([]);

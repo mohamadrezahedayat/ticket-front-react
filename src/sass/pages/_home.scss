@@ -1,13 +1,13 @@
-.home-page-container {
-  display: grid;
-  grid-template-rows: 80vh repeat(5, min-content);
-  grid-template-columns:
-    [sidebar-start] 8rem [sidebar-end full-start] 1fr [center-start] repeat(
-      8,
-      [col-start] minmax(min-content, 14rem) [col-end]
-    )
-    [center-end] 1fr [full-end];
-}
+// .home-page-container {
+//   display: grid;
+//   grid-template-rows: 80vh repeat(5, min-content);
+//   grid-template-columns:
+//     [sidebar-start] 8rem [sidebar-end full-start] 1fr [center-start] repeat(
+//       8,
+//       [col-start] minmax(min-content, 14rem) [col-end]
+//     )
+//     [center-end] 1fr [full-end];
+// }
 
 // .section-about {
 //   background-color: $color-grey-light-1;
