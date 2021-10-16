@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -8,8 +9,11 @@ import {
 } from '../../shared/styledComponent/functions';
 import { Colors } from '../../shared/styledComponent/variables';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
+import { AuthContext } from '../../shared/context/auth-context';
 
 const SeatV2 = ({ unit, seat }) => {
+  let history = useHistory();
+
   const {
     tooltipMode,
     hoveredSeats,
@@ -19,6 +23,8 @@ const SeatV2 = ({ unit, seat }) => {
     seatClickHandler,
     reservedSeatsOfCurrentUser,
   } = useContext(manageSeatsContext);
+
+  const { token } = useContext(AuthContext);
 
   const [hovered, sethovered] = useState();
   const [booked, setbooked] = useState(false);
@@ -63,11 +69,15 @@ const SeatV2 = ({ unit, seat }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reservedSeatsOfCurrentUser]);
 
+  const seatLocalClickHandler = () => {
+    if (!token) history.push('/auth');
+    seatClickHandler(seat);
+  };
   return (
     <SeatWrapper
       unit={unit}
       bgcolor={fillcolor}
-      onClick={() => seatClickHandler(seat)}
+      onClick={seatLocalClickHandler}
       onMouseOver={() => seatHoverHandler(seat)}
       onMouseLeave={() => sethoveredSeats([])}
       tooltipMode={tooltipMode}

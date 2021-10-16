@@ -4,9 +4,13 @@ import {
   setGrid,
   setFlex,
   setWidth,
+  setMinWidth,
+  setHeight,
+  setMinHeight,
+  setMaxWidth,
+  setMaxHeight,
   setCursor,
   setBorder,
-  setHeight,
   setAbsPos,
   setMargin,
   setZindex,
@@ -40,7 +44,12 @@ const Div = styled.div`
 
   /* size */
   ${(props) => props.width && setWidth(props.width)}
+  ${(props) => props.minWidth && setMinWidth(props.minWidth)}
+  ${(props) => props.maxWidth && setMaxWidth(props.maxWidth)}
+
   ${(props) => props.height && setHeight(props.height)} 
+  ${(props) => props.minHeight && setMinHeight(props.minHeight)} 
+  ${(props) => props.maxHeight && setMaxHeight(props.maxHeight)} 
 
 /* overflow */
 ${(props) => props.overflow && setOverflow(props.overflow)}

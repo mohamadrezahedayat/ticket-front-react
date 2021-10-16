@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React, { useState } from 'react';
 
 import { setBackgroundColor } from '../../shared/styledComponent/functions';
+import { Screen } from '../../shared/styledComponent/mediaQueries';
 import { Colors } from '../../shared/styledComponent/variables';
 import Div from '../../shared/styledComponent/Div';
 
@@ -57,6 +58,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
 
   & > div {
+    margin: 0 1rem;
     ${(props) => props.enable && 'cursor: pointer;'};
 
     &:hover {
@@ -70,11 +72,13 @@ const Wrapper = styled.div`
 
   & p.top {
     font-size: 5rem;
+    ${Screen.phone`font-size: 4rem;`}
     transform: translateY(-2rem);
   }
 
   & p.bottom {
     font-size: 4.5rem;
     text-align: right;
+    ${Screen.phone`font-size: 3.5rem;`}
   }
 `;

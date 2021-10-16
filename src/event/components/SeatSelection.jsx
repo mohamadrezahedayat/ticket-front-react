@@ -74,7 +74,7 @@ const SeatSelection = ({ events, date }) => {
   return (
     <Div
       row
-      height='100vh'
+      minHeight='100vh'
       gridRowStart='3'
       gridColumn='full-start/full-end'
       background={{ img: chairs, color: `${Colors.primaryLight}3f` }}

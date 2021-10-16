@@ -109,7 +109,12 @@ export const setSinglePadding = (string) => {
 
 // size
 export const setHeight = (height) => `height: ${height};`;
+export const setMinHeight = (height) => `min-height: ${height};`;
+export const setMaxHeight = (height) => `max-height: ${height};`;
+
 export const setWidth = (width) => `width: ${width};`;
+export const setMinWidth = (width) => `mn-width: ${width};`;
+export const setMaxWidth = (width) => `max-width: ${width};`;
 export const setWidthHeight = (width = '5rem', height) => {
   if (!height) height = width;
   return `width: ${width};height: ${height};`;

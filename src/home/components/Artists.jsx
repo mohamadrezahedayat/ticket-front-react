@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Heading3,
@@ -68,9 +68,6 @@ export default styled(Artists)`
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
     align-items: stretch;
-    ${Screen.tabletLandscape`
-      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-    `}
   }
 
   .artists__artist {

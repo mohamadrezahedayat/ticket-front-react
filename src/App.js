@@ -44,7 +44,7 @@ const App = () => {
           <EventDetail />
         </Route>
         <Route path='/bookEvent/:showId' exact>
-          {token ? <BookEvent /> : <Redirect to='/auth' exact />}
+          <BookEvent />
         </Route>
         <Route path='/payment/:eventId' exact>
           {token ? <Payment /> : <Redirect to='/auth' exact />}

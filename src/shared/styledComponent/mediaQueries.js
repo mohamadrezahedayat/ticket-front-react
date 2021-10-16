@@ -48,23 +48,6 @@ export const Screen = {
     `@media only screen and (min-width: 112.5em){${args}}`,
 };
 
-// export const Screen = {
-//   //600px
-//   phone: (...args) => `@media only screen and (max-width: 37.5em){${args}}`,
-
-//   //900px
-//   tabletPortrait: (...args) =>
-//     `@media only screen and (max-width: 56.25em){${args}}`,
-
-//   //1200px
-//   tabletLandscape: (...args) =>
-//     `@media only screen and (max-width: 75em){${args}}`,
-
-//   //1800px
-//   bigDesktop: (...args) =>
-//     `@media only screen and (min-width: 112.5em){${args}}`,
-// };
-
 export const setMediaQuery = ({ isMinWidth = 'true', breakPoint }, ...args) => {
   const condition = isMinWidth ? 'min-width' : 'max-width';
   return `@media only screen and (${condition}: ${breakPoint}){${args}}`;

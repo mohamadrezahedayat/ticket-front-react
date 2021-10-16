@@ -6,29 +6,26 @@ import {
   Span,
   Heading1,
   Heading3,
-  Heading4Dark,
-  Heading2Dark,
   Heading2,
   Heading4,
 } from '../../shared/styledComponent/Typography';
 import singer from '../../img/singer-rec.jpg';
 import tickets from '../../img/tickets.jpg';
 import {
+  setColor,
   setAbsPos,
   setPadding,
   setBoxShadow,
   setGridColumn,
   setBackground,
   setWidthHeight,
-  setBorderRadius,
-  setColor,
 } from '../../shared/styledComponent/functions';
 import Div from '../../shared/styledComponent/Div';
 import Button from '../../shared/styledComponent/Button';
 import concertVideo from '../../img/concert_video_bg.mp4';
 import { Colors } from '../../shared/styledComponent/variables';
-import { api, baseURL, imageAddress } from '../../shared/apis/server';
 import { Screen } from '../../shared/styledComponent/mediaQueries';
+import { api, baseURL, imageAddress } from '../../shared/apis/server';
 
 const Header = () => {
   const [diskImage, setdiskImage] = useState();
@@ -38,7 +35,10 @@ const Header = () => {
 
   useEffect(() => {
     const getLastShowEvent = async () => {
-      const { data } = await api.get(`${baseURL}/shows?limit=1`);
+      const res = await api.get(`${baseURL}/events?fields=show&limit=1`);
+      const showId = res.data.data.data[0].show.id;
+
+      const { data } = await api.get(`${baseURL}/shows?_id=${showId}`);
       const show = data.data.data[0];
       setcurrentShow(show);
     };
@@ -234,7 +234,7 @@ const HeaderWrapper = styled.div`
   .header__heading2 {
     font-size: 3rem;
     text-align: center;
-    text-transform: uppercase;
+    text-transform: capitalize;
     margin-bottom: 0.3em;
     ${Screen.tabletLandscape`font-size:3rem`}
     ${Screen.tabletPortrait`font-size:2.6rem`}
@@ -243,7 +243,6 @@ const HeaderWrapper = styled.div`
     & span {
       font-size: 3.7rem;
       padding-left: 0.2em;
-      text-transform: capitalize;
       ${setColor(Colors.tertiaryDark)}
       ${Screen.tabletLandscape`font-size:3.5rem`}
       ${Screen.tabletPortrait`font-size:3.2rem`}
