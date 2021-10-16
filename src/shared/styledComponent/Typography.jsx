@@ -19,6 +19,7 @@ import {
   setLetterSpacing,
   setTextTransform,
 } from './functions';
+import { Screen } from './mediaQueries';
 import { Colors, Fonts } from './variables';
 
 // dynamic heading

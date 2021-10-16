@@ -7,6 +7,9 @@ import {
   Heading1,
   Heading3,
   Heading4Dark,
+  Heading2Dark,
+  Heading2,
+  Heading4,
 } from '../../shared/styledComponent/Typography';
 import singer from '../../img/singer-rec.jpg';
 import tickets from '../../img/tickets.jpg';
@@ -18,14 +21,16 @@ import {
   setBackground,
   setWidthHeight,
   setBorderRadius,
+  setColor,
 } from '../../shared/styledComponent/functions';
 import Div from '../../shared/styledComponent/Div';
 import Button from '../../shared/styledComponent/Button';
 import concertVideo from '../../img/concert_video_bg.mp4';
 import { Colors } from '../../shared/styledComponent/variables';
 import { api, baseURL, imageAddress } from '../../shared/apis/server';
+import { Screen } from '../../shared/styledComponent/mediaQueries';
 
-const Header = ({ className }) => {
+const Header = () => {
   const [diskImage, setdiskImage] = useState();
   const [eventDates, seteventDates] = useState([]);
   const [currentShow, setcurrentShow] = useState();
@@ -33,8 +38,8 @@ const Header = ({ className }) => {
 
   useEffect(() => {
     const getLastShowEvent = async () => {
-      const res = await api.get(`${baseURL}/shows?limit=1`);
-      const show = res.data.data.data[0];
+      const { data } = await api.get(`${baseURL}/shows?limit=1`);
+      const show = data.data.data[0];
       setcurrentShow(show);
     };
     getLastShowEvent();
@@ -67,56 +72,29 @@ const Header = ({ className }) => {
 
   const renderFreeCapacity = (index) => {
     if (freeCapacities[index] !== 0)
-      return (
-        <Span fontSize='1.2rem'> only {freeCapacities[index]} seats left.</Span>
-      );
-    return (
-      <Span fontSize='1.2rem' color='red'>
-        Sold out!
-      </Span>
-    );
+      return <Span> only {freeCapacities[index]} seats left.</Span>;
+    return <Span color='red'>Sold out!</Span>;
   };
 
   return (
-    <div className={className}>
+    <HeaderWrapper>
       <div className='header__card'>
         <video src={concertVideo} loop muted autoPlay />
         <Div
           className='header__disk'
           background={{ img: diskImage ? diskImage : singer }}
         />
-        {/* Information Banner */}
         {currentShow && (
-          <Div
-            padding='2rem'
-            width='50%'
-            height='calc(100% - 4rem)'
-            absPosition={{ x: 'right,2rem', y: 'top,2rem' }}
-            borderRadius='4rem'
-            bgcolor={`${Colors.white}7`}
-            column
-            zIndex__hover='3'
-          >
-            <Heading1 textAlign='center'>
+          <Div className='header__banner'>
+            <Heading1 className='header__heading1'>
               {currentShow.artGroup.name}
-              <Span
-                fontSize='3rem'
-                SinglePadding='left,1rem'
-                textTransform='capitalize'
-              >
-                lives in
-              </Span>
-              <Span
-                fontSize='4rem'
-                SinglePadding='left,1rem'
-                textTransform='uppercase'
-                color={Colors.tertiary}
-              >
-                istanbul
-              </Span>
             </Heading1>
-            <Heading3 margin='2rem 0'>
-              <ul className='header__dates'>
+            <Heading2 className='header__heading2'>
+              live in
+              <span>{currentShow.events[0].location.city}</span>
+            </Heading2>
+            <Heading3 className='header__heading3'>
+              <ul>
                 {eventDates.map((date, index) => (
                   <li key={index}>
                     {new Date(date).toLocaleDateString(undefined, {
@@ -129,81 +107,181 @@ const Header = ({ className }) => {
                 ))}
               </ul>
             </Heading3>
-            <Heading4Dark textAlign='center'>
+            <Heading4 className='header__heading4'>
               "{currentShow.description}"
-            </Heading4Dark>
-            <Heading3 textAlign='center'>
+            </Heading4>
+            <Heading3 className='header__heading3'>
               {currentShow.events[0].location.name}
             </Heading3>
-            <Button className='header__more'>
-              <Link to={`/eventDetail/${currentShow._id}`}>
-                More Information
-              </Link>
+            <Button className='header__btn'>
+              <Link to={`/eventDetail/${currentShow._id}`}>More Detail</Link>
             </Button>
           </Div>
         )}
       </div>
-    </div>
+    </HeaderWrapper>
   );
 };
+export default Header;
 
-export default styled(Header)`
+const HeaderWrapper = styled.div`
+  ${setPadding('2rem')}
   ${setGridColumn('full-start / col-end 6')}
   ${setBackground({ img: tickets, color: Colors.secondary + '88' })}
-  ${setPadding('4rem')}
+  ${Screen.tabletLandscape`grid-column: full-start / full-end;padding:0;`}
 
   .header__card {
-    position: relative;
-    overflow: hidden;
     width: 100%;
     height: 100%;
+    padding: 3rem;
+    overflow: hidden;
+    position: relative;
     border-radius: 5rem;
-    padding: 2rem;
+
+    ${Screen.tabletLandscape`border-radius: 0;`}
 
     & video {
-      ${setAbsPos({ x: 'top,0', y: 'left,0' })}
       height: 100%;
       width: 100%;
-      object-fit: cover;
       opacity: 0.8;
-      ${setBorderRadius('5rem')}
+      object-fit: cover;
+      ${setAbsPos({ x: 'top,0', y: 'left,0' })}
     }
   }
 
   .header__disk {
-    ${setAbsPos({ x: 'top,50%', y: 'left,2rem' })}
-    transform: translateY(-50%);
-    background-attachment: initial;
-    opacity: 75%;
-    border-radius: 50%;
     z-index: 2;
+    opacity: 75%;
+    ${setBoxShadow()}
+    border-radius: 50%;
+    align-self: center;
+    transform: translateY(-50%);
     ${setWidthHeight('35rem')}
     max-width:calc(100% - 4rem);
-    align-self: center;
-    ${setBoxShadow()}
+    background-attachment: initial;
     transition: transform 1s ease-in-out;
-
+    ${setAbsPos({ x: 'top,50%', y: 'left,2rem' })}
+    ${Screen.phone`
+      top:2rem;
+      left:50%;
+      transform: translateX(-50%);
+    `}
     &:hover {
       transform: translateY(-50%) rotate(360deg);
+      ${Screen.phone`
+      transform: translateX(-50%) rotate(360deg);
+    `}
     }
   }
 
-  .header__dates {
-    color: ${Colors.secondary};
-    padding-left: 1rem;
-    line-height: 1.3;
-    font-size: 2rem;
-    text-decoration: none;
-    list-style: none;
-  }
-  .header__more {
-    margin-top: 2rem;
-    padding: 1rem 3rem;
-    font-size: 2rem;
-    border-radius: 1.5rem;
-    & a {
-      text-decoration: none;
-      color: white;
+  .header__banner {
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 2em;
+    border-radius: 4em;
+    background-color: ${Colors.white}7;
+    ${setAbsPos({ x: 'right,2rem', y: 'top,50%' })}
+    transform:translateY(-50%);
+    transition: transform 1s ease-in-out;
+    ${Screen.phone`
+      right:50%;
+      top:75%;
+      min-width:60%;
+      transform: translate(50%, -50%);
+      max-width: unset;
+      max-height: calc( 50% - 4em)
+    `}
+    & hover {
+      z-index: 3;
     }
+
+    & .header__btn {
+      font-size: 2rem;
+      letter-spacing: 2px;
+      margin-top: 1em;
+      padding: 0.5em;
+      border-radius: 0.7em;
+      ${Screen.tabletLandscape`font-size:1.8rem`}
+      ${Screen.tabletPortrait`font-size:1.6rem`}
+      ${Screen.phone`font-size:1.5rem`}
+      ${Screen.bigDesktop`font-size:2.2rem`}
+      & a {
+        color: white;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .header__heading1 {
+    font-size: 3.7rem;
+    text-align: center;
+    text-transform: uppercase;
+    ${Screen.tabletLandscape`font-size:3.7rem`}
+    ${Screen.tabletPortrait`font-size:3.5rem`}
+    ${Screen.phone`font-size:2rem`}
+    ${Screen.bigDesktop`font-size:4.5rem`}
+    & span {
+      ${Screen.tabletLandscape`font-size:3rem`}
+      ${Screen.tabletPortrait`font-size:2.5rem`}
+      ${Screen.phone`font-size:1.5rem`}
+      ${Screen.bigDesktop`font-size:3rem`}
+    }
+  }
+
+  .header__heading2 {
+    font-size: 3rem;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 0.3em;
+    ${Screen.tabletLandscape`font-size:3rem`}
+    ${Screen.tabletPortrait`font-size:2.6rem`}
+    ${Screen.phone`font-size:2rem`}
+    ${Screen.bigDesktop`font-size:3.5rem`}
+    & span {
+      font-size: 3.7rem;
+      padding-left: 0.2em;
+      text-transform: capitalize;
+      ${setColor(Colors.tertiaryDark)}
+      ${Screen.tabletLandscape`font-size:3.5rem`}
+      ${Screen.tabletPortrait`font-size:3.2rem`}
+      ${Screen.phone`font-size:2.5rem`}
+      ${Screen.bigDesktop`font-size:4rem`}
+    }
+  }
+
+  .header__heading3 {
+    text-align: center;
+    margin-bottom: 0.3em;
+    font-size: 2.2rem;
+    letter-spacing: -1px;
+    ${Screen.tabletLandscape`font-size:2.1rem`}
+    ${Screen.tabletPortrait`font-size:1.9rem`}
+    ${Screen.phone`font-size:1.4rem`}
+    ${Screen.bigDesktop`font-size:2.2rem`}
+    & ul {
+      list-style: none;
+      line-height: 1.3;
+      padding-left: 1rem;
+      text-decoration: none;
+      color: ${Colors.secondary};
+    }
+    & span {
+      text-transform: lowercase;
+    }
+  }
+
+  .header__heading4 {
+    text-align: center;
+    ${setColor(Colors.tertiaryDark)}
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 0.4em;
+    ${Screen.tabletLandscape`font-size:2rem`}
+    ${Screen.tabletPortrait`font-size:1.8rem`}
+    ${Screen.phone`font-size:1.4rem`}
+    ${Screen.bigDesktop`font-size:2.3rem`}
   }
 `;

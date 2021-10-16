@@ -7,6 +7,7 @@ import {
 } from '../../shared/styledComponent/Typography';
 import { api, imageAddress } from '../../shared/apis/server';
 import { Colors } from '../../shared/styledComponent/variables';
+import { Screen } from '../../shared/styledComponent/mediaQueries';
 import chairs from '../../img/chairs.jpg';
 
 const Artists = ({ className }) => {
@@ -14,28 +15,30 @@ const Artists = ({ className }) => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get('artgroups?fields=images,name&limit=4');
+      const { data } = await api.get('artgroups?fields=images,name&limit=6');
       setartistsPhotos(data.data.data);
     })();
   }, []);
 
   const imageCards = artistsPhotos.map((artist) => (
-    <Fragment key={artist.name}>
+    <div key={artist.name} className='artists__artist'>
       <img
-        src={`${imageAddress}/artists/${artist.images[0]}`}
-        alt={artist.name}
         className='artists__img'
+        alt={artist.name}
+        src={`${imageAddress}/artists/${artist.images[0]}`}
       />
       <div className='artists__detail'>
-        <Heading4Light textTransform='uppercase'>{artist.name}</Heading4Light>
+        <Heading4Light>{artist.name}</Heading4Light>
         <p className='artists__sold'>Coming Soon</p>
       </div>
-    </Fragment>
+    </div>
   ));
 
   return (
     <div className={className}>
-      <Heading3 color={Colors.white}>Hot Artists</Heading3>
+      <Heading3 color={Colors.white} textAlign='center'>
+        Hot Artists
+      </Heading3>
       <div className='artists__list'>{imageCards}</div>
     </div>
   );
@@ -46,27 +49,37 @@ export default styled(Artists)`
   background-color: ${Colors.tertiary};
   background-image: linear-gradient(
       to right,
-      ${Colors.tertiary}cc,
+      ${Colors.tertiary}bc,
       ${Colors.tertiary}05
     ),
     url(${chairs});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  padding: 2rem;
+  padding: 2em;
+  overflow-y: auto;
+
   display: grid;
-  justify-items: center;
-  align-items: center;
+  grid-template-rows: max-content 1fr;
   grid-row-gap: 2rem;
-  justify-items: center;
-  overflow: hidden;
+  ${Screen.tabletLandscape`grid-column: full-start / full-end;`}
+
   .artists__list {
     display: grid;
-    grid-template-columns: min-content max-content;
-    grid-column-gap: 2rem;
-    grid-row-gap: 2rem;
-    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    align-items: stretch;
+    ${Screen.tabletLandscape`
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    `}
   }
+
+  .artists__artist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
   .artists__img {
     width: 8rem;
     border-radius: 50%;
@@ -75,12 +88,19 @@ export default styled(Artists)`
     transition: all 0.3s;
   }
   .artists__img:hover {
-    transform: scale(1.3);
+    transform: scale(1.3) rotate(360deg);
     border-radius: 30%;
+  }
+  .artists__detail {
+    & h4 {
+      font-weight: 600;
+      margin-top: 0.2em;
+      text-transform: capitalize;
+      text-align: center;
+    }
   }
   .artists__sold {
     text-transform: uppercase;
-    color: $color-grey-light-2;
-    margin-top: -3px;
+    text-align: center;
   }
 `;

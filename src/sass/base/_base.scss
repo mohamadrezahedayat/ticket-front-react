@@ -1,21 +1,23 @@
-*,
-*::after,
-*::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: inherit;
-}
+// *,
+// *::after,
+// *::before {
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: inherit;
+// }
 
-html {
-  font-size: 62.5%; //1 rem = 10px; 10px/16px = 62.5%
-}
+// html {
+//   font-size: 62.5%; //1 rem = 10px; 10px/16px = 62.5%
+//   // document root font-size usually is 16 px then 1rem is 16 px
+//   // we want to 1 rem = 10 px for simplicity
+// }
 
-body {
-  box-sizing: border-box;
-  color: $color-white;
-}
+// body {
+//   box-sizing: border-box;
+//   color: $color-white;
+// }
 
-::selection {
-  background-color: $color-primary;
-  color: $color-white;
-}
+// ::selection {
+//   background-color: $color-primary;
+//   color: $color-white;
+// }

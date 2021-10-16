@@ -41,10 +41,17 @@ export const setOverflow = (string) => {
     return `overflow-${params[0]}:${params[1]};overflow-${params[2]}:${params[3]};`;
 };
 
+// position
 export const setAbsPos = ({ x = 'top,0', y = 'left,0' } = {}) =>
   `position:absolute; 
   ${x.split(',')[0]}: ${x.split(',')[1]};
   ${y.split(',')[0]}: ${y.split(',')[1]};`;
+
+export const setAbsCenter = () => `
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%)`;
 
 // flex
 export const setFlex = ({
