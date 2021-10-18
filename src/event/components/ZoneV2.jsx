@@ -5,10 +5,10 @@ import Div from '../../shared/styledComponent/Div';
 
 const SeatsWrapper = ({ zone, unit, offsetX, offsetY }) => {
   const { columns, rows, startColumn, startRow } = zone.layout;
-  const left = `${startColumn * unit + offsetX}rem`;
-  const top = `${startRow * unit + offsetY}rem`;
-  const width = `${columns * unit + 0.4}rem`;
-  const height = `${rows * unit + 0.4}rem`;
+  const left = `${startColumn * unit + offsetX}px`;
+  const top = `${startRow * unit + offsetY}px`;
+  const width = `${columns * unit + 4}px`;
+  const height = `${rows * unit + 4}px`;
 
   return (
     <Div

@@ -12,40 +12,7 @@ import { api, baseURL, imageAddress } from '../../shared/apis/server';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const BookEvent = () => {
-  const {
-    addSeat,
-    addAgain,
-    setclicked,
-    isSeatFree,
-    configMode,
-    removeSeat,
-    seatsState,
-    setaddAgain,
-    getSeatById,
-    tooltipMode,
-    isForbidden,
-    getNextSeat,
-    ticketCount,
-    activeEvent,
-    changeStatus,
-    hoveredSeats,
-    getSeatByCode,
-    selectedSeats,
-    setactiveEvent,
-    settooltipMode,
-    setticketCount,
-    sethoveredSeats,
-    seatClickHandler,
-    setselectedSeats,
-    seatHoverHandler,
-    getNextSeatStatus,
-    setInitialCapacity,
-    deleteUserReservedSeats,
-    reservedSeatsOfCurrentUser,
-    setReservedSeatsOfCurrentUser,
-    getReservedSeatsOfCurrentUser,
-  } = useSeats();
-
+  const seatHook = useSeats();
   let { showId } = useParams();
   const [date, setdate] = useState();
   const [show, setshow] = useState(false);
@@ -74,41 +41,7 @@ const BookEvent = () => {
           dates={events.map((event) => event.startDate)}
         />
       )}
-      <manageSeatsContext.Provider
-        value={{
-          addSeat,
-          addAgain,
-          setclicked,
-          isSeatFree,
-          configMode,
-          removeSeat,
-          seatsState,
-          setaddAgain,
-          isForbidden,
-          getSeatById,
-          tooltipMode,
-          getNextSeat,
-          ticketCount,
-          activeEvent,
-          changeStatus,
-          hoveredSeats,
-          getSeatByCode,
-          selectedSeats,
-          settooltipMode,
-          setactiveEvent,
-          setticketCount,
-          sethoveredSeats,
-          seatClickHandler,
-          setselectedSeats,
-          seatHoverHandler,
-          getNextSeatStatus,
-          setInitialCapacity,
-          deleteUserReservedSeats,
-          reservedSeatsOfCurrentUser,
-          setReservedSeatsOfCurrentUser,
-          getReservedSeatsOfCurrentUser,
-        }}
-      >
+      <manageSeatsContext.Provider value={seatHook}>
         {events && (
           <SeatSelection
             className='seat-selection'

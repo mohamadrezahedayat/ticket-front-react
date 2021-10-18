@@ -8,8 +8,8 @@ import {
   setBoxShadow,
 } from '../../shared/styledComponent/functions';
 import { Colors } from '../../shared/styledComponent/variables';
-import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import { AuthContext } from '../../shared/context/auth-context';
+import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const SeatV2 = ({ unit, seat }) => {
   let history = useHistory();
@@ -73,6 +73,7 @@ const SeatV2 = ({ unit, seat }) => {
     if (!token) history.push('/auth');
     seatClickHandler(seat);
   };
+
   return (
     <SeatWrapper
       unit={unit}
@@ -83,6 +84,7 @@ const SeatV2 = ({ unit, seat }) => {
       tooltipMode={tooltipMode}
       cursorType={cursorType}
     >
+      {/* tooltip */}
       <div className='tooltip'>
         <ul>
           <li>{seat.code}</li>
@@ -90,6 +92,7 @@ const SeatV2 = ({ unit, seat }) => {
           <li>{seat.price}</li>
         </ul>
       </div>
+      {/* chair svg */}
       <svg
         version='1.1'
         id='armchair'
@@ -106,7 +109,6 @@ const SeatV2 = ({ unit, seat }) => {
               id='center-cover'
               d='M 414.893,450.201 V 114.752 C 307.576,103.47 202.943,103.479 97.1,114.752 V 450.2 c 53.831,17.284 106.637,26.324 158.897,26.483 v 0 c 52.259,-0.159 105.065,-9.198 158.896,-26.482'
             />
-
             <path
               id='arm-cover'
               d='M 434.677,27.967 C 315.893,14.205 196.094,14.205 77.319,27.967 38.363,32.143 8.826,65.008 8.826,104.185 V 450.2 c 0,24.382 19.765,44.138 44.138,44.138 24.373,0 44.138,-19.756 44.138,-44.138 V 114.39 c 105.843,-11.282 210.476,-11.29 317.793,0 V 450.2 c 0,24.382 19.765,44.138 44.138,44.138 24.373,0 44.138,-19.756 44.138,-44.138 V 104.185 c 0,-39.177 -29.537,-72.042 -68.494,-76.218'
@@ -139,9 +141,9 @@ const SeatV2 = ({ unit, seat }) => {
 export default SeatV2;
 
 const SeatWrapper = styled.div`
-  height: ${(props) => props.unit}rem;
-  width: ${(props) => props.unit}rem;
-  padding: ${(props) => 0.05 * props.unit}rem;
+  height: ${(props) => Math.round(props.unit)}px;
+  width: ${(props) => Math.round(props.unit)}px;
+  padding: ${(props) => Math.max(Math.round(0.05 * props.unit), 1)}px;
   transform: rotate(180deg);
   & .tooltip {
     display: none;

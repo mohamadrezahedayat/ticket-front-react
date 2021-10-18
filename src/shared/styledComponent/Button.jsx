@@ -65,6 +65,8 @@ const Button = styled.button`
   font: inherit;
   text-decoration: none;
   font-size: ${(props) => (props.fontSize ? props.fontSize : '1.2rem')};
+  letter-spacing: ${(props) =>
+    props.letterSpacing ? props.letterSpacing : '0'};
 
   /* border */
   ${(props) =>

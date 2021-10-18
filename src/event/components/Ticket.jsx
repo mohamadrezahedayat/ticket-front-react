@@ -1,13 +1,14 @@
 import React from 'react';
 import { Colors } from '../../shared/styledComponent/variables';
 
-const Ticket = ({ width }) => {
+const Ticket = ({ width, className }) => {
   return (
     <svg
       viewBox='0 0 200 56'
       fill='none'
       width={width}
       xmlns='http://www.w3.org/2000/svg'
+      className={className}
     >
       <mask id='path-1-inside-1' fill='white'>
         <path

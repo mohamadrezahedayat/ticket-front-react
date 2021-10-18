@@ -1,13 +1,26 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
+import {
+  setBoxShadow,
+  setBackgroundColor,
+} from '../../shared/styledComponent/functions';
 import LeftPanel from './LeftPanel';
 import RightPanel from './RightPanel';
 import chairs from '../../img/chairs.jpg';
 import Div from '../../shared/styledComponent/Div';
 import { Colors } from '../../shared/styledComponent/variables';
+import {
+  Screen,
+  setMediaQuery,
+} from '../../shared/styledComponent/mediaQueries';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
-const SeatSelection = ({ events, date }) => {
+const SeatSelection = ({ events, date, className }) => {
+  const [width, setwidth] = useState();
+  const [columnMax, setcolumnMax] = useState();
+  const [rowMax, setrowMax] = useState();
+
   const {
     activeEvent,
     setactiveEvent,
@@ -26,10 +39,7 @@ const SeatSelection = ({ events, date }) => {
     []
   );
 
-  const [width, setwidth] = useState(getWidth());
-  const [columnMax, setcolumnMax] = useState();
-
-  // resize eventHandler
+  // resize eventHandler, set width state after user resize
   useEffect(() => {
     let timeoutId = null;
     const resizeListener = () => {
@@ -66,23 +76,66 @@ const SeatSelection = ({ events, date }) => {
     const colMax = Math.max(
       ...layouts.map((layout) => layout.columns + layout.startColumn)
     );
+    const rowMax = Math.max(
+      ...layouts.map((layout) => layout.rows + layout.startRow)
+    );
     setcolumnMax(colMax);
-
+    setrowMax(rowMax);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeEvent]);
-
   return (
     <Div
-      row
-      minHeight='100vh'
-      gridRowStart='3'
-      gridColumn='full-start/full-end'
+      className={className}
       background={{ img: chairs, color: `${Colors.primaryLight}3f` }}
     >
-      <LeftPanel date={date} columnMax={columnMax} width={width} />
-      <RightPanel width={width} event={activeEvent} />
+      <LeftPanel
+        className='left-panel'
+        date={date}
+        columnMax={columnMax}
+        rowMax={rowMax}
+        width={width}
+      />
+      <RightPanel className='right-panel' width={width} event={activeEvent} />
     </Div>
   );
 };
 
-export default SeatSelection;
+const SeatSelectionWrapper = styled(SeatSelection)`
+  grid-row-start: 3;
+  grid-column: full-start/full-end;
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  grid-auto-rows: max-content;
+  gap: 3rem;
+  ${setMediaQuery(
+    { isMinWidth: false, breakPoint: '62.5em' },
+    `padding:3rem 1rem;
+    gap: 1.5rem;`
+  )}
+  ${Screen.tabletLandscape`
+    grid-template-columns: 1fr;
+    grid-auto-rows: min-content;
+  `}
+  & .left-panel {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    ${setBoxShadow()}
+    overflow: hidden;
+    border-radius: 3rem;
+    ${setBackgroundColor(Colors.white + '5')}
+    ${Screen.tabletLandscape` grid-row-start:2;margin-bottom:3rem;`}
+  }
+
+  & .right-panel {
+    border-radius: 3rem;
+    overflow-x: auto;
+    ${setBackgroundColor(Colors.white + '5')}
+    ${setBoxShadow()}
+    ${Screen.tabletLandscape`max-width:40rem;
+    justify-self:center;
+  `}
+  }
+`;
+export default SeatSelectionWrapper;
