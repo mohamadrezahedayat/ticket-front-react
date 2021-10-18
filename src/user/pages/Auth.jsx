@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
+import userImage from '../../img/user.jpg';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '../../shared/hooks/form-hook';
@@ -16,6 +17,13 @@ import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_MOBILE,
 } from '../../shared/util/validators';
+import styled from 'styled-components';
+import {
+  setBackground,
+  setBackgroundColor,
+  setBoxShadow,
+} from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 
 const Auth = () => {
   const { login } = useContext(AuthContext);
@@ -241,14 +249,46 @@ const Auth = () => {
   );
 
   return (
-    <div className='auth-page-container'>
+    <Container className='auth-page-container'>
       <Sidebar />
       <div className='form-container'>
         <ErrorModal error={error} onClear={clearError} />
         <div className='sign-form-container'>{authForm}</div>
       </div>
-    </div>
+    </Container>
   );
 };
 
 export default Auth;
+
+const Container = styled.div`
+  min-height: 100vh;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns:
+    [sidebar-start] 8rem [sidebar-end full-start] 1fr [center-start]
+    repeat(8, [col-start] minmax(min-content, 12rem) [col-end])
+    [center-end] 1fr [full-end];
+
+  ${setBackground({ img: userImage, color: `${Colors.primary}70` })}
+
+  .form-container {
+    display: grid;
+    grid-column: col-start 1 / col-end 8;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    padding: 5rem;
+    grid-gap: 5rem;
+  }
+
+  & .sign-form-container {
+    display: inline-block;
+    ${setBackgroundColor(`${Colors.greyLight1}35`)}
+    padding: 3rem;
+    border-radius: 2rem;
+    ${setBoxShadow({ x: '1rem', y: '1rem', z: '1rem', color: 'fff4' })}
+    align-self: center;
+    overflow: auto;
+    position: relative;
+  }
+`;

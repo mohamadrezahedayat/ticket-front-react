@@ -1,34 +1,6 @@
-.auth-page-container {
-  display: grid;
-
-  grid-template-columns:
-    [sidebar-start] 8rem [sidebar-end full-start] 1fr [center-start] repeat(
-      8,
-      [col-start] minmax(min-content, 12rem) [col-end]
-    )
-    [center-end] 1fr [full-end];
-  background-image: linear-gradient(
-      rgba($color-secondary, 0.6),
-      rgba($color-secondary, 0.6)
-    ),
-    url(../../img/user.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  // position: fixed;
-  min-height: 100vh;
-  width: 100%;
-}
 .form-container {
   display: grid;
   grid-column: col-start 1 / col-end 8;
-  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
-  padding: 5rem;
-  grid-gap: 5rem;
-}
-.form-container--acount {
-  display: grid;
-  grid-column: col-start 3 / col-end 8;
   grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
   padding: 5rem;
   grid-gap: 5rem;

@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
+import styled from 'styled-components';
 
+import userImage from '../../img/user.jpg';
 import Accordion from '../components/Accordion';
 import MyTickets from '../components/MyTickets';
 import MyPayments from '../components/MyPayments';
@@ -18,6 +20,12 @@ import EditProfilePhoto from '../components/EditProfilePhoto';
 import { AuthContext } from '../../shared/context/auth-context';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
 import { imageAddress, randomApi } from '../../shared/apis/server';
+import {
+  setBackground,
+  setBackgroundColor,
+  setBoxShadow,
+} from '../../shared/styledComponent/functions';
+import { Colors } from '../../shared/styledComponent/variables';
 
 const Account = () => {
   const { logout, username, userPhoto, role, userId } = useContext(AuthContext);
@@ -238,14 +246,54 @@ const Account = () => {
   };
 
   return (
-    <div className='auth-page-container'>
+    <Container className='auth-page-container'>
       <Sidebar />
       <div className='acount-nav'>{renderAccordions()}</div>
       <div className='form-container--acount'>
         <div className='sign-form-container'>{renderForm()}</div>
       </div>
-    </div>
+    </Container>
   );
 };
 
 export default Account;
+
+const Container = styled.div`
+  min-height: 100vh;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns:
+    [sidebar-start] 8rem [sidebar-end full-start] 1fr [center-start]
+    repeat(8, [col-start] minmax(min-content, 12rem) [col-end])
+    [center-end] 1fr [full-end];
+
+  ${setBackground({ img: userImage, color: `${Colors.primary}70` })}
+
+  .form-container {
+    display: grid;
+    grid-column: col-start 1 / col-end 8;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    padding: 5rem;
+    grid-gap: 5rem;
+  }
+
+  .form-container--acount {
+    display: grid;
+    grid-column: col-start 3 / col-end 8;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    padding: 5rem;
+    grid-gap: 5rem;
+
+    & .sign-form-container {
+      display: inline-block;
+      ${setBackgroundColor(`${Colors.greyLight1}35`)}
+      padding: 3rem;
+      border-radius: 2rem;
+      ${setBoxShadow({ x: '1rem', y: '1rem', z: '1rem', color: 'fff4' })}
+      align-self: center;
+      overflow: auto;
+      position: relative;
+    }
+  }
+`;
