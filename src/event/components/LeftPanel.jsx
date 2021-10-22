@@ -112,6 +112,7 @@ const Header = styled.div`
   padding: 0 1rem;
   width: 100%;
   height: 5rem;
+  z-index: 2;
   ${setBackgroundColor(`${Colors.primaryDark}c0`)}
   &:hover {
     ${setBackgroundColor(`${Colors.primaryDark}ff`)}
