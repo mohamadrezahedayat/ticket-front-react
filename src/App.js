@@ -9,11 +9,11 @@ import {
 import Home from './home/pages/Home';
 import Auth from './user/pages/Auth';
 import Account from './user/pages/Account';
+import Payment from './payment/pages/Payment';
 import BookEvent from './event/pages/BookEvent';
 import { useAuth } from './shared/hooks/auth-hook';
 import EventDetail from './event/pages/EventDetail';
 import { AuthContext } from './shared/context/auth-context';
-import Payment from './payment/pages/Payment';
 
 const App = () => {
   const {
@@ -38,7 +38,7 @@ const App = () => {
           <Auth />
         </Route>
         <Route path='/account'>
-          {token ? <Account /> : <Redirect to='/auth' exact />}
+          {!!token ? <Account /> : <Redirect to='/auth' exact />}
         </Route>
         <Route path='/eventDetail/:showId' exact>
           <EventDetail />
@@ -47,7 +47,7 @@ const App = () => {
           <BookEvent />
         </Route>
         <Route path='/payment/:eventId' exact>
-          {token ? <Payment /> : <Redirect to='/auth' exact />}
+          {!!token ? <Payment /> : <Redirect to='/auth' exact />}
         </Route>
 
         <Redirect to='/' exact />

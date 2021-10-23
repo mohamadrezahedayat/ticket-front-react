@@ -129,6 +129,7 @@ const HeaderWrapper = styled.div`
   ${setGridColumn('full-start / col-end 6')}
   ${setBackground({ img: tickets, color: Colors.secondary + '88' })}
   ${Screen.tabletLandscape`grid-column: full-start / full-end;padding:0;`}
+  ${Screen.phone`grid-column: 1 / -1;`}
 
   .header__card {
     width: 100%;

@@ -63,6 +63,7 @@ export default styled(Artists)`
   grid-template-rows: max-content 1fr;
   grid-row-gap: 2rem;
   ${Screen.tabletLandscape`grid-column: full-start / full-end;`}
+  ${Screen.phone`grid-column: 1 / -1;`}
 
   .artists__list {
     display: grid;

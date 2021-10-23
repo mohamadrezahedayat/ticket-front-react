@@ -1,29 +1,29 @@
 import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 
-import userImage from '../../img/user.jpg';
-import { AuthContext } from '../../shared/context/auth-context';
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { useForm } from '../../shared/hooks/form-hook';
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
-import { baseURL } from '../../shared/apis/server';
-import Sidebar from '../../shared/components/UIElements/Sidebar';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
   VALIDATOR_MOBILE,
 } from '../../shared/util/validators';
-import styled from 'styled-components';
 import {
   setBackground,
   setBackgroundColor,
   setBoxShadow,
 } from '../../shared/styledComponent/functions';
+import userImage from '../../img/user.jpg';
+import { baseURL } from '../../shared/apis/server';
+import { useForm } from '../../shared/hooks/form-hook';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import Input from '../../shared/components/FormElements/Input';
+import { AuthContext } from '../../shared/context/auth-context';
 import { Colors } from '../../shared/styledComponent/variables';
+import Sidebar from '../../shared/components/UIElements/Sidebar';
+import Button from '../../shared/components/FormElements/Button';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const Auth = () => {
   const { login } = useContext(AuthContext);
@@ -31,6 +31,7 @@ const Auth = () => {
   const history = useHistory();
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -100,49 +101,51 @@ const Auth = () => {
             'Content-Type': 'application/json',
           }
         );
-
+        const { data, token } = responseData;
         login(
-          responseData.data.user._id,
-          responseData.data.user.email,
-          responseData.data.user.mobile,
-          responseData.data.user.name,
-          responseData.data.user.photo,
-          responseData.token,
+          data.user._id,
+          data.user.email,
+          data.user.mobile,
+          data.user.name,
+          data.user.photo,
+          token,
           new Date(new Date().getTime() + 1000 * 60 * 60),
-          responseData.data.user.role
+          data.user.role
         );
-        history.push('/');
+        history.push('/account');
       } catch (err) {}
     } else {
       try {
         const formData = new FormData();
-        if (formState.inputs.image.value)
-          formData.append('photo', formState.inputs.image.value[0]);
+        const { image, email, name, mobile, password, passwordConfirm } =
+          formState.inputs;
 
-        formData.append('email', formState.inputs.email.value);
-        formData.append('name', formState.inputs.name.value);
-        formData.append('mobile', formState.inputs.mobile.value);
-        formData.append('password', formState.inputs.password.value);
-        formData.append(
-          'passwordConfirm',
-          formState.inputs.passwordConfirm.value
-        );
-        const responseData = await sendRequest(
+        if (formState.inputs.image.value)
+          formData.append('photo', image.value[0]);
+
+        formData.append('email', email.value);
+        formData.append('name', name.value);
+        formData.append('mobile', mobile.value);
+        formData.append('password', password.value);
+        formData.append('passwordConfirm', passwordConfirm.value);
+        const { data, token } = await sendRequest(
           `${baseURL}/users/signup`,
           'POST',
           formData
         );
+
         login(
-          responseData.data.user._id,
-          responseData.data.user.email,
-          responseData.data.user.mobile,
-          responseData.data.user.name,
-          responseData.data.user.photo,
-          responseData.token,
+          data.user._id,
+          data.user.email,
+          data.user.mobile,
+          data.user.name,
+          data.user.photo,
+          token,
           new Date(new Date().getTime() + 1000 * 60 * 60),
-          responseData.data.user.role
+          data.user.role
         );
-        history.push('/');
+
+        history.push('/account');
       } catch (err) {}
     }
   };
