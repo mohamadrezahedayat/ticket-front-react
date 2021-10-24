@@ -1,83 +1,81 @@
-.acount-nav {
-  max-height: 100%;
-  grid-column: full-start / col-end 2;
-  margin: 1rem 0 0 1rem;
-}
-.accordion input {
-  position: absolute;
-  opacity: 0;
-  z-index: -1;
-}
-.accordion-wrapper {
-  overflow: hidden;
-  box-shadow: 0 4px 4px -2px rgba($color-black, 0.5);
-  width: 100%;
-  // height: 100vh;
-}
-.accordion {
-  width: 100%;
-  color: $color-white;
-  overflow: hidden;
-  margin-bottom: 6px;
-}
-.accordion:last-child {
-  margin-bottom: 0;
-}
-.accordion-label {
-  display: flex;
-  -webkit-box-pack: justify;
-  justify-content: space-between;
-  padding: 5px;
-  background: rgba($color-primary, 0.8);
-  font-weight: 400;
-  cursor: pointer;
-  font-size: 1.5rem;
-}
-.accordion-label:hover {
-  background: rgba($color-primary, 1);
-}
-.accordion-label::after {
-  content: '\276F';
-  width: 1.5rem;
-  height: 1.5rem;
-  text-align: center;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-}
-.accordion-content {
-  max-height: 0;
-  // padding: 0 16px;
-  color: rgba($color-primary, 1);
-  background: $color-white;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-}
-.accordion-content p {
-  margin: 0;
-  color: rgba($color-primary, 0.7);
-  font-size: 1.5rem;
-}
-input:checked + .accordion-label {
-  background: rgba($color-primary, 1);
-}
-input:checked + .accordion-label::after {
-  -webkit-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-input:checked ~ .accordion-content {
-  max-height: 100vh;
-  // padding: 16px;
-}
+// .acount-nav {
+//   max-height: 100%;
+//   grid-column: 2 / span 2;
+//   margin: 1rem 0 0 1rem;
+// }
 
-.accordion-content ul {
-  li,
-  a {
-    padding: 0.5rem;
-    font-size: 1.4rem;
-    display: block;
-    border-bottom: 1px solid $color-black;
-    text-transform: capitalize;
-    text-decoration: none;
-    cursor: pointer;
-  }
-}
+// .accordion-wrapper {
+//   overflow: hidden;
+//   box-shadow: 0 4px 4px -2px rgba($color-black, 0.5);
+//   width: 100%;
+// }
+// .accordion {
+//   width: 100%;
+//   color: $color-white;
+//   overflow: hidden;
+//   margin-bottom: 6px;
+// }
+// .accordion input {
+//   position: absolute;
+//   opacity: 0;
+//   z-index: -1;
+// }
+// .accordion:last-child {
+//   margin-bottom: 0;
+// }
+// .accordion-label {
+//   display: flex;
+//   -webkit-box-pack: justify;
+//   justify-content: space-between;
+//   padding: 5px;
+//   background: rgba($color-primary, 0.8);
+//   font-weight: 400;
+//   cursor: pointer;
+//   font-size: 1.5rem;
+// }
+// .accordion-label:hover {
+//   background: rgba($color-primary, 1);
+// }
+// .accordion-label::after {
+//   content: '\276F';
+//   width: 1.5rem;
+//   height: 1.5rem;
+//   text-align: center;
+//   -webkit-transition: all 0.3s;
+//   transition: all 0.3s;
+// }
+// .accordion-content {
+//   max-height: 0;
+//   color: rgba($color-primary, 1);
+//   background: $color-white;
+//   -webkit-transition: all 0.3s;
+//   transition: all 0.3s;
+// }
+// .accordion-content p {
+//   margin: 0;
+//   color: rgba($color-primary, 0.7);
+//   font-size: 1.5rem;
+// }
+// input:checked + .accordion-label {
+//   background: rgba($color-primary, 1);
+// }
+// input:checked + .accordion-label::after {
+//   -webkit-transform: rotate(90deg);
+//   transform: rotate(90deg);
+// }
+// input:checked ~ .accordion-content {
+//   max-height: 100vh;
+// }
+
+// .accordion-content ul {
+//   li,
+//   a {
+//     padding: 0.5rem;
+//     font-size: 1.4rem;
+//     display: block;
+//     border-bottom: 1px solid $color-black;
+//     text-transform: capitalize;
+//     text-decoration: none;
+//     cursor: pointer;
+//   }
+// }

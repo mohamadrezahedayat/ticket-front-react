@@ -1,4 +1,11 @@
 import React, { useReducer, useEffect } from 'react';
+import styled from 'styled-components';
+import {
+  setBackgroundColor,
+  setBorder,
+  setColor,
+} from '../../styledComponent/functions';
+import { Colors } from '../../styledComponent/variables';
 
 import { validate } from '../../util/validators';
 
@@ -23,18 +30,18 @@ const inputReducer = (state, action) => {
 
 const Input = (props) => {
   const {
-    onInput,
     id,
+    rows,
     type,
-    placeholder,
-    className,
     label,
+    element,
+    onInput,
+    className,
     errorText,
     validators,
-    rows,
+    placeholder,
     initialValue,
     initialValid,
-    element,
   } = props;
 
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -84,16 +91,63 @@ const Input = (props) => {
     );
 
   return (
-    <div
+    <FormWrapper
       className={`${className || 'form-control'} ${
-        !inputState.isValid && inputState.isTouched && 'form-control--invalid'
+        !inputState.isValid && inputState.isTouched && 'invalid'
       }`}
     >
       <label htmlFor={id}>{label}</label>
       {inputElement}
       {!inputState.isValid && inputState.isTouched && <p>{errorText}</p>}
-    </div>
+    </FormWrapper>
   );
 };
 
 export default Input;
+
+const FormWrapper = styled.div`
+  margin: 1rem 0;
+
+  & label,
+  & input,
+  & textarea {
+    display: block;
+  }
+
+  & label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  & input,
+  & textarea {
+    width: 100%;
+    font: inherit;
+    ${setBorder({ width: '1px', style: 'solid', color: Colors.greyLight })}
+    ${setBackgroundColor(Colors.greyLight)}
+      padding: 0.15rem 0.25rem;
+  }
+
+  & input:focus,
+  & textarea:focus {
+    outline: none;
+    ${setBackgroundColor(Colors.greyLight)}
+    border-color: ${Colors.primary};
+  }
+
+  &.invalid label,
+  &.invalid p {
+    ${setColor(Colors.secondary)}
+  }
+
+  &.invalid input,
+  &.invalid textarea {
+    border-color: ${Colors.secondary};
+    ${setBackgroundColor(Colors.greyLight)}
+  }
+
+  & p {
+    text-align: center;
+    margin: 0.5rem 0;
+  }
+`;

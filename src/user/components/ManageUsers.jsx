@@ -9,15 +9,17 @@ import React, {
 import {
   api,
   baseURL,
-  imageAddress,
   randomApi,
+  imageAddress,
 } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
 import EditUser from './EditUser';
+import { AuthContext } from '../../shared/context/auth-context';
+import { Heading3 } from '../../shared/styledComponent/Typography';
+import Table from './Table';
 
 const ManageUsers = () => {
-  const { token } = useContext(AuthContext);
   const [users, setusers] = useState([]);
+  const { token } = useContext(AuthContext);
   const [editMode, seteditMode] = useState(false);
   const [activeUser, setactiveUser] = useState(null);
 
@@ -48,7 +50,7 @@ const ManageUsers = () => {
     ];
 
     return headerElement.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
+      return <th key={index}>{key}</th>;
     });
   };
 
@@ -88,19 +90,17 @@ const ManageUsers = () => {
 
   const renderTable = () => {
     return (
-      <table className='table'>
-        <thead>
-          <tr>{renderHeader()}</tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
-      </table>
+      <Table
+        className='table'
+        headers={renderHeader()}
+        body={renderBody()}
+      ></Table>
     );
   };
 
   return (
     <Fragment>
-      <h3 className='heading-3'>Manage Users</h3>
-
+      <Heading3>Manage Users</Heading3>
       {!editMode && renderTable()}
       {editMode && (
         <EditUser user={activeUser} onSubmit={() => seteditMode(false)} />

@@ -13,6 +13,7 @@ import {
 } from '../../shared/apis/server';
 import { AuthContext } from '../../shared/context/auth-context';
 import AddEditShow from './AddEditShow';
+import Table from './Table';
 
 const ManageShows = () => {
   const { token } = useContext(AuthContext);
@@ -100,12 +101,11 @@ const ManageShows = () => {
 
   const renderTable = () => {
     return (
-      <table className='table'>
-        <thead>
-          <tr>{renderHeader()}</tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
-      </table>
+      <Table
+        className='table'
+        headers={renderHeader()}
+        body={renderBody()}
+      ></Table>
     );
   };
   return (

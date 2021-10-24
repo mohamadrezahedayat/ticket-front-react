@@ -157,13 +157,13 @@ const AddEditArtgroup = ({ editMode, artGroup, onFinish, onEdit }) => {
         >
           {!editMode ? 'Add New Artgroup' : 'Edit Artgroup'}
         </Button>
-        <Button
+        <botton
           type='button'
+          className='form__cancel'
           onClick={() => (editMode ? onEdit() : onFinish())}
-          inverse={true}
         >
           Cancel
-        </Button>
+        </botton>
       </form>
     </Fragment>
   );

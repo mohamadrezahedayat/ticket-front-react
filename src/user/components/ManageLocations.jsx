@@ -13,6 +13,7 @@ import {
 } from '../../shared/apis/server';
 import { AuthContext } from '../../shared/context/auth-context';
 import AddEditLocation from './AddEditLocation';
+import Table from './Table';
 
 const ManageLocations = () => {
   const { token } = useContext(AuthContext);
@@ -103,12 +104,11 @@ const ManageLocations = () => {
 
   const renderTable = () => {
     return (
-      <table className='table'>
-        <thead>
-          <tr>{renderHeader()}</tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
-      </table>
+      <Table
+        className='table'
+        headers={renderHeader()}
+        body={renderBody()}
+      ></Table>
     );
   };
   return (

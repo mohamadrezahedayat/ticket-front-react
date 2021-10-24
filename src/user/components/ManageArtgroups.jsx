@@ -13,6 +13,7 @@ import {
 } from '../../shared/apis/server';
 import { AuthContext } from '../../shared/context/auth-context';
 import AddEditArtgroup from './AddEditArtgroup';
+import Table from './Table';
 
 const ManageArtgroups = () => {
   const { token } = useContext(AuthContext);
@@ -101,12 +102,11 @@ const ManageArtgroups = () => {
 
   const renderTable = () => {
     return (
-      <table className='table'>
-        <thead>
-          <tr>{renderHeader()}</tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
-      </table>
+      <Table
+        className='table'
+        headers={renderHeader()}
+        body={renderBody()}
+      ></Table>
     );
   };
   return (

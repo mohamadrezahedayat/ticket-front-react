@@ -132,6 +132,9 @@ const EditUser = ({ user, onSubmit }) => {
         >
           Edit User
         </Button>
+        <button type='button' className='form__cancel' onClick={onSubmit}>
+          Cancel
+        </button>
       </form>
     </Fragment>
   );

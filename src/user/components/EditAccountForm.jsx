@@ -1,17 +1,17 @@
 import React, { useContext } from 'react';
 
-import Input from '../../shared/components/FormElements/Input';
-import { useForm } from '../../shared/hooks/form-hook';
-import { baseURL } from '../../shared/apis/server';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MOBILE,
 } from '../../shared/util/validators';
-import Button from '../../shared/components/FormElements/Button';
+import { baseURL } from '../../shared/apis/server';
+import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import Input from '../../shared/components/FormElements/Input';
 import { AuthContext } from '../../shared/context/auth-context';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const EditAcountForm = ({ onFinish }) => {
   const { username, token, email, mobile, login } = useContext(AuthContext);
@@ -130,6 +130,9 @@ const EditAcountForm = ({ onFinish }) => {
       >
         Save
       </Button>
+      <button type='button' className='form__cancel' onClick={onFinish}>
+        Cancel
+      </button>
     </form>
   );
 };

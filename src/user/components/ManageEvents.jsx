@@ -17,6 +17,7 @@ import AddEditEvent from './AddEditEvent';
 import { useSeats } from '../../shared/hooks/manageSeats-hook';
 import { AuthContext } from '../../shared/context/auth-context';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
+import Table from './Table';
 
 const ManageEvents = () => {
   const { token } = useContext(AuthContext);
@@ -139,12 +140,11 @@ const ManageEvents = () => {
 
   const renderTable = () => {
     return (
-      <table className='table'>
-        <thead>
-          <tr>{renderHeader()}</tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
-      </table>
+      <Table
+        className='table'
+        headers={renderHeader()}
+        body={renderBody()}
+      ></Table>
     );
   };
 

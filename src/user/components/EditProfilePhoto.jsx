@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import { useForm } from '../../shared/hooks/form-hook';
-import { baseURL, imageAddress } from '../../shared/apis/server';
-import Button from '../../shared/components/FormElements/Button';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { baseURL, imageAddress } from '../../shared/apis/server';
+import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const EditProfilePhoto = ({ onFinish }) => {
   const { token, login, userPhoto } = useContext(AuthContext);
@@ -85,6 +85,9 @@ const EditProfilePhoto = ({ onFinish }) => {
       >
         Save Profile Image
       </Button>
+      <button type='button' className='form__cancel' onClick={onFinish}>
+        Cancel
+      </button>
     </form>
   );
 };

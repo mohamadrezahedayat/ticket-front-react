@@ -1,24 +1,23 @@
 import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import styled from 'styled-components';
 
 import {
   VALIDATOR_EMAIL,
-  VALIDATOR_MINLENGTH,
   VALIDATOR_MOBILE,
+  VALIDATOR_MINLENGTH,
 } from '../../shared/util/validators';
 import {
-  setBackground,
-  setBackgroundColor,
-  setBoxShadow,
-} from '../../shared/styledComponent/functions';
-import userImage from '../../img/user.jpg';
+  Span,
+  Heading3,
+  Heading4,
+} from '../../shared/styledComponent/Typography';
+import GridLayout from '../components/GridLayout';
 import { baseURL } from '../../shared/apis/server';
 import { useForm } from '../../shared/hooks/form-hook';
+import FormContainer from '../components/FormContainer';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
 import { AuthContext } from '../../shared/context/auth-context';
-import { Colors } from '../../shared/styledComponent/variables';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -26,9 +25,8 @@ import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const Auth = () => {
-  const { login } = useContext(AuthContext);
-
   const history = useHistory();
+  const { login } = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
@@ -150,148 +148,111 @@ const Auth = () => {
     }
   };
 
-  const authForm = (
-    <form className='form' onSubmit={authSubmitHandler}>
-      <h3 className='heading-3'>
-        {!isLoginMode ? 'Create An Acount' : 'Login To Your Acount'}
-      </h3>
-      {isLoading && <LoadingSpinner asOverlay />}
-      {!isLoginMode && (
-        <Input
-          element='input'
-          id='name'
-          type='text'
-          label='Name'
-          validators={[]}
-          onInput={inputHandler}
-        />
-      )}
-      <Input
-        element='input'
-        id='email'
-        type='email'
-        label='E-Mail'
-        autoComplete='email'
-        validators={[VALIDATOR_EMAIL()]}
-        errorText='Please enter a valid email address.'
-        onInput={inputHandler}
-      />
-      {!isLoginMode && (
-        <Input
-          element='input'
-          id='mobile'
-          type='mobile'
-          label='Mobile'
-          placeholder='+98-9120000000'
-          validators={[VALIDATOR_MOBILE()]}
-          errorText='Please enter a valid mobile number.'
-          onInput={inputHandler}
-        />
-      )}
-      {isLoginMode && (
-        <Link to='forgotPassword' className='form__input--inline'>
-          FORGOT PASSWORD?
-        </Link>
-      )}
-
-      <Input
-        element='input'
-        id='password'
-        type='password'
-        label='Password'
-        autoComplete='current-password'
-        validators={[VALIDATOR_MINLENGTH(8)]}
-        errorText='Please enter a valid password, at least 8 characters.'
-        onInput={inputHandler}
-      />
-      {!isLoginMode && (
-        <Input
-          element='input'
-          id='passwordConfirm'
-          type='password'
-          label='Password Confirm'
-          au
-          autoComplete='current-password'
-          validators={[VALIDATOR_MINLENGTH(8)]}
-          errorText='Please confirm your password, at least 8 characters.'
-          onInput={inputHandler}
-        />
-      )}
-      {!isLoginMode && (
-        <ImageUpload
-          center
-          id='image'
-          onInput={inputHandler}
-          errorText='Please provide a profile image.'
-        />
-      )}
-      <Button
-        type='submit'
-        disabled={!formState.isValid}
-        className='form__submit'
-      >
-        {isLoginMode ? 'LOG IN' : 'SIGN UP'}
-      </Button>
-
-      {isLoginMode ? (
-        <h4>
-          Don't have an acount?
-          <span onClick={switchModeHandler} className='form__input--inline'>
-            Sign up
-          </span>
-        </h4>
-      ) : (
-        <h4>
-          Do you have an acount?
-          <span onClick={switchModeHandler} className='form__input--inline'>
-            Log in
-          </span>
-        </h4>
-      )}
-    </form>
-  );
-
   return (
-    <Container className='auth-page-container'>
+    <GridLayout>
       <Sidebar />
-      <div className='form-container'>
+      <FormContainer gridColumn='3 / -3'>
         <ErrorModal error={error} onClear={clearError} />
-        <div className='sign-form-container'>{authForm}</div>
-      </div>
-    </Container>
+        <form className='form' onSubmit={authSubmitHandler}>
+          <Heading3>
+            {!isLoginMode ? 'Create An Acount' : 'Login To Your Acount'}
+          </Heading3>
+          {isLoading && <LoadingSpinner asOverlay />}
+          {!isLoginMode && (
+            <Input
+              element='input'
+              id='name'
+              type='text'
+              label='Name'
+              validators={[]}
+              onInput={inputHandler}
+            />
+          )}
+          <Input
+            element='input'
+            id='email'
+            type='email'
+            label='E-Mail'
+            autoComplete='email'
+            validators={[VALIDATOR_EMAIL()]}
+            errorText='Please enter a valid email address.'
+            onInput={inputHandler}
+          />
+          {!isLoginMode && (
+            <Input
+              element='input'
+              id='mobile'
+              type='mobile'
+              label='Mobile'
+              placeholder='+98-9120000000'
+              validators={[VALIDATOR_MOBILE()]}
+              errorText='Please enter a valid mobile number.'
+              onInput={inputHandler}
+            />
+          )}
+          {isLoginMode && (
+            <Span textAlign='right' SingleMargin='bottom,-2.5rem'>
+              <Link to='forgotPassword'>Forgot Password?</Link>
+            </Span>
+          )}
+
+          <Input
+            element='input'
+            id='password'
+            type='password'
+            label='Password'
+            autoComplete='current-password'
+            validators={[VALIDATOR_MINLENGTH(8)]}
+            errorText='Please enter a valid password, at least 8 characters.'
+            onInput={inputHandler}
+          />
+          {!isLoginMode && (
+            <Input
+              element='input'
+              id='passwordConfirm'
+              type='password'
+              label='Password Confirm'
+              autoComplete='current-password'
+              validators={[VALIDATOR_MINLENGTH(8)]}
+              errorText='Please confirm your password, at least 8 characters.'
+              onInput={inputHandler}
+            />
+          )}
+          {!isLoginMode && (
+            <ImageUpload
+              center
+              id='image'
+              onInput={inputHandler}
+              errorText='Please provide a profile image.'
+            />
+          )}
+          <Button
+            type='submit'
+            disabled={!formState.isValid}
+            className='form__submit'
+          >
+            {isLoginMode ? 'LOG IN' : 'SIGN UP'}
+          </Button>
+
+          {isLoginMode ? (
+            <Heading4 SingleMargin='top,.5rem'>
+              Don't have an acount?
+              <Span onClick={switchModeHandler} fontWeight='600'>
+                &nbsp;Sign up
+              </Span>
+            </Heading4>
+          ) : (
+            <Heading4 SingleMargin='top,.5rem'>
+              Do you have an acount?
+              <Span onClick={switchModeHandler} fontWeight='600'>
+                &nbsp;Log in
+              </Span>
+            </Heading4>
+          )}
+        </form>
+      </FormContainer>
+    </GridLayout>
   );
 };
 
 export default Auth;
-
-const Container = styled.div`
-  min-height: 100vh;
-  width: 100%;
-
-  display: grid;
-  grid-template-columns:
-    [sidebar-start] 8rem [sidebar-end full-start] 1fr [center-start]
-    repeat(8, [col-start] minmax(min-content, 12rem) [col-end])
-    [center-end] 1fr [full-end];
-
-  ${setBackground({ img: userImage, color: `${Colors.primary}70` })}
-
-  .form-container {
-    display: grid;
-    grid-column: col-start 1 / col-end 8;
-    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
-    padding: 5rem;
-    grid-gap: 5rem;
-  }
-
-  & .sign-form-container {
-    display: inline-block;
-    ${setBackgroundColor(`${Colors.greyLight1}35`)}
-    padding: 3rem;
-    border-radius: 2rem;
-    ${setBoxShadow({ x: '1rem', y: '1rem', z: '1rem', color: 'fff4' })}
-    align-self: center;
-    overflow: auto;
-    position: relative;
-  }
-`;

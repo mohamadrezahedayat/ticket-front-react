@@ -91,9 +91,10 @@ export default Sidebar;
 
 const Wrapper = styled.div`
   ${setColor(Colors.white)}
-  grid-column: sidebar-start / sidebar-end;
+  grid-column: 1 / span 1;
   grid-row: 1/-1;
   ${Screen.phone`
+    height:8rem;
     grid-column: 1 / -1;
     grid-row: 1/span 1;
   `}
