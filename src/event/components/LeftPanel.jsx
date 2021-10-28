@@ -3,7 +3,12 @@ import styled from 'styled-components';
 
 import ZoneV2 from './ZoneV2';
 import Div from '../../shared/styledComponent/Div';
-import { Arrow, Reset, ZoomIn, ZoomOut } from './Svgs';
+import {
+  Arrow,
+  Reset,
+  ZoomIn,
+  ZoomOut,
+} from '../../shared/components/UIElements/Svgs';
 import { Colors } from '../../shared/styledComponent/variables';
 import { Screen } from '../../shared/styledComponent/mediaQueries';
 import { setBackgroundColor } from '../../shared/styledComponent/functions';

@@ -5,6 +5,7 @@ import {
   setColor,
   setBorder,
   setBackgroundColor,
+  setBoxShadow,
 } from '../../shared/styledComponent/functions';
 import { Screen } from '../../shared/styledComponent/mediaQueries';
 import { Colors } from '../../shared/styledComponent/variables';
@@ -34,21 +35,38 @@ const TableWrapper = styled.table`
   & td,
   & th {
     ${setBorder({ width: '1px', color: Colors.greyLight1 })}
-    padding: 1px 2px;
-    max-width: 14rem;
+    padding: .2rem;
+    max-width: 15rem;
     text-align: center;
     ${Screen.tabletPortrait`
-    padding: 1px 1px;
     max-width: 10rem;`}
   }
+  td:nth-of-type(5) {
+    padding: 0;
+  }
+
   & th {
     text-transform: capitalize;
+    padding: 3px;
+    text-align: center;
+    ${setBackgroundColor(Colors.primary)}
+    ${setColor(Colors.white)}
   }
   td img {
-    width: 10rem;
-    border-radius: 100%;
-    ${Screen.tabletPortrait`width: 7rem;`}
-    ${Screen.phone`width: 4rem;`}
+    height: 7.5rem;
+    width: 7.5rem;
+    vertical-align: middle;
+    ${Screen.tabletPortrait`width: 5rem;height: 5rem;`}
+    ${Screen.phone`width: 3rem;height: 3rem;`}
+  }
+  th input {
+    padding: 0.3rem;
+    width: 100%;
+    background-color: ${Colors.white}c;
+    vertical-align: middle;
+    &:focus {
+      background-color: ${Colors.greyLight2};
+    }
   }
 
   & tr {
@@ -58,19 +76,19 @@ const TableWrapper = styled.table`
     ${setBackgroundColor(`${Colors.primary}4c`)}
   }
 
-  & th {
-    padding: 3px;
-    text-align: center;
-    ${setBackgroundColor(Colors.primary)}
-    ${setColor(Colors.white)}
-  }
-
-  .opration {
-    text-align: center;
-  }
-
-  .opration__button {
-    width: 6rem;
+  .edit__button {
+    width: 4rem;
+    padding: 0.5rem;
+    margin: 0 1px;
+    fill: ${Colors.primary};
+    border-radius: 0.5rem;
+    &:hover,
+    &:active {
+      fill: ${Colors.tertiaryDark};
+      ${setBoxShadow()}
+      transform: translateY(3px);
+    }
+    /*
     margin-bottom: 1rem;
     outline: none;
     font-size: 1.3rem;
@@ -100,6 +118,6 @@ const TableWrapper = styled.table`
       ${setBorder({ width: '1px', color: Colors.primary })}
       ${setBackgroundColor(Colors.primary)}
       ${setColor(Colors.white)}
-    }
+    } */
   }
 `;

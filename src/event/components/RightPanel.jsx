@@ -2,12 +2,16 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import {
+  PieChart,
+  DeleteIcon,
+  AddAgainIcon,
+} from '../../shared/components/UIElements/Svgs';
 import ReservedTicket from './ReservedTicket';
 import Div from '../../shared/styledComponent/Div';
 import Label from '../../shared/styledComponent/Label';
 import Button from '../../shared/styledComponent/Button';
 import Slider from '../../shared/styledComponent/Slider';
-import { AddAgainIcon, DeleteIcon, PieChart } from './Svgs';
 import { Colors } from '../../shared/styledComponent/variables';
 import { imageAddress, randomApi } from '../../shared/apis/server';
 import { Heading4Light } from '../../shared/styledComponent/Typography';
