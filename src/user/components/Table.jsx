@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import {
   setColor,
   setBorder,
-  setBackgroundColor,
   setBoxShadow,
+  setBackgroundColor,
 } from '../../shared/styledComponent/functions';
-import { Screen } from '../../shared/styledComponent/mediaQueries';
 import { Colors } from '../../shared/styledComponent/variables';
+import { Screen } from '../../shared/styledComponent/mediaQueries';
 
 const Table = ({ headers, body }) => {
   return (
@@ -22,6 +22,19 @@ const Table = ({ headers, body }) => {
 };
 
 export default Table;
+
+const svg__button = `
+  width: 4rem;
+  height: 4rem;
+  margin: 0 1px;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+`;
+const svg__button__hover = `
+  transform: translateY(3px);
+  ${setBoxShadow()}
+`;
+
 const TableWrapper = styled.table`
   font-size: 1.3rem;
   max-width: 100%;
@@ -41,9 +54,9 @@ const TableWrapper = styled.table`
     ${Screen.tabletPortrait`
     max-width: 10rem;`}
   }
-  td:nth-of-type(5) {
+  /* td:nth-of-type(5) {
     padding: 0;
-  }
+  } */
 
   & th {
     text-transform: capitalize;
@@ -58,6 +71,11 @@ const TableWrapper = styled.table`
     vertical-align: middle;
     ${Screen.tabletPortrait`width: 5rem;height: 5rem;`}
     ${Screen.phone`width: 3rem;height: 3rem;`}
+    transition: all .5s cubic-bezier(0.19, 1, 0.22, 1);
+    &:hover {
+      border-radius: 100%;
+      transform: scale(1.5) rotate(360deg);
+    }
   }
   th input {
     padding: 0.3rem;
@@ -77,47 +95,30 @@ const TableWrapper = styled.table`
   }
 
   .edit__button {
-    width: 4rem;
-    padding: 0.5rem;
-    margin: 0 1px;
+    ${svg__button}
     fill: ${Colors.primary};
-    border-radius: 0.5rem;
     &:hover,
     &:active {
       fill: ${Colors.tertiaryDark};
-      ${setBoxShadow()}
-      transform: translateY(3px);
+      ${svg__button__hover}
     }
-    /*
-    margin-bottom: 1rem;
-    outline: none;
-    font-size: 1.3rem;
-    ${setColor(Colors.secondary)}
-    padding: 3px 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    ${setBorder({ width: '1px', color: Colors.secondary })}
-    background-color: transparent;
-    ${Screen.tabletPortrait`
-    width: 5rem;
-    font-size: 1.2rem;
-    border-radius: 3px;`}
-    &--danger {
-      outline: none;
-      ${setBorder({ width: '1px', color: Colors.secondary })}
-      ${setBackgroundColor(Colors.tertiaryDark)}
-      &:hover,
-      &:active {
-        ${setBorder({ width: '1px', color: Colors.primary })}
-        ${setBackgroundColor(Colors.primary)}
-        ${setColor(Colors.white)}
-      }
-    }
+  }
+  .delete__button {
+    ${svg__button}
+    fill: ${Colors.secondaryDark};
     &:hover,
     &:active {
-      ${setBorder({ width: '1px', color: Colors.primary })}
-      ${setBackgroundColor(Colors.primary)}
-      ${setColor(Colors.white)}
-    } */
+      fill: ${Colors.tertiaryDark};
+      ${svg__button__hover}
+    }
+  }
+  .seat__button {
+    ${svg__button}
+    fill: #3d3d03;
+    &:hover,
+    &:active {
+      fill: ${Colors.tertiaryDark};
+      ${svg__button__hover}
+    }
   }
 `;

@@ -1,19 +1,19 @@
 import React, { Fragment, useContext } from 'react';
 
-import { useHttpClient } from '../../shared/hooks/http-hook';
-import { useForm } from '../../shared/hooks/form-hook';
-import Input from '../../shared/components/FormElements/Input';
-import Button from '../../shared/components/FormElements/Button';
-import ErrorModal from '../../shared/components/UIElements/ErrorModal';
-import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import ImageUpload from '../../shared/components/FormElements/ImageUpload';
-import { baseURL, randomApi } from '../../shared/apis/server';
-import { imageAddress } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MOBILE,
 } from '../../shared/util/validators';
+import { useForm } from '../../shared/hooks/form-hook';
+import { imageAddress } from '../../shared/apis/server';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import { baseURL, randomApi } from '../../shared/apis/server';
+import Input from '../../shared/components/FormElements/Input';
+import { AuthContext } from '../../shared/context/auth-context';
+import Button from '../../shared/components/FormElements/Button';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const EditUser = ({ user, onSubmit }) => {
   const { token } = useContext(AuthContext);

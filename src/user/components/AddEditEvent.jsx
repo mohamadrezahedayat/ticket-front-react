@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  Fragment,
-  useState,
-  useEffect,
-} from 'react';
+import React, { useCallback, useContext, useState, useEffect } from 'react';
 
 import { useForm } from '../../shared/hooks/form-hook';
 import { baseURL, api } from '../../shared/apis/server';
@@ -14,6 +8,7 @@ import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { Heading3 } from '../../shared/styledComponent/Typography';
 
 const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
@@ -120,10 +115,9 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
   };
 
   return (
-    <Fragment>
-      <h3 className='heading-3'>
-        {`${!editMode ? 'Add New Event' : 'Edit Event'}`}
-      </h3>
+    <>
+      <Heading3>{`${!editMode ? 'Add New event' : 'Edit event'}`}</Heading3>
+
       <ErrorModal error={error} onClear={clearError} />
       <form className='form' onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
@@ -205,15 +199,14 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
           {!editMode ? 'Add New Event' : 'Edit Event'}
         </Button>
 
-        <Button
-          type='button'
-          inverse={true}
+        <button
+          className='form__cancel'
           onClick={() => (editMode ? onEdit() : onFinish())}
         >
           Cancel
-        </Button>
+        </button>
       </form>
-    </Fragment>
+    </>
   );
 };
 

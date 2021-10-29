@@ -1,26 +1,27 @@
 import React, {
   Fragment,
-  useCallback,
-  useContext,
   useState,
   useEffect,
+  useContext,
+  useCallback,
 } from 'react';
 
+import {
+  api,
+  baseURL,
+  randomApi,
+  imageAddress,
+} from '../../shared/apis/server';
 import {
   VALIDATOR_MAXLENGTH,
   VALIDATOR_MINLENGTH,
 } from '../../shared/util/validators';
-import {
-  baseURL,
-  randomApi,
-  imageAddress,
-  api,
-} from '../../shared/apis/server';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
 import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
+import { Heading3 } from '../../shared/styledComponent/Typography';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
@@ -55,21 +56,21 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
   );
   // get list of artgroups to render artgroup lists
   const getArtgroups = useCallback(async () => {
-    const response = await api.get(`${baseURL}/artgroups?fields=name,_id`);
-    setartgroups(response.data.data.data);
-    !editMode && setartgroup(response.data.data.data[0]._id);
+    const { data } = await api.get(`${baseURL}/artgroups?fields=name,_id`);
+    setartgroups(data.data.data);
+    !editMode && setartgroup(data.data.data[0]._id);
   }, [editMode]);
 
   // get list of managers to render manager lists
   const getManagers = useCallback(async () => {
-    const response = await api.get(
+    const { data } = await api.get(
       `${baseURL}/users?role=show-manager&fields=name,_id`,
       {
         headers: { authorization: `Bearer ${token}` },
       }
     );
-    setmanagers(response.data.data.data);
-    !editMode && setmanager(response.data.data.data[0]._id);
+    setmanagers(data.data.data);
+    !editMode && setmanager(data.data.data[0]._id);
   }, [token, editMode]);
 
   // set artgroups and managers state in first render
@@ -115,9 +116,7 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
 
   return (
     <Fragment>
-      <h3 className='heading-3'>
-        {`${!editMode ? 'Add New Show' : 'Edit Show'}`}
-      </h3>
+      <Heading3>{`${!editMode ? 'Add New Show' : 'Edit Show'}`}</Heading3>
       <ErrorModal error={error} onClear={clearError} />
       <form className='form' onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}
@@ -212,13 +211,13 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
         >
           {!editMode ? 'Add New Show' : 'Edit Show'}
         </Button>
-        <Button
+        <button
           type='button'
+          className='form__cancel'
           onClick={() => (editMode ? onEdit() : onFinish())}
-          inverse={true}
         >
           Cancel
-        </Button>
+        </button>
       </form>
     </Fragment>
   );

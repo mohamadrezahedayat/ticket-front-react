@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  Fragment,
-} from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 import {
   api,
@@ -12,15 +6,22 @@ import {
   randomApi,
   imageAddress,
 } from '../../shared/apis/server';
+import Table from './Table';
 import EditSeats from './EditSeats';
 import AddEditEvent from './AddEditEvent';
 import { useSeats } from '../../shared/hooks/manageSeats-hook';
 import { AuthContext } from '../../shared/context/auth-context';
+import { Heading3 } from '../../shared/styledComponent/Typography';
+import {
+  DeleteIcon,
+  Edit,
+  SeatSvg,
+} from '../../shared/components/UIElements/Svgs';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
-import Table from './Table';
 
 const ManageEvents = () => {
   const { token } = useContext(AuthContext);
+
   const [events, setevents] = useState([]);
   const [editMode, seteditMode] = useState(false);
   const [editSeatsMode, seteditSeatsMode] = useState(false);
@@ -48,13 +49,14 @@ const ManageEvents = () => {
   } = useSeats();
 
   const getEvents = useCallback(async () => {
-    const response = await api.get(`${baseURL}/events`, {
+    const { data } = await api.get(`${baseURL}/events`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setevents(response.data.data.data);
+    setevents(data.data.data);
   }, [token]);
 
   const deleteEventHandler = async (event) => {
+    // todo check ticket sold
     await api.delete(`${baseURL}/events/${event._id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -76,18 +78,16 @@ const ManageEvents = () => {
   };
 
   const renderHeader = () => {
-    let headerElement = [
-      'Event name',
-      'location name',
-      'date',
-      'time',
-      'image',
-      'operation',
-    ];
-
-    return headerElement.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
-    });
+    return (
+      <>
+        <th>show name</th>
+        <th>location name</th>
+        <th>date</th>
+        <th>time</th>
+        <th>profile</th>
+        <th>action</th>
+      </>
+    );
   };
 
   const renderBody = () => {
@@ -113,24 +113,18 @@ const ManageEvents = () => {
               />
             </td>
             <td className='opration'>
-              <button
-                className='opration__button'
+              <Edit
+                className='edit__button'
                 onClick={() => editEventHandler(event)}
-              >
-                Edit
-              </button>
-              <button
-                className='opration__button'
+              />
+              <SeatSvg
+                className='seat__button'
                 onClick={() => editSeatsHandler(event)}
-              >
-                Seats
-              </button>
-              <button
-                className='opration__button--danger'
+              />
+              <DeleteIcon
+                className='delete__button'
                 onClick={() => deleteEventHandler(event)}
-              >
-                Delete
-              </button>
+              />
             </td>
           </tr>
         );
@@ -149,10 +143,8 @@ const ManageEvents = () => {
   };
 
   return (
-    <Fragment>
-      <h3 className='heading-3'>{`${
-        !editMode && !editSeatsMode ? 'Manage Event' : ''
-      }`}</h3>
+    <>
+      {!editMode && <Heading3>Manage Event</Heading3>}
       {!editMode && !editSeatsMode && renderTable()}
       {editMode && !editSeatsMode && (
         <AddEditEvent
@@ -193,7 +185,7 @@ const ManageEvents = () => {
           />
         </manageSeatsContext.Provider>
       )}
-    </Fragment>
+    </>
   );
 };
 

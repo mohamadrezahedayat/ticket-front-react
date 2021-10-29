@@ -1,13 +1,16 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { QRCode } from 'react-qrcode-logo';
 
 import {
   api,
   baseURL,
-  imageAddress,
   randomApi,
+  imageAddress,
 } from '../../shared/apis/server';
+import { QRCode } from 'react-qrcode-logo';
+import { Heading3 } from '../../shared/styledComponent/Typography';
+import { SaveIcon, ViewIcon } from '../../shared/components/UIElements/Svgs';
 import { AuthContext } from '../../shared/context/auth-context';
+import Table from './Table';
 
 const MyPayments = () => {
   const { token } = useContext(AuthContext);
@@ -15,10 +18,10 @@ const MyPayments = () => {
 
   useEffect(() => {
     const getUserTickets = async () => {
-      const data = await api.get(`${baseURL}/bookings/myTickets`, {
+      const { data } = await api.get(`${baseURL}/bookings/myTickets`, {
         headers: { authorization: `Bearer ${token}` },
       });
-      settickets(data.data.data.data);
+      settickets(data.data.data);
     };
     getUserTickets();
   }, [token]);
@@ -38,7 +41,7 @@ const MyPayments = () => {
     ];
 
     return headerElement.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
+      return <th key={index}>{key}</th>;
     });
   };
   const downloadImage = (data, filename = 'ticket.jpeg') => {
@@ -91,18 +94,11 @@ const MyPayments = () => {
             </td>
 
             <td className='opration'>
-              <button
-                className='opration__button'
-                // onClick={() => viewTicket(handler)}
-              >
-                View Ticket
-              </button>
-              <button
-                className='opration__button'
+              <ViewIcon className='edit__button' />
+              <SaveIcon
+                className='delete__button'
                 onClick={() => saveTicketHandler(seatCode)}
-              >
-                Save Qrcode
-              </button>
+              />
             </td>
           </tr>
         );
@@ -112,20 +108,19 @@ const MyPayments = () => {
 
   const renderTable = () => {
     return (
-      <table className='table'>
-        <thead>
-          <tr>{renderHeader()}</tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
-      </table>
+      <Table
+        className='table'
+        headers={renderHeader()}
+        body={renderBody()}
+      ></Table>
     );
   };
 
   return (
-    <div>
-      <h3 className='heading-3'>My Payments</h3>
+    <>
+      <Heading3>My Payments</Heading3>
       {renderTable()}
-    </div>
+    </>
   );
 };
 

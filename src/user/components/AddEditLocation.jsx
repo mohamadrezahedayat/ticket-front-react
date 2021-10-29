@@ -290,11 +290,11 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
         </div>
 
         <button
-          type='button'
-          className='button button--inverse u-margin-bottom-small '
+          className='form__cancel'
           onClick={() =>
             setzoneInputs([...zoneInputs, `zone${zoneInputs.length + 1}`])
           }
+          style={{ marginBottom: '1rem' }}
         >
           Add New Zone
         </button>
@@ -314,13 +314,12 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
         >
           {!editMode ? 'Add New Location' : 'Edit Location'}
         </Button>
-        <Button
-          type='button'
+        <button
+          className='form__cancel'
           onClick={() => (editMode ? onEdit() : onFinish())}
-          inverse={true}
         >
           Cancel
-        </Button>
+        </button>
       </form>
     </Fragment>
   );

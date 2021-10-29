@@ -1,42 +1,57 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  Fragment,
-} from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+
 import {
   api,
   baseURL,
-  imageAddress,
   randomApi,
+  imageAddress,
 } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
-import AddEditArtgroup from './AddEditArtgroup';
 import Table from './Table';
+import AddEditArtgroup from './AddEditArtgroup';
+import { DeleteIcon, Edit } from '../../shared/components/UIElements/Svgs';
+import { AuthContext } from '../../shared/context/auth-context';
+import { Heading3 } from '../../shared/styledComponent/Typography';
 
 const ManageArtgroups = () => {
   const { token } = useContext(AuthContext);
+
+  const [name, setname] = useState();
+  const [crew, setcrew] = useState();
+  const [leader, setleader] = useState();
   const [artGroups, setartGroups] = useState([]);
   const [editMode, seteditMode] = useState(false);
+  const [description, setdescription] = useState();
   const [activeArtGroup, setactiveArtGroup] = useState(false);
 
   const getArtGroups = useCallback(async () => {
-    const response = await api.get(`${baseURL}/artgroups`, {
+    let like = `like=and[`;
+    like += `name=${name || '.'},`;
+    like += `leader=${leader || '.'},`;
+    like += `crew=${crew || '.'},`;
+    like += `description=${description || '.'}`;
+    like += `]`;
+    const { data } = await api.get(`${baseURL}/artgroups?${like}&limit=20`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setartGroups(response.data.data.data);
-  }, [token]);
+    setartGroups(data.data.data);
+  }, [crew, description, leader, name, token]);
 
   const deleteArtGroupHandler = async (artGroup) => {
-    await api.delete(`${baseURL}/artgroups/${artGroup._id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    getArtGroups();
+    const { data } = await api.get(`${baseURL}/shows?artGroup=${artGroup._id}`);
+    if (data.results === 0) {
+      await api.delete(`${baseURL}/artgroups/${artGroup._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      getArtGroups();
+    } else console.log(`Can't delete! \nthis artist has ${data.results} shows`);
+    // todo throws error and remove console.log()
   };
 
   useEffect(() => {
-    getArtGroups();
+    const timeout = setTimeout(getArtGroups, 300);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [getArtGroups, editMode]);
 
   const editArtGroupHandler = (artGroup) => {
@@ -45,18 +60,40 @@ const ManageArtgroups = () => {
   };
 
   const renderHeader = () => {
-    let headerElement = [
-      'name',
-      'leader',
-      'crew',
-      'description',
-      'profile',
-      'operation',
-    ];
-
-    return headerElement.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
-    });
+    return (
+      <>
+        <th>
+          <input
+            value={name}
+            onChange={(e) => setname(e.target.value)}
+            placeholder='name'
+          />
+        </th>
+        <th>
+          <input
+            value={leader}
+            onChange={(e) => setleader(e.target.value)}
+            placeholder='leader'
+          />
+        </th>
+        <th>
+          <input
+            value={crew}
+            onChange={(e) => setcrew(e.target.value)}
+            placeholder='crew'
+          />
+        </th>
+        <th>
+          <input
+            value={description}
+            onChange={(e) => setdescription(e.target.value)}
+            placeholder='description'
+          />
+        </th>
+        <th>profile</th>
+        <th>action</th>
+      </>
+    );
   };
 
   const renderBody = () => {
@@ -81,18 +118,14 @@ const ManageArtgroups = () => {
               />
             </td>
             <td className='opration'>
-              <button
-                className='opration__button'
+              <Edit
+                className='edit__button'
                 onClick={() => editArtGroupHandler(artGroup)}
-              >
-                Edit
-              </button>
-              <button
-                className='opration__button--danger'
+              />
+              <DeleteIcon
+                className='delete__button'
                 onClick={() => deleteArtGroupHandler(artGroup)}
-              >
-                Delete
-              </button>
+              />
             </td>
           </tr>
         );
@@ -110,8 +143,8 @@ const ManageArtgroups = () => {
     );
   };
   return (
-    <Fragment>
-      <h3 className='heading-3'>{`${!editMode ? 'Manage ArtGroup' : ''}`}</h3>
+    <>
+      {!editMode && <Heading3>Manage ArtGroup</Heading3>}
       {!editMode && renderTable()}
       {editMode && (
         <AddEditArtgroup
@@ -120,7 +153,7 @@ const ManageArtgroups = () => {
           onEdit={() => seteditMode(false)}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 

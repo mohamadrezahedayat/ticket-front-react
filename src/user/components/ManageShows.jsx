@@ -1,42 +1,53 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  Fragment,
-} from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+
 import {
   api,
   baseURL,
-  imageAddress,
   randomApi,
+  imageAddress,
 } from '../../shared/apis/server';
+import { Heading3 } from '../../shared/styledComponent/Typography';
+import { DeleteIcon, Edit } from '../../shared/components/UIElements/Svgs';
 import { AuthContext } from '../../shared/context/auth-context';
 import AddEditShow from './AddEditShow';
 import Table from './Table';
 
 const ManageShows = () => {
   const { token } = useContext(AuthContext);
+
+  const [name, setname] = useState();
   const [shows, setshows] = useState([]);
   const [editMode, seteditMode] = useState(false);
+  const [description, setdescription] = useState();
   const [activeShow, setactiveShow] = useState(false);
 
   const getShows = useCallback(async () => {
-    const response = await api.get(`${baseURL}/shows`, {
+    let like = `like=and[`;
+    like += `name=${name || '.'},`;
+    like += `description=${description || '.'}`;
+    like += `]`;
+    const { data } = await api.get(`${baseURL}/shows?${like}&limit=20`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setshows(response.data.data.data);
-  }, [token]);
+    setshows(data.data.data);
+  }, [description, name, token]);
 
   const deleteShowHandler = async (show) => {
-    await api.delete(`${baseURL}/shows/${show._id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    getShows();
+    const { data } = await api.get(`${baseURL}/events?show=${show._id}`);
+    if (data.results === 0) {
+      await api.delete(`${baseURL}/shows/${show._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      getShows();
+    } else console.log(`Can't delete! \nthis show has ${data.results} events`);
+    // todo throws error and remove console.log()
   };
 
   useEffect(() => {
-    getShows();
+    const timeout = setTimeout(getShows, 300);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [getShows, editMode]);
 
   const editShowHandler = (show) => {
@@ -45,18 +56,28 @@ const ManageShows = () => {
   };
 
   const renderHeader = () => {
-    let headerElement = [
-      'name',
-      'description',
-      'artGroup',
-      'manager',
-      'imageCover',
-      'operation',
-    ];
-
-    return headerElement.map((key, index) => {
-      return <th key={index}>{key.toUpperCase()}</th>;
-    });
+    return (
+      <>
+        <th>
+          <input
+            value={name}
+            onChange={(e) => setname(e.target.value)}
+            placeholder='name'
+          />
+        </th>
+        <th>
+          <input
+            value={description}
+            onChange={(e) => setdescription(e.target.value)}
+            placeholder='description'
+          />
+        </th>
+        <th>artgroup</th>
+        <th>manager</th>
+        <th>Photo</th>
+        <th>action</th>
+      </>
+    );
   };
 
   const renderBody = () => {
@@ -80,18 +101,14 @@ const ManageShows = () => {
               />
             </td>
             <td className='opration'>
-              <button
-                className='opration__button'
+              <Edit
+                className='edit__button'
                 onClick={() => editShowHandler(show)}
-              >
-                Edit
-              </button>
-              <button
-                className='opration__button--danger'
+              />
+              <DeleteIcon
+                className='delete__button'
                 onClick={() => deleteShowHandler(show)}
-              >
-                Delete
-              </button>
+              />
             </td>
           </tr>
         );
@@ -109,8 +126,8 @@ const ManageShows = () => {
     );
   };
   return (
-    <Fragment>
-      <h3 className='heading-3'>{`${!editMode ? 'Manage Show' : ''}`}</h3>
+    <>
+      {!editMode && <Heading3>Manage Shows</Heading3>}
       {!editMode && renderTable()}
       {editMode && (
         <AddEditShow
@@ -119,7 +136,7 @@ const ManageShows = () => {
           onEdit={() => seteditMode(false)}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 

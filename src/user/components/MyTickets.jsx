@@ -4,7 +4,7 @@ import { QRCode } from 'react-qrcode-logo';
 import Ticket from '../../event/components/Ticket';
 import Div from '../../shared/styledComponent/Div';
 import { api, baseURL } from '../../shared/apis/server';
-import { H } from '../../shared/styledComponent/Typography';
+import { H, Heading3 } from '../../shared/styledComponent/Typography';
 import { AuthContext } from '../../shared/context/auth-context';
 import { Colors } from '../../shared/styledComponent/variables';
 
@@ -29,7 +29,7 @@ const MyTickets = () => {
         <Div>
           <Ticket />
           <Div
-            absPosition={{ x: 'top,50%', y: 'left,8%' }}
+            absPosition={{ x: 'top,50%', y: 'left,5%' }}
             transform='translateY(-50%)'
           >
             <QRCode
@@ -39,66 +39,58 @@ const MyTickets = () => {
               bgColor='rgba(255,255,255,.3)'
             />
           </Div>
-          <H
+          <Heading3
             as='h3'
             fontSize='2.5rem'
             fontWeight='100'
             color='white'
             textTransform='capitalize'
-            letterSpacing='1px'
             absPosition={{ x: 'left,55%', y: 'top,20%' }}
           >
             {ticket.seatCode}
-          </H>
-          <H
-            as='h3'
-            fontSize='2.5rem'
+          </Heading3>
+          <Heading3
+            fontSize='2rem'
             fontWeight='100'
             color='white'
-            letterSpacing='1px'
             absPosition={{ x: 'left,55%', y: 'top,40%' }}
           >
-            {ticket.event.show.name}
-          </H>
-          <H
-            as='h3'
-            fontSize='2.5rem'
+            {ticket.event.show.name.slice(0, 12)}
+          </Heading3>
+          <Heading3
+            fontSize='2rem'
             fontWeight='100'
             color='white'
-            absPosition={{ x: 'left,28%', y: 'top,40%' }}
+            absPosition={{ x: 'left,27%', y: 'top,40%' }}
           >
-            {ticket.event.show.name}
-          </H>
-          <H
-            as='h3'
+            {ticket.event.show.name.slice(0, 8)}
+          </Heading3>
+          <Heading3
             fontSize='1.5rem'
             fontWeight='100'
             color='silver'
             absPosition={{ x: 'left,55%', y: 'top,60%' }}
           >
             {ticket.event.location.name}
-          </H>
-          <H
-            as='h3'
+          </Heading3>
+          <Heading3
             fontSize='1.5rem'
             fontWeight='100'
             color='silver'
             absPosition={{ x: 'left,55%', y: 'top,70%' }}
           >
             {new Date(ticket.event.startDate).toLocaleString()}
-          </H>
-          <H
-            as='h3'
+          </Heading3>
+          <Heading3
             fontSize='2rem'
             color='white'
             textTransform='capitalize'
-            letterSpacing='2px'
-            absPosition={{ x: 'left,28%', y: 'top,60%' }}
+            absPosition={{ x: 'left,27%', y: 'top,60%' }}
           >
             {ticket.seatCode}
-          </H>
+          </Heading3>
           <Div
-            absPosition={{ x: 'top,40%', y: 'right,8%' }}
+            absPosition={{ x: 'top,35%', y: 'right,5%' }}
             transform='translateY(-50%)'
           >
             <QRCode

@@ -93,7 +93,6 @@ const FormContainer = styled.div`
 
     &__input--inline {
       color: inherit;
-      margin-bottom: -3.6rem;
       margin-top: 1rem;
       align-self: flex-end;
       z-index: 3;

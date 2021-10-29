@@ -1,42 +1,61 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  Fragment,
-} from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+
 import {
   api,
   baseURL,
-  imageAddress,
   randomApi,
+  imageAddress,
 } from '../../shared/apis/server';
+import { DeleteIcon, Edit } from '../../shared/components/UIElements/Svgs';
 import { AuthContext } from '../../shared/context/auth-context';
+import { Heading3 } from '../../shared/styledComponent/Typography';
 import AddEditLocation from './AddEditLocation';
 import Table from './Table';
 
 const ManageLocations = () => {
   const { token } = useContext(AuthContext);
+  const [name, setname] = useState();
+  const [type, settype] = useState();
+  const [city, setcity] = useState();
+  const [address, setaddress] = useState();
   const [locations, setlocations] = useState([]);
   const [editMode, seteditMode] = useState(false);
+  const [description, setdescription] = useState();
   const [activeLocation, setactiveLocation] = useState(false);
 
   const getLocations = useCallback(async () => {
-    const response = await api.get(`${baseURL}/locations`, {
+    let like = `like=and[`;
+    like += `name=${name || '.'},`;
+    like += `type=${type || '.'},`;
+    like += `city=${city || '.'},`;
+    like += `address=${address || '.'},`;
+    like += `description=${description || '.'}`;
+    like += `]`;
+    const { data } = await api.get(`${baseURL}/locations?${like}&limit=20`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    setlocations(response.data.data.data);
-  }, [token]);
+    setlocations(data.data.data);
+  }, [address, city, description, name, token, type]);
 
   const deleteLocationHandler = async (location) => {
-    await api.delete(`${baseURL}/locations/${location._id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    getLocations();
+    const { data } = await api.get(
+      `${baseURL}/events?location=${location._id}`
+    );
+    if (data.results === 0) {
+      await api.delete(`${baseURL}/locations/${location._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      getLocations();
+    } else
+      console.log(`Can't delete! \nthis location has ${data.results} events`);
+    // todo throws error and remove console.log()
   };
 
   useEffect(() => {
-    getLocations();
+    const timeout = setTimeout(getLocations, 300);
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [getLocations, editMode]);
 
   const editLocationHandler = (location) => {
@@ -45,19 +64,47 @@ const ManageLocations = () => {
   };
 
   const renderHeader = () => {
-    let headerElement = [
-      'Name',
-      'Type',
-      'City',
-      'Address',
-      'Description',
-      'Image',
-      'Operation',
-    ];
-
-    return headerElement.map((key, index) => {
-      return <th key={index}>{key}</th>;
-    });
+    return (
+      <>
+        <th>
+          <input
+            value={name}
+            onChange={(e) => setname(e.target.value)}
+            placeholder='name'
+          />
+        </th>
+        <th>
+          <input
+            value={type}
+            onChange={(e) => settype(e.target.value)}
+            placeholder='type'
+          />
+        </th>
+        <th>
+          <input
+            value={city}
+            onChange={(e) => setcity(e.target.value)}
+            placeholder='city'
+          />
+        </th>
+        <th>
+          <input
+            value={address}
+            onChange={(e) => setaddress(e.target.value)}
+            placeholder='address'
+          />
+        </th>
+        <th>
+          <input
+            value={description}
+            onChange={(e) => setdescription(e.target.value)}
+            placeholder='description'
+          />
+        </th>
+        <th>image</th>
+        <th>action</th>
+      </>
+    );
   };
 
   const renderBody = () => {
@@ -66,11 +113,11 @@ const ManageLocations = () => {
       locations.map((location) => {
         return (
           <tr key={location._id}>
-            <td>{location.name}</td>
+            <td>{location.name.slice(0, 40)}...</td>
             <td>{location.type}</td>
             <td>{location.city}</td>
-            <td>{location.address}</td>
-            <td>{location.description}</td>
+            <td>{location.address.slice(0, 40)}...</td>
+            <td>{location.description.slice(0, 40)}...</td>
             <td>
               <img
                 src={
@@ -83,18 +130,14 @@ const ManageLocations = () => {
               />
             </td>
             <td className='opration'>
-              <button
-                className='opration__button'
+              <Edit
+                className='edit__button'
                 onClick={() => editLocationHandler(location)}
-              >
-                Edit
-              </button>
-              <button
-                className='opration__button--danger'
+              />
+              <DeleteIcon
+                className='delete__button'
                 onClick={() => deleteLocationHandler(location)}
-              >
-                Delete
-              </button>
+              />
             </td>
           </tr>
         );
@@ -112,8 +155,8 @@ const ManageLocations = () => {
     );
   };
   return (
-    <Fragment>
-      <h3 className='heading-3'>{`${!editMode ? 'Manage Location' : ''}`}</h3>
+    <>
+      {!editMode && <Heading3>Manage Locations</Heading3>}
       {!editMode && renderTable()}
       {editMode && (
         <AddEditLocation
@@ -122,7 +165,7 @@ const ManageLocations = () => {
           onEdit={() => seteditMode(false)}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 
