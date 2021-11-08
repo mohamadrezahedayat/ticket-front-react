@@ -6,18 +6,17 @@ import {
   randomApi,
   imageAddress,
 } from '../../shared/apis/server';
-import Table from './Table';
-import EditSeats from './EditSeats';
-import AddEditEvent from './AddEditEvent';
-import { useSeats } from '../../shared/hooks/manageSeats-hook';
-import { AuthContext } from '../../shared/context/auth-context';
-import { Heading3 } from '../../shared/styledComponent/Typography';
 import {
-  DeleteIcon,
   Edit,
   SeatSvg,
+  DeleteIcon,
 } from '../../shared/components/UIElements/Svgs';
+import { AuthContext } from '../../shared/context/auth-context';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
+import { useSeats } from '../../shared/hooks/manageSeats-hook';
+import AddEditEvent from './AddEditEvent';
+import EditSeats from './EditSeats';
+import Table from './Table';
 
 const ManageEvents = () => {
   const { token } = useContext(AuthContext);
@@ -144,7 +143,6 @@ const ManageEvents = () => {
 
   return (
     <>
-      {!editMode && <Heading3>Manage Event</Heading3>}
       {!editMode && !editSeatsMode && renderTable()}
       {editMode && !editSeatsMode && (
         <AddEditEvent

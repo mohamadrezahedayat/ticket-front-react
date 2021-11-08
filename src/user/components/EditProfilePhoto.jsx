@@ -70,7 +70,6 @@ const EditProfilePhoto = ({ onFinish }) => {
     <form className='form' onSubmit={submitHandler}>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
-      <h3 className='heading-3'>Edit Your Profile photo</h3>
       <ImageUpload
         imageUrl={`${imageAddress}users/${userPhoto}`}
         center

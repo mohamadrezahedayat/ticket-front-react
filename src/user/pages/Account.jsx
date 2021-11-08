@@ -9,6 +9,7 @@ import ManageShows from '../components/ManageShows';
 import ManageUsers from '../components/ManageUsers';
 import AddEditEvent from '../components/AddEditEvent';
 import ManageEvents from '../components/ManageEvents';
+import FormContainer from '../components/FormContainer';
 import ChangePassword from '../components/ChangePassword';
 import EditAccountForm from '../components/EditAccountForm';
 import AddEditArtgroup from '../components/AddEditArtgroup';
@@ -19,53 +20,84 @@ import EditProfilePhoto from '../components/EditProfilePhoto';
 import { AuthContext } from '../../shared/context/auth-context';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
 import { imageAddress, randomApi } from '../../shared/apis/server';
-import FormContainer from '../components/FormContainer';
 
 const Account = () => {
   const { username, userPhoto, userId } = useContext(AuthContext);
   const [formName, setFormName] = useState(false);
 
   const renderForm = () => {
+    let form, header;
+
     switch (formName) {
       case 'EditAccountForm':
-        return <EditAccountForm onFinish={() => setFormName('')} />;
+        form = <EditAccountForm onFinish={() => setFormName('')} />;
+        header = 'Edit Account information';
+        break;
       case 'EditProfilePhoto':
-        return <EditProfilePhoto onFinish={() => setFormName('')} />;
+        form = <EditProfilePhoto onFinish={() => setFormName('')} />;
+        header = 'Add / replace profile photo';
+        break;
       case 'ChangePassword':
-        return <ChangePassword onFinish={() => setFormName('')} />;
+        form = <ChangePassword onFinish={() => setFormName('')} />;
+        header = 'Change Password';
+        break;
       case 'ManageUsers':
-        return <ManageUsers />;
+        form = <ManageUsers />;
+        header = 'Manage Users';
+        break;
       case 'AddEditArtgroup':
-        return (
-          <AddEditArtgroup onFinish={() => setFormName('ManageArtgroups')} />
+        form = (
+          <AddEditArtgroup
+            onFinish={() => {
+              setFormName('ManageArtgroups');
+            }}
+          />
         );
+        header = 'Add Artgroup';
+        break;
       case 'ManageArtgroups':
-        return <ManageArtgroups />;
+        form = <ManageArtgroups />;
+        header = 'manage Artgroups';
+        break;
       case 'AddEditShow':
-        return <AddEditShow onFinish={() => setFormName('ManageShows')} />;
+        form = <AddEditShow onFinish={() => setFormName('ManageShows')} />;
+        header = 'add show';
+        break;
       case 'ManageShows':
-        return <ManageShows />;
+        form = <ManageShows />;
+        header = 'manage shows';
+        break;
       case 'AddEditLocation':
-        return (
+        form = (
           <AddEditLocation onFinish={() => setFormName('ManageLocations')} />
         );
+        header = 'add location';
+        break;
       case 'ManageLocations':
-        return <ManageLocations />;
+        form = <ManageLocations />;
+        header = 'manage locations';
+        break;
       case 'AddEditEvent':
-        return <AddEditEvent onFinish={() => setFormName('ManageEvents')} />;
+        form = <AddEditEvent onFinish={() => setFormName('ManageEvents')} />;
+        header = 'add event';
+        break;
       case 'ManageEvents':
-        return <ManageEvents onFinish={() => setFormName('ManageEvents')} />;
+        form = <ManageEvents onFinish={() => setFormName('ManageEvents')} />;
+        header = 'manage events';
+        break;
       case 'MyPayments':
-        return <MyPayments />;
+        form = <MyPayments />;
+        header = 'my payments';
+        break;
       case 'MyTickets':
-        return <MyTickets />;
+        form = <MyTickets />;
+        header = 'my tickets';
+        break;
 
       default:
-        return (
+        form = (
           <div className='acount-view'>
-            <div className='acount-view__detail'>
-              <h3>{username}</h3>
-            </div>
+            <div className='acount-view__detail'></div>
             <img
               className='acount-view__photo'
               src={
@@ -78,15 +110,23 @@ const Account = () => {
           </div>
         );
     }
+
+    return (
+      <FormContainer
+        gridColumn='6 / -2'
+        gridColumnTabLand='5 / -2'
+        header={header ? header : username}
+      >
+        {form}
+      </FormContainer>
+    );
   };
 
   return (
-    <GridLayout>
+    <GridLayout className='main-grid'>
       <Sidebar />
       <Accordions setFormName={setFormName} />
-      <FormContainer gridColumn='6 / -2' gridColumnTabLand='5 / -2'>
-        {renderForm()}
-      </FormContainer>
+      {renderForm()}
     </GridLayout>
   );
 };

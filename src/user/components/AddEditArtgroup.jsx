@@ -9,7 +9,6 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
 import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
-import { Heading3 } from '../../shared/styledComponent/Typography';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
@@ -91,9 +90,6 @@ const AddEditArtgroup = ({ editMode, artGroup, onFinish, onEdit }) => {
 
   return (
     <Fragment>
-      <Heading3>{`${
-        !editMode ? 'Add New Artgroup' : 'Edit Artgroup'
-      }`}</Heading3>
       <ErrorModal error={error} onClear={clearError} />
       <form className='form' onSubmit={submitHandler}>
         {isLoading && <LoadingSpinner asOverlay />}

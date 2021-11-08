@@ -57,7 +57,6 @@ const ChangePassword = ({ onFinish }) => {
     <form className='form' onSubmit={submitHandler}>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
-      <h3 className='heading-3'>Change Your Password</h3>
       <Input
         element='input'
         id='passwordCurrent'

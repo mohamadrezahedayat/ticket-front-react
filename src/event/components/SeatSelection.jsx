@@ -5,15 +5,15 @@ import {
   setBoxShadow,
   setBackgroundColor,
 } from '../../shared/styledComponent/functions';
+import {
+  Screen,
+  setMediaQuery,
+} from '../../shared/styledComponent/mediaQueries';
 import LeftPanel from './LeftPanel';
 import RightPanel from './RightPanel';
 import chairs from '../../img/chairs.jpg';
 import Div from '../../shared/styledComponent/Div';
 import { Colors } from '../../shared/styledComponent/variables';
-import {
-  Screen,
-  setMediaQuery,
-} from '../../shared/styledComponent/mediaQueries';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const SeatSelection = ({ events, date, className }) => {
@@ -90,7 +90,6 @@ const SeatSelection = ({ events, date, className }) => {
     >
       <LeftPanel
         className='left-panel'
-        date={date}
         columnMax={columnMax}
         rowMax={rowMax}
         width={width}

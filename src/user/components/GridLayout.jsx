@@ -5,8 +5,8 @@ import userImage from '../../img/user.jpg';
 import { Colors } from '../../shared/styledComponent/variables';
 import { setBackground } from '../../shared/styledComponent/functions';
 
-const GridLayout = ({ children }) => {
-  return <Container>{children}</Container>;
+const GridLayout = ({ children, className }) => {
+  return <Container className={className}>{children}</Container>;
 };
 
 export default GridLayout;

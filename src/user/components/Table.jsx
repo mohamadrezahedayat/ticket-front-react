@@ -54,9 +54,6 @@ const TableWrapper = styled.table`
     ${Screen.tabletPortrait`
     max-width: 10rem;`}
   }
-  /* td:nth-of-type(5) {
-    padding: 0;
-  } */
 
   & th {
     text-transform: capitalize;

@@ -59,12 +59,12 @@ export const useSeats = () => {
 
   const [clicked, setclicked] = useState(false);
   const [addAgain, setaddAgain] = useState(false);
+  const [activeEvent, setactiveEvent] = useState();
   const [isSending, setisSending] = useState(false);
   const [ticketCount, setticketCount] = useState(2);
-  const [activeEvent, setactiveEvent] = useState();
   const [hoveredSeats, sethoveredSeats] = useState([]);
   const [tooltipMode, settooltipMode] = useState(true);
-  const [configMode, setconfigMode] = useState('status');
+  const [configMode, setconfigMode] = useState(true);
   const [selectedSeats, setselectedSeats] = useState([]);
   const [selectedZones, setselectedZones] = useState([]);
   const [selectByZone, setselectByZone] = useState(false);

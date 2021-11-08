@@ -1,12 +1,12 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { QRCode } from 'react-qrcode-logo';
 
+import { QRCode } from 'react-qrcode-logo';
 import Ticket from '../../event/components/Ticket';
 import Div from '../../shared/styledComponent/Div';
 import { api, baseURL } from '../../shared/apis/server';
-import { H, Heading3 } from '../../shared/styledComponent/Typography';
 import { AuthContext } from '../../shared/context/auth-context';
 import { Colors } from '../../shared/styledComponent/variables';
+import { Heading3 } from '../../shared/styledComponent/Typography';
 
 const MyTickets = () => {
   const { token } = useContext(AuthContext);
@@ -24,7 +24,6 @@ const MyTickets = () => {
 
   return (
     <div>
-      <h3 className='heading-3'>My Tickets</h3>
       {tickets.map((ticket) => (
         <Div>
           <Ticket />

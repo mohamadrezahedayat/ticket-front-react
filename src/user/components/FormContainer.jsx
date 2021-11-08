@@ -1,14 +1,31 @@
 import styled from 'styled-components';
+
 import {
   setColor,
+  setBorder,
   setBoxShadow,
   setBackgroundColor,
-  setBorder,
+  setAbsPos,
 } from '../../shared/styledComponent/functions';
 import { Colors } from '../../shared/styledComponent/variables';
 import { Screen } from '../../shared/styledComponent/mediaQueries';
+import { Heading3 } from '../../shared/styledComponent/Typography';
 
-const FormContainer = styled.div`
+const FormContainer = ({ gridColumn, children, header }) => {
+  return (
+    <Container className='form-container' gridColumn={gridColumn}>
+      <div className='header'>
+        <Heading3 color={Colors.white} lineHeight='5rem'>
+          {header}
+        </Heading3>
+      </div>
+      {children}
+    </Container>
+  );
+};
+
+const Container = styled.div`
+  position: relative;
   min-width: 50vw;
   grid-column: ${(props) => props.gridColumn};
   grid-row: 2 / -2;
@@ -17,20 +34,67 @@ const FormContainer = styled.div`
   ${setBackgroundColor(`${Colors.greyLight1}35`)}
   border-radius: 2rem;
   padding: 3rem;
+  padding-top: 6rem;
   overflow-x: auto;
   ${setBoxShadow()}
   ${Screen.tabletLandscape`
   transform:translateX( calc(( (100vw - 80px ) / -11) + 2rem) ) ;
-  
   `}
   ${Screen.phone`
-      grid-row: 3/-2;
-      grid-column: 1 / -1;
-      justify-self: center;
-      transform:unset;
-    `}
+    grid-row: 3/-2;
+    grid-column: 1 / -1;
+    justify-self: center;
+    transform:unset;
+  `}
 
-& .form {
+  & .header {
+    ${setAbsPos()}
+    width: 100%;
+    height: 5rem;
+    background-color: ${Colors.primary}aa;
+    padding-left: 3rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    & .close-bottom {
+      color: white;
+      font-size: 2rem;
+      line-height: 100%;
+      align-self: center;
+      text-decoration: none;
+      margin-right: 2rem;
+      padding: 0.5rem;
+      border-radius: 2px;
+      cursor: pointer;
+      &:hover {
+        background-color: ${Colors.tertiaryLight};
+      }
+    }
+  }
+
+  .acount-view {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    &__photo {
+      border-radius: 50%;
+      width: 30%;
+      margin-bottom: 3rem;
+    }
+    &__detail {
+      margin-bottom: 2rem;
+      h3 {
+        font-size: 2rem;
+        ${setColor(Colors.primary)}
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  & .form {
     font-weight: 400;
     ${setColor(Colors.primary)}
     display: flex;

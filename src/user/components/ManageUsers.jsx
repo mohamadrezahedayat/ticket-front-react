@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  Fragment,
-} from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 import {
   api,
@@ -12,21 +6,21 @@ import {
   randomApi,
   imageAddress,
 } from '../../shared/apis/server';
-import EditUser from './EditUser';
-import { AuthContext } from '../../shared/context/auth-context';
-import { Heading3 } from '../../shared/styledComponent/Typography';
 import Table from './Table';
+import EditUser from './EditUser';
 import { Edit } from '../../shared/components/UIElements/Svgs';
+import { AuthContext } from '../../shared/context/auth-context';
 
 const ManageUsers = () => {
-  const [users, setusers] = useState([]);
   const { token } = useContext(AuthContext);
-  const [editMode, seteditMode] = useState(false);
-  const [activeUser, setactiveUser] = useState(null);
+
   const [role, setrole] = useState();
   const [name, setname] = useState();
   const [email, setemail] = useState();
   const [mobile, setmobile] = useState();
+  const [users, setusers] = useState([]);
+  const [editMode, seteditMode] = useState(false);
+  const [activeUser, setactiveUser] = useState(null);
 
   const getUsers = useCallback(async () => {
     let like = `like=and[`;
@@ -124,24 +118,14 @@ const ManageUsers = () => {
     );
   };
 
-  const renderTable = () => {
-    return (
-      <Table
-        className='table'
-        headers={renderHeader()}
-        body={renderBody()}
-      ></Table>
-    );
-  };
-
-  return (
-    <Fragment>
-      <Heading3>Manage Users</Heading3>
-      {!editMode && renderTable()}
-      {editMode && (
-        <EditUser user={activeUser} onSubmit={() => seteditMode(false)} />
-      )}
-    </Fragment>
+  return !editMode ? (
+    <Table
+      className='table'
+      headers={renderHeader()}
+      body={renderBody()}
+    ></Table>
+  ) : (
+    <EditUser user={activeUser} onSubmit={() => seteditMode(false)} />
   );
 };
 

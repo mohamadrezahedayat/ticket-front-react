@@ -1,20 +1,20 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import ZoneV2 from './ZoneV2';
-import Div from '../../shared/styledComponent/Div';
 import {
   Arrow,
   Reset,
   ZoomIn,
   ZoomOut,
 } from '../../shared/components/UIElements/Svgs';
-import { Colors } from '../../shared/styledComponent/variables';
-import { Screen } from '../../shared/styledComponent/mediaQueries';
+import Div from '../../shared/styledComponent/Div';
 import { setBackgroundColor } from '../../shared/styledComponent/functions';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
+import { Screen } from '../../shared/styledComponent/mediaQueries';
+import { Colors } from '../../shared/styledComponent/variables';
+import ZoneV2 from './ZoneV2';
 
-const LeftPanel = ({ date, columnMax, rowMax, width, className }) => {
+const LeftPanel = ({ columnMax, rowMax, width, className }) => {
   const seatsWrapper = useRef();
 
   const [unit, setunit] = useState();
@@ -22,7 +22,6 @@ const LeftPanel = ({ date, columnMax, rowMax, width, className }) => {
   const [offsetY, setoffsetY] = useState(30);
   const [zoomedUnit, setzoomedUnit] = useState(unit);
   const [seatWrapperWidth, setseatWrapperWidth] = useState();
-
   const { seatsState, setclicked } = useContext(manageSeatsContext);
 
   // first width of left panel window
@@ -98,7 +97,6 @@ const LeftPanel = ({ date, columnMax, rowMax, width, className }) => {
             unit={zoomedUnit}
             offsetY={offsetY}
             offsetX={offsetX}
-            date={date}
           />
         ))}
       </Div>

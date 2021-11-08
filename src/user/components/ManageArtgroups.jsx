@@ -8,9 +8,8 @@ import {
 } from '../../shared/apis/server';
 import Table from './Table';
 import AddEditArtgroup from './AddEditArtgroup';
-import { DeleteIcon, Edit } from '../../shared/components/UIElements/Svgs';
 import { AuthContext } from '../../shared/context/auth-context';
-import { Heading3 } from '../../shared/styledComponent/Typography';
+import { DeleteIcon, Edit } from '../../shared/components/UIElements/Svgs';
 
 const ManageArtgroups = () => {
   const { token } = useContext(AuthContext);
@@ -120,7 +119,9 @@ const ManageArtgroups = () => {
             <td className='opration'>
               <Edit
                 className='edit__button'
-                onClick={() => editArtGroupHandler(artGroup)}
+                onClick={() => {
+                  editArtGroupHandler(artGroup);
+                }}
               />
               <DeleteIcon
                 className='delete__button'
@@ -144,7 +145,6 @@ const ManageArtgroups = () => {
   };
   return (
     <>
-      {!editMode && <Heading3>Manage ArtGroup</Heading3>}
       {!editMode && renderTable()}
       {editMode && (
         <AddEditArtgroup

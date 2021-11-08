@@ -6,11 +6,6 @@ import {
   VALIDATOR_MOBILE,
   VALIDATOR_MINLENGTH,
 } from '../../shared/util/validators';
-import {
-  Span,
-  Heading3,
-  Heading4,
-} from '../../shared/styledComponent/Typography';
 import GridLayout from '../components/GridLayout';
 import { baseURL } from '../../shared/apis/server';
 import { useForm } from '../../shared/hooks/form-hook';
@@ -21,6 +16,7 @@ import { AuthContext } from '../../shared/context/auth-context';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import { Span, Heading4 } from '../../shared/styledComponent/Typography';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
@@ -151,12 +147,12 @@ const Auth = () => {
   return (
     <GridLayout>
       <Sidebar />
-      <FormContainer gridColumn='3 / -3'>
+      <FormContainer
+        gridColumn='3 / -3'
+        header={!isLoginMode ? 'Create An Acount' : 'Login To Your Acount'}
+      >
         <ErrorModal error={error} onClear={clearError} />
         <form className='form' onSubmit={authSubmitHandler}>
-          <Heading3>
-            {!isLoginMode ? 'Create An Acount' : 'Login To Your Acount'}
-          </Heading3>
           {isLoading && <LoadingSpinner asOverlay />}
           {!isLoginMode && (
             <Input

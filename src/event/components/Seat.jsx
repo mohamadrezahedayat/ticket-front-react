@@ -32,7 +32,7 @@ const Seat = ({ unit, seat }) => {
   useEffect(() => {
     if (selected && !selectByZone) {
       setfillcolor('#37c2c2');
-    } else if (configMode === 'status') {
+    } else if (configMode) {
       if (seat.status === 'free') setfillcolor('#373737');
       if (seat.status === 'sold') setfillcolor('#1b2b17');
       if (seat.status === 'inactive') setfillcolor('#6a666e');

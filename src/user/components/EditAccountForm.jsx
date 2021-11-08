@@ -38,7 +38,7 @@ const EditAcountForm = ({ onFinish }) => {
     event.preventDefault();
 
     try {
-      const responseData = await sendRequest(
+      const { data } = await sendRequest(
         `${baseURL}/users/updateMe`,
         'PATCH',
         JSON.stringify({
@@ -58,9 +58,9 @@ const EditAcountForm = ({ onFinish }) => {
         'userData',
         JSON.stringify({
           userId,
-          username: responseData.data.user.name,
-          email: responseData.data.user.email,
-          mobile: responseData.data.user.mobile,
+          username: data.user.name,
+          email: data.user.email,
+          mobile: data.user.mobile,
           photo,
           token,
           expiration,
@@ -69,9 +69,9 @@ const EditAcountForm = ({ onFinish }) => {
       );
       login(
         userId,
-        responseData.data.user.email,
-        responseData.data.user.mobile,
-        responseData.data.user.name,
+        data.user.email,
+        data.user.mobile,
+        data.user.name,
         photo,
         token,
         new Date(new Date().getTime() + 1000 * 60 * 60),
@@ -85,7 +85,6 @@ const EditAcountForm = ({ onFinish }) => {
     <form className='form' onSubmit={submitHandler}>
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
-      <h3 className='heading-3'>Edit Your Acount Information</h3>
       <Input
         element='input'
         id='name'

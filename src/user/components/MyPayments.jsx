@@ -7,9 +7,8 @@ import {
   imageAddress,
 } from '../../shared/apis/server';
 import { QRCode } from 'react-qrcode-logo';
-import { Heading3 } from '../../shared/styledComponent/Typography';
-import { SaveIcon, ViewIcon } from '../../shared/components/UIElements/Svgs';
 import { AuthContext } from '../../shared/context/auth-context';
+import { SaveIcon, ViewIcon } from '../../shared/components/UIElements/Svgs';
 import Table from './Table';
 
 const MyPayments = () => {
@@ -106,21 +105,12 @@ const MyPayments = () => {
     );
   };
 
-  const renderTable = () => {
-    return (
-      <Table
-        className='table'
-        headers={renderHeader()}
-        body={renderBody()}
-      ></Table>
-    );
-  };
-
   return (
-    <>
-      <Heading3>My Payments</Heading3>
-      {renderTable()}
-    </>
+    <Table
+      className='table'
+      headers={renderHeader()}
+      body={renderBody()}
+    ></Table>
   );
 };
 
