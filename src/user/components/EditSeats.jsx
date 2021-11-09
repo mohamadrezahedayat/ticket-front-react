@@ -1,7 +1,13 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from 'react';
 import styled from 'styled-components';
 
-import Zone from '../../event/components/Zone';
+import SeatsPanel from './SeatsPanel';
 import Div from '../../shared/styledComponent/Div';
 import { baseURL } from '../../shared/apis/server';
 import Input from '../../shared/styledComponent/Input';
@@ -10,15 +16,22 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import { Colors } from '../../shared/styledComponent/variables';
 import { AuthContext } from '../../shared/context/auth-context';
 import { Checkbox2 } from '../../shared/styledComponent/Checkbox';
-import { setBoxShadow } from '../../shared/styledComponent/functions';
+import {
+  setBackgroundColor,
+  setBoxShadow,
+} from '../../shared/styledComponent/functions';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import { Screen } from '../../shared/styledComponent/mediaQueries';
 
 const EditSeats = ({ event, onEdit }) => {
   const container = useRef();
   const { capacity } = event;
+  const [width, setwidth] = useState();
+  const [rowMax, setrowMax] = useState();
   const { token } = useContext(AuthContext);
+  const [columnMax, setcolumnMax] = useState();
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
   const {
     setselectedZones,
@@ -37,10 +50,41 @@ const EditSeats = ({ event, onEdit }) => {
 
   const [_price, set_price] = useState();
 
+  const getWidth = useCallback(
+    () =>
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth,
+    []
+  );
+
+  // resize eventHandler, set width state after user resize
+  useEffect(() => {
+    let timeoutId = null;
+    const resizeListener = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => setwidth(getWidth()), 150);
+    };
+    window.addEventListener('resize', resizeListener);
+    return () => {
+      window.removeEventListener('resize', resizeListener);
+    };
+  }, [getWidth]);
+
   // fill initial capacity state so we can process user seat configurations
   useEffect(() => {
     setInitialCapacity(capacity);
 
+    // calculate maximum columns & rows
+    const layouts = capacity.map((zone) => zone.layout);
+    const colMax = Math.max(
+      ...layouts.map((layout) => layout.columns + layout.startColumn)
+    );
+    const rowMax = Math.max(
+      ...layouts.map((layout) => layout.rows + layout.startRow)
+    );
+    setcolumnMax(colMax);
+    setrowMax(rowMax);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [capacity]);
 
@@ -109,7 +153,7 @@ const EditSeats = ({ event, onEdit }) => {
       );
     } else {
       return (
-        <Div rowLeft margin='1rem 0 0 0'>
+        <Div className='status-bottom-container'>
           <Input
             width='10rem'
             padding='.5rem'
@@ -120,11 +164,7 @@ const EditSeats = ({ event, onEdit }) => {
             value={_price}
             onChange={(e) => set_price(e.target.value)}
           />
-          <Button
-            letterSpacing='1px'
-            fontSize='1.4rem'
-            onClick={setPriceHandler}
-          >
+          <Button className='btn-save' onClick={setPriceHandler}>
             Set price
           </Button>
         </Div>
@@ -188,17 +228,12 @@ const EditSeats = ({ event, onEdit }) => {
         </div>
         {renderConfigInput()}
         {/* seats */}
-        <div className='seats-wrapper'>
-          {seatsState.map((zone) => (
-            <Zone
-              key={zone._id}
-              zone={zone}
-              offsetX={0}
-              offsetY={10}
-              unit={2.5}
-            />
-          ))}
-        </div>
+        <SeatsPanel
+          className='seats-panel'
+          columnMax={columnMax}
+          rowMax={rowMax}
+          width={width}
+        ></SeatsPanel>
       </Div>
     </Container>
   );
@@ -215,18 +250,18 @@ const Container = styled.div`
     flex-wrap: nowrap;
     justify-content: space-around;
     align-items: center;
-    .btn-save {
-      font-size: 1.4rem;
-      letter-spacing: 1px;
-      cursor: pointer;
-      border: none;
-      ${setBoxShadow()}
-      height: 2.5rem;
-      background-color: ${Colors.primaryLight};
-      border-radius: 2px;
-      &:hover {
-        background-color: ${Colors.primaryDark};
-      }
+  }
+  .btn-save {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: none;
+    ${setBoxShadow()}
+    height: 2.5rem;
+    background-color: ${Colors.primaryLight};
+    border-radius: 2px;
+    &:hover {
+      background-color: ${Colors.primaryDark};
     }
   }
   .status-bottom-container {
@@ -249,11 +284,14 @@ const Container = styled.div`
       }
     }
   }
-  .seats-wrapper {
-    width: 100%;
-    min-height: 50vh;
-    background-color: #af5eaf;
-    position: relative;
-    overflow: auto;
+  & .seats-panel {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    ${setBoxShadow()}
+    overflow: hidden;
+    border-radius: 3rem;
+    ${setBackgroundColor(Colors.white + '5')}
+    ${Screen.tabletLandscape` grid-row-start:2;margin-bottom:3rem;`}
   }
 `;

@@ -128,9 +128,9 @@ const Seat = ({ unit, seat }) => {
 export default Seat;
 
 const SeatWrapper = styled.div`
-  height: ${(props) => props.unit}rem;
-  width: ${(props) => props.unit}rem;
-  padding: ${(props) => 0.05 * props.unit}rem;
+  height: ${(props) => props.unit}px;
+  width: ${(props) => props.unit}px;
+  padding: ${(props) => 0.05 * props.unit}px;
   transform: rotate(180deg);
   & .tooltip {
     display: none;

@@ -18,8 +18,8 @@ import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const SeatSelection = ({ events, date, className }) => {
   const [width, setwidth] = useState();
-  const [columnMax, setcolumnMax] = useState();
   const [rowMax, setrowMax] = useState();
+  const [columnMax, setcolumnMax] = useState();
 
   const {
     activeEvent,
@@ -71,7 +71,7 @@ const SeatSelection = ({ events, date, className }) => {
     setReservedSeatsOfCurrentUser(getReservedSeatsOfCurrentUser(capacity));
     setselectedSeats([]);
 
-    // calculate maximum columns
+    // calculate maximum columns & rows
     const layouts = capacity.map((zone) => zone.layout);
     const colMax = Math.max(
       ...layouts.map((layout) => layout.columns + layout.startColumn)
