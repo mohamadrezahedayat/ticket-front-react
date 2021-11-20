@@ -1,10 +1,9 @@
-import React, { useCallback, useContext, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 
 import { useForm } from '../../shared/hooks/form-hook';
 import { baseURL, api } from '../../shared/apis/server';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
-import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
@@ -14,7 +13,6 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
   const [locations, setlocations] = useState([]);
   const [location, setlocation] = useState();
-  const { token } = useContext(AuthContext);
   const [shows, setshows] = useState([]);
   const [show, setshow] = useState();
 
@@ -49,23 +47,16 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
   );
 
   const getShows = useCallback(async () => {
-    const response = await api.get(`${baseURL}/shows?fields=name,_id`, {
-      headers: { authorization: `Bearer ${token}` },
-    });
+    const response = await api.get(`/shows?fields=name,_id`);
     setshows(response.data.data.data);
     if (!editMode) setshow(response.data.data.data[0]._id);
-  }, [token, editMode]);
+  }, [editMode]);
 
   const getLocations = useCallback(async () => {
-    const response = await api.get(
-      `${baseURL}/locations?fields=name,_id,capacity`,
-      {
-        headers: { authorization: `Bearer ${token}` },
-      }
-    );
+    const response = await api.get(`/locations?fields=name,_id,capacity`);
     setlocations(response.data.data.data);
     if (!editMode) setlocation(response.data.data.data[0]._id);
-  }, [token, editMode]);
+  }, [editMode]);
 
   useEffect(() => {
     getShows();
@@ -91,7 +82,6 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
           }),
           {
             'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`,
           }
         );
       } else {
@@ -105,7 +95,6 @@ const AddEditEvent = ({ editMode, event, onFinish, onEdit }) => {
           }),
           {
             'Content-Type': 'application/json',
-            authorization: `Bearer ${token}`,
           }
         );
       }

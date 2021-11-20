@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment } from 'react';
 
 import {
   VALIDATOR_EMAIL,
@@ -9,14 +9,12 @@ import { imageAddress } from '../../shared/apis/server';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { baseURL, randomApi } from '../../shared/apis/server';
 import Input from '../../shared/components/FormElements/Input';
-import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const EditUser = ({ user, onSubmit }) => {
-  const { token } = useContext(AuthContext);
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
@@ -56,9 +54,7 @@ const EditUser = ({ user, onSubmit }) => {
       formData.append('email', formState.inputs.email.value);
       formData.append('mobile', formState.inputs.mobile.value);
 
-      await sendRequest(`${baseURL}/users/${user._id}`, 'PATCH', formData, {
-        authorization: `Bearer ${token}`,
-      });
+      await sendRequest(`${baseURL}/users/${user._id}`, 'PATCH', formData);
     } catch (err) {}
     onSubmit();
   };
@@ -116,7 +112,7 @@ const EditUser = ({ user, onSubmit }) => {
         <ImageUpload
           imageUrl={
             user.photo && user.photo !== 'default.jpg'
-              ? `${imageAddress}users/${user.photo}`
+              ? `${imageAddress}/users/${user.photo}`
               : randomApi(user._id)
           }
           center

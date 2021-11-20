@@ -12,7 +12,7 @@ import { AuthContext } from '../../shared/context/auth-context';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const SeatV2 = ({ unit, seat }) => {
-  let history = useHistory();
+  const history = useHistory();
 
   const {
     tooltipMode,
@@ -24,7 +24,7 @@ const SeatV2 = ({ unit, seat }) => {
     reservedSeatsOfCurrentUser,
   } = useContext(manageSeatsContext);
 
-  const { token } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
 
   const [hovered, sethovered] = useState();
   const [booked, setbooked] = useState(false);
@@ -70,7 +70,7 @@ const SeatV2 = ({ unit, seat }) => {
   }, [reservedSeatsOfCurrentUser]);
 
   const seatLocalClickHandler = () => {
-    if (!token) history.push('/auth');
+    if (!isLoggedIn) history.push('/auth');
     seatClickHandler(seat);
   };
 

@@ -6,6 +6,7 @@ import {
   setBoxShadow,
   setBackgroundColor,
   setAbsPos,
+  setCursor,
 } from '../../shared/styledComponent/functions';
 import { Colors } from '../../shared/styledComponent/variables';
 import { Screen } from '../../shared/styledComponent/mediaQueries';
@@ -35,6 +36,7 @@ const Container = styled.div`
   border-radius: 2rem;
   padding: 3rem;
   padding-top: 6rem;
+
   overflow-x: auto;
   ${setBoxShadow()}
   ${Screen.tabletLandscape`
@@ -308,6 +310,17 @@ const Container = styled.div`
         height: 100%;
         object-fit: cover;
       }
+    }
+  }
+  .googleIcon {
+    width: 5rem;
+    margin: 1rem 0.5rem;
+    fill: #dc4b39;
+    text-align: center;
+    ${setBoxShadow()}
+    ${setCursor('pointer')}
+    &:hover {
+      filter: brightness(0.8);
     }
   }
 `;

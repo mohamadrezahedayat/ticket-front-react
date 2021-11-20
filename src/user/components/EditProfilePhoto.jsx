@@ -10,7 +10,7 @@ import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const EditProfilePhoto = ({ onFinish }) => {
-  const { token, login, userPhoto } = useContext(AuthContext);
+  const { login, userPhoto } = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
@@ -31,10 +31,7 @@ const EditProfilePhoto = ({ onFinish }) => {
       const responseData = await sendRequest(
         `${baseURL}/users/updateMe`,
         'PATCH',
-        formData,
-        {
-          authorization: `Bearer ${token}`,
-        }
+        formData
       );
       const { email, mobile, username, expiration, userId, role } = JSON.parse(
         localStorage.getItem('userData')
@@ -47,7 +44,6 @@ const EditProfilePhoto = ({ onFinish }) => {
           email,
           mobile,
           photo: responseData.data.user.photo,
-          token,
           expiration,
           role,
         })
@@ -58,7 +54,6 @@ const EditProfilePhoto = ({ onFinish }) => {
         mobile,
         username,
         responseData.data.user.photo,
-        token,
         new Date(new Date().getTime() + 1000 * 60 * 60),
         role
       );
@@ -71,7 +66,7 @@ const EditProfilePhoto = ({ onFinish }) => {
       <ErrorModal error={error} onClear={clearError} />
       {isLoading && <LoadingSpinner asOverlay />}
       <ImageUpload
-        imageUrl={`${imageAddress}users/${userPhoto}`}
+        imageUrl={`${imageAddress}/users/${userPhoto}`}
         center
         id='image'
         onInput={inputHandler}

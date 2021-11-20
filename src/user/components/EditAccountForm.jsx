@@ -14,7 +14,7 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const EditAcountForm = ({ onFinish }) => {
-  const { username, token, email, mobile, login } = useContext(AuthContext);
+  const { username, email, mobile, login } = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
@@ -48,7 +48,6 @@ const EditAcountForm = ({ onFinish }) => {
         }),
         {
           'Content-Type': 'application/json',
-          authorization: `Bearer ${token}`,
         }
       );
       const { expiration, photo, userId, role } = JSON.parse(
@@ -62,7 +61,6 @@ const EditAcountForm = ({ onFinish }) => {
           email: data.user.email,
           mobile: data.user.mobile,
           photo,
-          token,
           expiration,
           role,
         })
@@ -73,7 +71,6 @@ const EditAcountForm = ({ onFinish }) => {
         data.user.mobile,
         data.user.name,
         photo,
-        token,
         new Date(new Date().getTime() + 1000 * 60 * 60),
         role
       );

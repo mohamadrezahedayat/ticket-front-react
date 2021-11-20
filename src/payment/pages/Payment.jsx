@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import Div from '../../shared/styledComponent/Div';
-import { api, baseURL } from '../../shared/apis/server';
+import { api } from '../../shared/apis/server';
 import Button from '../../shared/styledComponent/Button';
 import paymentPage from '../../img/payment_page_temp.png';
 import { AuthContext } from '../../shared/context/auth-context';
@@ -11,11 +11,11 @@ import { AuthContext } from '../../shared/context/auth-context';
 const Payment = () => {
   let history = useHistory();
   const { eventId } = useParams();
-  const { userId, token } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
   const [reservedSeats, setreservedSeats] = useState([]);
 
   const getCapacity = useCallback(async () => {
-    const { data } = await api.get(`${baseURL}/events/${eventId}`);
+    const { data } = await api.get(`/events/${eventId}`);
     return data.data.data.capacity;
   }, [eventId]);
 
@@ -62,9 +62,7 @@ const Payment = () => {
     await getReservedSeats(userId);
     const data = { eventId, userId, reservedSeats };
 
-    await api.post(`${baseURL}/bookings`, data, {
-      headers: { authorization: `Bearer ${token}` },
-    });
+    await api.post(`/bookings`, data);
 
     history.push('/');
   };

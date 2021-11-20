@@ -9,7 +9,7 @@ import {
 import { imageAddress } from '../../shared/apis/server';
 import { setMediaQuery } from '../../shared/styledComponent/mediaQueries';
 
-const ShowImages = ({ images, baseUrl }) => {
+const ShowImages = ({ images }) => {
   return (
     <Wrapper>
       {images.map(

@@ -5,7 +5,7 @@ import {
   useReducer,
   useCallback,
 } from 'react';
-import { api, baseURL } from '../apis/server';
+import { api } from '../apis/server';
 import { AuthContext } from '../context/auth-context';
 
 const seatsReducer = (state, action) => {
@@ -55,7 +55,7 @@ const seatsReducer = (state, action) => {
 };
 
 export const useSeats = () => {
-  const { userId, token } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
 
   const [clicked, setclicked] = useState(false);
   const [addAgain, setaddAgain] = useState(false);
@@ -78,7 +78,7 @@ export const useSeats = () => {
     async () => {
       if (!activeEvent || isSending) return;
       setisSending(true);
-      const result = await api.get(`${baseURL}/events/${activeEvent.id}`);
+      const result = await api.get(`/events/${activeEvent.id}`);
 
       setisSending(false);
 
@@ -344,13 +344,11 @@ export const useSeats = () => {
   };
 
   const reserveSeats = async (selectedSeats, duration) => {
-    const result = await api.patch(
-      `${baseURL}/events/${activeEvent.id}/reserveSeat`,
-      { selectedSeats, userId, duration },
-      {
-        headers: { authorization: `Bearer ${token}` },
-      }
-    );
+    const result = await api.patch(`/events/${activeEvent.id}/reserveSeat`, {
+      selectedSeats,
+      userId,
+      duration,
+    });
     const { capacity } = result.data.data.data;
     setReservedSeatsOfCurrentUser(getReservedSeatsOfCurrentUser(capacity));
   };

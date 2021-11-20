@@ -102,7 +102,7 @@ const Account = () => {
               className='acount-view__photo'
               src={
                 userPhoto && userPhoto !== 'default.jpg'
-                  ? `${imageAddress}users/${userPhoto}`
+                  ? `${imageAddress}/users/${userPhoto}`
                   : randomApi(userId)
               }
               alt={username}

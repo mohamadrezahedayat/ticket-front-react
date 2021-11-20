@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import {
   api,
@@ -6,15 +6,11 @@ import {
   randomApi,
   imageAddress,
 } from '../../shared/apis/server';
-import { Heading3 } from '../../shared/styledComponent/Typography';
 import { DeleteIcon, Edit } from '../../shared/components/UIElements/Svgs';
-import { AuthContext } from '../../shared/context/auth-context';
 import AddEditShow from './AddEditShow';
 import Table from './Table';
 
 const ManageShows = () => {
-  const { token } = useContext(AuthContext);
-
   const [name, setname] = useState();
   const [shows, setshows] = useState([]);
   const [editMode, seteditMode] = useState(false);
@@ -26,18 +22,14 @@ const ManageShows = () => {
     like += `name=${name || '.'},`;
     like += `description=${description || '.'}`;
     like += `]`;
-    const { data } = await api.get(`${baseURL}/shows?${like}&limit=20`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const { data } = await api.get(`${baseURL}/shows?${like}&limit=20`);
     setshows(data.data.data);
-  }, [description, name, token]);
+  }, [description, name]);
 
   const deleteShowHandler = async (show) => {
     const { data } = await api.get(`${baseURL}/events?show=${show._id}`);
     if (data.results === 0) {
-      await api.delete(`${baseURL}/shows/${show._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`${baseURL}/shows/${show._id}`);
       getShows();
     } else console.log(`Can't delete! \nthis show has ${data.results} events`);
     // todo throws error and remove console.log()
@@ -127,7 +119,6 @@ const ManageShows = () => {
   };
   return (
     <>
-      {!editMode && <Heading3>Manage Shows</Heading3>}
       {!editMode && renderTable()}
       {editMode && (
         <AddEditShow

@@ -1,76 +1,28 @@
 import React from 'react';
-import {
-  Route,
-  Switch,
-  Redirect,
-  BrowserRouter as Router,
-} from 'react-router-dom';
 
-import Home from './home/pages/Home';
-import Auth from './user/pages/Auth';
-import Account from './user/pages/Account';
-import Payment from './payment/pages/Payment';
-import BookEvent from './event/pages/BookEvent';
+import Router from './Router';
 import { useAuth } from './shared/hooks/auth-hook';
-import EventDetail from './event/pages/EventDetail';
 import { AuthContext } from './shared/context/auth-context';
 
 const App = () => {
-  const {
-    userPhoto,
-    username,
-    userId,
-    mobile,
-    email,
-    token,
-    role,
-    login,
-    logout,
-  } = useAuth();
-
-  const routes = () => {
-    return (
-      <Switch>
-        <Route path='/' exact>
-          <Home />
-        </Route>
-        <Route path='/auth'>
-          <Auth />
-        </Route>
-        <Route path='/account'>
-          {!!token ? <Account /> : <Redirect to='/auth' exact />}
-        </Route>
-        <Route path='/eventDetail/:showId' exact>
-          <EventDetail />
-        </Route>
-        <Route path='/bookEvent/:showId' exact>
-          <BookEvent />
-        </Route>
-        <Route path='/payment/:eventId' exact>
-          {!!token ? <Payment /> : <Redirect to='/auth' exact />}
-        </Route>
-
-        <Redirect to='/' exact />
-      </Switch>
-    );
-  };
+  const { userPhoto, username, userId, mobile, email, role, login, logout } =
+    useAuth();
 
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: !!token,
+        isLoggedIn: !!username,
         userPhoto,
         username,
         mobile,
         userId,
         email,
-        token,
         role,
         login,
         logout,
       }}
     >
-      <Router>{routes()}</Router>
+      <Router />
     </AuthContext.Provider>
   );
 };

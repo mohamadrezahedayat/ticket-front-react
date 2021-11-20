@@ -1,29 +1,20 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {
-  api,
-  baseURL,
-  randomApi,
-  imageAddress,
-} from '../../shared/apis/server';
+import { api, randomApi, imageAddress } from '../../shared/apis/server';
 import { QRCode } from 'react-qrcode-logo';
-import { AuthContext } from '../../shared/context/auth-context';
 import { SaveIcon, ViewIcon } from '../../shared/components/UIElements/Svgs';
 import Table from './Table';
 
 const MyPayments = () => {
-  const { token } = useContext(AuthContext);
   const [tickets, settickets] = useState([]);
 
   useEffect(() => {
     const getUserTickets = async () => {
-      const { data } = await api.get(`${baseURL}/bookings/myTickets`, {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const { data } = await api.get(`/bookings/myTickets`);
       settickets(data.data.data);
     };
     getUserTickets();
-  }, [token]);
+  }, []);
 
   const renderHeader = () => {
     let headerElement = [

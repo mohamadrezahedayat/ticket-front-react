@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react';
+import React, { Fragment, useState, useEffect, useCallback } from 'react';
 
 import {
   api,
@@ -19,7 +13,6 @@ import {
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
-import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
 import { Heading3 } from '../../shared/styledComponent/Typography';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -32,7 +25,6 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
   const [manager, setmanager] = useState(editMode && show.manager[0]._id);
   const [artgroups, setartgroups] = useState([]);
   const [managers, setmanagers] = useState([]);
-  const { token } = useContext(AuthContext);
   const [formState, inputHandler] = useForm(
     {
       name: {
@@ -64,14 +56,11 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
   // get list of managers to render manager lists
   const getManagers = useCallback(async () => {
     const { data } = await api.get(
-      `${baseURL}/users?role=show-manager&fields=name,_id`,
-      {
-        headers: { authorization: `Bearer ${token}` },
-      }
+      `${baseURL}/users?role=show-manager&fields=name,_id`
     );
     setmanagers(data.data.data);
     !editMode && setmanager(data.data.data[0]._id);
-  }, [token, editMode]);
+  }, [editMode]);
 
   // set artgroups and managers state in first render
   useEffect(() => {
@@ -101,14 +90,10 @@ const AddEditShow = ({ editMode, show, onFinish, onEdit }) => {
       formData.append('artGroup', artgroup);
 
       if (!editMode) {
-        await sendRequest(`${baseURL}/shows/`, 'POST', formData, {
-          authorization: `Bearer ${token}`,
-        });
+        await sendRequest(`${baseURL}/shows/`, 'POST', formData);
         onFinish();
       } else {
-        await sendRequest(`${baseURL}/shows/${show._id}`, 'PATCH', formData, {
-          authorization: `Bearer ${token}`,
-        });
+        await sendRequest(`${baseURL}/shows/${show._id}`, 'PATCH', formData);
         onEdit();
       }
     } catch (err) {}

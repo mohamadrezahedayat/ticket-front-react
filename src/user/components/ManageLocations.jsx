@@ -1,19 +1,12 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import {
-  api,
-  baseURL,
-  randomApi,
-  imageAddress,
-} from '../../shared/apis/server';
+import { api, randomApi, imageAddress } from '../../shared/apis/server';
 import { DeleteIcon, Edit } from '../../shared/components/UIElements/Svgs';
-import { AuthContext } from '../../shared/context/auth-context';
 import { Heading3 } from '../../shared/styledComponent/Typography';
 import AddEditLocation from './AddEditLocation';
 import Table from './Table';
 
 const ManageLocations = () => {
-  const { token } = useContext(AuthContext);
   const [name, setname] = useState();
   const [type, settype] = useState();
   const [city, setcity] = useState();
@@ -31,20 +24,14 @@ const ManageLocations = () => {
     like += `address=${address || '.'},`;
     like += `description=${description || '.'}`;
     like += `]`;
-    const { data } = await api.get(`${baseURL}/locations?${like}&limit=20`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const { data } = await api.get(`/locations?${like}&limit=20`);
     setlocations(data.data.data);
-  }, [address, city, description, name, token, type]);
+  }, [address, city, description, name, type]);
 
   const deleteLocationHandler = async (location) => {
-    const { data } = await api.get(
-      `${baseURL}/events?location=${location._id}`
-    );
+    const { data } = await api.get(`/events?location=${location._id}`);
     if (data.results === 0) {
-      await api.delete(`${baseURL}/locations/${location._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/locations/${location._id}`);
       getLocations();
     } else
       console.log(`Can't delete! \nthis location has ${data.results} events`);

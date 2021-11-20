@@ -8,13 +8,16 @@ import {
 } from '../../shared/util/validators';
 import GridLayout from '../components/GridLayout';
 import { baseURL } from '../../shared/apis/server';
+import Div from '../../shared/styledComponent/Div';
 import { useForm } from '../../shared/hooks/form-hook';
 import FormContainer from '../components/FormContainer';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
+import { Colors } from '../../shared/styledComponent/variables';
 import { AuthContext } from '../../shared/context/auth-context';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
 import Button from '../../shared/components/FormElements/Button';
+import { GoogleIcon } from '../../shared/components/UIElements/Svgs';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { Span, Heading4 } from '../../shared/styledComponent/Typography';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
@@ -95,14 +98,13 @@ const Auth = () => {
             'Content-Type': 'application/json',
           }
         );
-        const { data, token } = responseData;
+        const { data } = responseData;
         login(
           data.user._id,
           data.user.email,
           data.user.mobile,
           data.user.name,
           data.user.photo,
-          token,
           new Date(new Date().getTime() + 1000 * 60 * 60),
           data.user.role
         );
@@ -122,7 +124,7 @@ const Auth = () => {
         formData.append('mobile', mobile.value);
         formData.append('password', password.value);
         formData.append('passwordConfirm', passwordConfirm.value);
-        const { data, token } = await sendRequest(
+        const { data } = await sendRequest(
           `${baseURL}/users/signup`,
           'POST',
           formData
@@ -134,7 +136,6 @@ const Auth = () => {
           data.user.mobile,
           data.user.name,
           data.user.photo,
-          token,
           new Date(new Date().getTime() + 1000 * 60 * 60),
           data.user.role
         );
@@ -246,6 +247,24 @@ const Auth = () => {
             </Heading4>
           )}
         </form>
+        {
+          <Div
+            border={{
+              position: 'top',
+              width: '1px',
+              style: 'solid',
+              color: `${Colors.primary}`,
+            }}
+            width='100%'
+            SingleMargin='top,1rem'
+            row
+          >
+            <Heading4>
+              {true ? 'Log out from Google' : 'Login with Google'}
+            </Heading4>
+            <GoogleIcon className='googleIcon' onClick={() => {}} />
+          </Div>
+        }
       </FormContainer>
     </GridLayout>
   );

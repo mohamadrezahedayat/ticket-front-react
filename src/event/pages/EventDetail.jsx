@@ -11,7 +11,7 @@ import Footer from '../../shared/styledComponent/Footer';
 import Button from '../../shared/styledComponent/Button';
 import LocationImages from '../components/LocationImages';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
-import { api, baseURL, imageAddress } from '../../shared/apis/server';
+import { api, imageAddress } from '../../shared/apis/server';
 import {
   Screen,
   setMediaQuery,
@@ -24,10 +24,10 @@ const EventDetail = () => {
   const [location, setlocation] = useState(false);
 
   const getEvents = useCallback(async () => {
-    const { data } = await api.get(`${baseURL}/events?show=${showId}`);
+    const { data } = await api.get(`/events?show=${showId}`);
     setevents(data.data.data);
-    setshow(data.data.data[0].show);
-    setlocation(data.data.data[0].location);
+    setshow(data.data.data[0]?.show);
+    setlocation(data.data.data[0]?.location);
   }, [showId]);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const EventDetail = () => {
   return (
     <EventDetailWrapper>
       <Sidebar />
-      <ShowCover image={show && `${imageAddress}shows/${show.imageCover}`} />
+      <ShowCover image={show && `${imageAddress}/shows/${show.imageCover}`} />
       <Button className='buy1'>
         <Link className='link' to={`/bookEvent/${showId}`}>
           Buy Ticket

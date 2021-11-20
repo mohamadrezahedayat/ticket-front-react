@@ -1,17 +1,11 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import {
-  api,
-  baseURL,
-  randomApi,
-  imageAddress,
-} from '../../shared/apis/server';
 import {
   Edit,
   SeatSvg,
   DeleteIcon,
 } from '../../shared/components/UIElements/Svgs';
-import { AuthContext } from '../../shared/context/auth-context';
+import { api, randomApi, imageAddress } from '../../shared/apis/server';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 import { useSeats } from '../../shared/hooks/manageSeats-hook';
 import AddEditEvent from './AddEditEvent';
@@ -19,8 +13,6 @@ import EditSeats from './EditSeats';
 import Table from './Table';
 
 const ManageEvents = () => {
-  const { token } = useContext(AuthContext);
-
   const [events, setevents] = useState([]);
   const [editMode, seteditMode] = useState(false);
   const [editSeatsMode, seteditSeatsMode] = useState(false);
@@ -48,17 +40,13 @@ const ManageEvents = () => {
   } = useSeats();
 
   const getEvents = useCallback(async () => {
-    const { data } = await api.get(`${baseURL}/events`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const { data } = await api.get(`/events`);
     setevents(data.data.data);
-  }, [token]);
+  }, []);
 
   const deleteEventHandler = async (event) => {
     // todo check ticket sold
-    await api.delete(`${baseURL}/events/${event._id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await api.delete(`/events/${event._id}`);
     getEvents();
   };
 

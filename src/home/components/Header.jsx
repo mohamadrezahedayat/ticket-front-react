@@ -25,7 +25,7 @@ import Button from '../../shared/styledComponent/Button';
 import concertVideo from '../../img/concert_video_bg.mp4';
 import { Colors } from '../../shared/styledComponent/variables';
 import { Screen } from '../../shared/styledComponent/mediaQueries';
-import { api, baseURL, imageAddress } from '../../shared/apis/server';
+import { api, imageAddress } from '../../shared/apis/server';
 
 const Header = () => {
   const [diskImage, setdiskImage] = useState();
@@ -35,10 +35,11 @@ const Header = () => {
 
   useEffect(() => {
     const getLastShowEvent = async () => {
-      const res = await api.get(`${baseURL}/events?fields=show&limit=1`);
-      const showId = res.data.data.data[0].show.id;
+      const result = await api.get(`/events?fields=show&limit=1`);
 
-      const { data } = await api.get(`${baseURL}/shows?_id=${showId}`);
+      const showId = result.data.data.data[0].show.id;
+
+      const { data } = await api.get(`/shows?_id=${showId}`);
       const show = data.data.data[0];
       setcurrentShow(show);
     };
@@ -47,7 +48,7 @@ const Header = () => {
 
   useEffect(() => {
     if (!currentShow) return;
-    setdiskImage(`${imageAddress}artists/${currentShow.artGroup.images[0]}`);
+    setdiskImage(`${imageAddress}/artists/${currentShow.artGroup.images[0]}`);
 
     const dates = currentShow.events.map((event) => event.startDate);
     seteventDates(dates);

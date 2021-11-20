@@ -1,26 +1,22 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { QRCode } from 'react-qrcode-logo';
+import { api } from '../../shared/apis/server';
 import Ticket from '../../event/components/Ticket';
 import Div from '../../shared/styledComponent/Div';
-import { api, baseURL } from '../../shared/apis/server';
-import { AuthContext } from '../../shared/context/auth-context';
 import { Colors } from '../../shared/styledComponent/variables';
 import { Heading3 } from '../../shared/styledComponent/Typography';
 
 const MyTickets = () => {
-  const { token } = useContext(AuthContext);
   const [tickets, settickets] = useState([]);
 
   useEffect(() => {
     const getUserTickets = async () => {
-      const data = await api.get(`${baseURL}/bookings/myTickets`, {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const data = await api.get(`/bookings/myTickets`);
       settickets(data.data.data.data);
     };
     getUserTickets();
-  }, [token]);
+  }, []);
 
   return (
     <div>

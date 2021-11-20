@@ -14,7 +14,6 @@ import Input from '../../shared/styledComponent/Input';
 import Button from '../../shared/styledComponent/Button';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { Colors } from '../../shared/styledComponent/variables';
-import { AuthContext } from '../../shared/context/auth-context';
 import { Checkbox2 } from '../../shared/styledComponent/Checkbox';
 import {
   setBackgroundColor,
@@ -30,7 +29,6 @@ const EditSeats = ({ event, onEdit }) => {
   const { capacity } = event;
   const [width, setwidth] = useState();
   const [rowMax, setrowMax] = useState();
-  const { token } = useContext(AuthContext);
   const [columnMax, setcolumnMax] = useState();
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
   const {
@@ -108,7 +106,6 @@ const EditSeats = ({ event, onEdit }) => {
         }),
         {
           'Content-Type': 'application/json',
-          authorization: `Bearer ${token}`,
         }
       );
     } catch (error) {

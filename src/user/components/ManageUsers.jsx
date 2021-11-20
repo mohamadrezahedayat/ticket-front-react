@@ -1,19 +1,11 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-import {
-  api,
-  baseURL,
-  randomApi,
-  imageAddress,
-} from '../../shared/apis/server';
+import { api, randomApi, imageAddress } from '../../shared/apis/server';
 import Table from './Table';
 import EditUser from './EditUser';
 import { Edit } from '../../shared/components/UIElements/Svgs';
-import { AuthContext } from '../../shared/context/auth-context';
 
 const ManageUsers = () => {
-  const { token } = useContext(AuthContext);
-
   const [role, setrole] = useState();
   const [name, setname] = useState();
   const [email, setemail] = useState();
@@ -31,13 +23,10 @@ const ManageUsers = () => {
     like += `]`;
 
     const { data } = await api.get(
-      `${baseURL}/users?${like}&fields=-passwordChangedAt&limit=20`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      `/users?${like}&fields=-passwordChangedAt&limit=20`
     );
     setusers(data.data.data);
-  }, [token, role, email, mobile, name]);
+  }, [role, email, mobile, name]);
 
   useEffect(() => {
     const timeout = setTimeout(getUsers, 300);

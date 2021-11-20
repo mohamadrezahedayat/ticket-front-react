@@ -31,7 +31,7 @@ const Shows = () => {
             <img
               className='card__image'
               alt={show.name}
-              src={`${imageAddress}shows/${show.imageCover}`}
+              src={`${imageAddress}/shows/${show.imageCover}`}
             />
           </div>
           <div className='card__details'>

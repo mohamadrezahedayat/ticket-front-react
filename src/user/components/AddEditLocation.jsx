@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 
 import {
   VALIDATOR_MIN,
@@ -9,7 +9,6 @@ import ZoneInputs from './ZoneInputs';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
-import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
 import { Heading3 } from '../../shared/styledComponent/Typography';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -18,7 +17,6 @@ import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
-  const { token } = useContext(AuthContext);
   const [locationType, setlocationType] = useState(
     !editMode ? 'concert' : location.type
   );
@@ -162,17 +160,12 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
       formData.append('capacity', JSON.stringify(capacityArray));
 
       if (!editMode) {
-        await sendRequest(`${baseURL}/locations/`, 'POST', formData, {
-          authorization: `Bearer ${token}`,
-        });
+        await sendRequest(`${baseURL}/locations/`, 'POST', formData);
       } else {
         await sendRequest(
           `${baseURL}/locations/${location._id}`,
           'PATCH',
-          formData,
-          {
-            authorization: `Bearer ${token}`,
-          }
+          formData
         );
       }
 
@@ -277,7 +270,7 @@ const AddEditLocation = ({ editMode, location, onFinish, onEdit }) => {
             className='form__input--inline'
             imageUrl={
               editMode && location.images && location.images.length !== 0
-                ? `${imageAddress}locations/${location.images[0]}`
+                ? `${imageAddress}/locations/${location.images[0]}`
                 : randomApi('images')
             }
             initialValid={editMode}

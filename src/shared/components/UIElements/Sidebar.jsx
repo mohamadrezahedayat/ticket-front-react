@@ -22,10 +22,10 @@ const Sidebar = () => {
     <img
       src={
         userPhoto && userPhoto !== 'default.jpg'
-          ? `${imageAddress}users/${userPhoto}`
+          ? `${imageAddress}/users/${userPhoto}`
           : randomApi(userId)
       }
-      alt={username}
+      alt={username || 'avatar'}
     />
   );
 

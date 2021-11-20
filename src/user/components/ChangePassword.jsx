@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import Input from '../../shared/components/FormElements/Input';
 import { useForm } from '../../shared/hooks/form-hook';
@@ -6,12 +6,10 @@ import { baseURL } from '../../shared/apis/server';
 import { VALIDATOR_MINLENGTH } from '../../shared/util/validators';
 import Button from '../../shared/components/FormElements/Button';
 import { useHttpClient } from '../../shared/hooks/http-hook';
-import { AuthContext } from '../../shared/context/auth-context';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
 const ChangePassword = ({ onFinish }) => {
-  const { token } = useContext(AuthContext);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
@@ -45,7 +43,6 @@ const ChangePassword = ({ onFinish }) => {
         }),
         {
           'Content-Type': 'application/json',
-          authorization: `Bearer ${token}`,
         }
       );
 

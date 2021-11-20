@@ -8,7 +8,7 @@ import SeatSelection from '../components/SeatSelection';
 import Footer from '../../shared/styledComponent/Footer';
 import { useSeats } from '../../shared/hooks/manageSeats-hook';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
-import { api, baseURL, imageAddress } from '../../shared/apis/server';
+import { api, imageAddress } from '../../shared/apis/server';
 import { manageSeatsContext } from '../../shared/context/manage-seats-context';
 
 const BookEvent = () => {
@@ -19,7 +19,7 @@ const BookEvent = () => {
   const [events, setevents] = useState(false);
 
   const getEvents = useCallback(async () => {
-    const { data } = await api.get(`${baseURL}/events?show=${showId}`);
+    const { data } = await api.get(`/events?show=${showId}`);
     setdate(data.data.data[0].startDate);
     setshow(data.data.data[0].show);
     setevents(data.data.data);
@@ -32,7 +32,7 @@ const BookEvent = () => {
   return (
     <BookEventWrapper>
       <Sidebar />
-      <ShowCover image={show && `${imageAddress}shows/${show.imageCover}`} />
+      <ShowCover image={show && `${imageAddress}/shows/${show.imageCover}`} />
       {events && (
         <Date
           enable

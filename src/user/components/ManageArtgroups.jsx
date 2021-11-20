@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import {
   api,
@@ -8,12 +8,9 @@ import {
 } from '../../shared/apis/server';
 import Table from './Table';
 import AddEditArtgroup from './AddEditArtgroup';
-import { AuthContext } from '../../shared/context/auth-context';
 import { DeleteIcon, Edit } from '../../shared/components/UIElements/Svgs';
 
 const ManageArtgroups = () => {
-  const { token } = useContext(AuthContext);
-
   const [name, setname] = useState();
   const [crew, setcrew] = useState();
   const [leader, setleader] = useState();
@@ -29,18 +26,14 @@ const ManageArtgroups = () => {
     like += `crew=${crew || '.'},`;
     like += `description=${description || '.'}`;
     like += `]`;
-    const { data } = await api.get(`${baseURL}/artgroups?${like}&limit=20`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const { data } = await api.get(`${baseURL}/artgroups?${like}&limit=20`);
     setartGroups(data.data.data);
-  }, [crew, description, leader, name, token]);
+  }, [crew, description, leader, name]);
 
   const deleteArtGroupHandler = async (artGroup) => {
     const { data } = await api.get(`${baseURL}/shows?artGroup=${artGroup._id}`);
     if (data.results === 0) {
-      await api.delete(`${baseURL}/artgroups/${artGroup._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`${baseURL}/artgroups/${artGroup._id}`);
       getArtGroups();
     } else console.log(`Can't delete! \nthis artist has ${data.results} shows`);
     // todo throws error and remove console.log()

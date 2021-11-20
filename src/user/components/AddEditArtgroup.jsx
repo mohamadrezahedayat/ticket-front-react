@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react';
+import React, { Fragment } from 'react';
 
 import {
   VALIDATOR_MAXLENGTH,
@@ -7,7 +7,6 @@ import {
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
-import { AuthContext } from '../../shared/context/auth-context';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
@@ -15,7 +14,6 @@ import { baseURL, randomApi, imageAddress } from '../../shared/apis/server';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const AddEditArtgroup = ({ editMode, artGroup, onFinish, onEdit }) => {
-  const { token } = useContext(AuthContext);
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
@@ -70,18 +68,13 @@ const AddEditArtgroup = ({ editMode, artGroup, onFinish, onEdit }) => {
         }
 
       if (!editMode) {
-        await sendRequest(`${baseURL}/artgroups/`, 'POST', formData, {
-          authorization: `Bearer ${token}`,
-        });
+        await sendRequest(`${baseURL}/artgroups/`, 'POST', formData);
         onFinish();
       } else {
         await sendRequest(
           `${baseURL}/artgroups/${artGroup._id}`,
           'PATCH',
-          formData,
-          {
-            authorization: `Bearer ${token}`,
-          }
+          formData
         );
         onEdit();
       }
