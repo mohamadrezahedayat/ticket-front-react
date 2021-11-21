@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import {
@@ -7,17 +7,17 @@ import {
   VALIDATOR_MINLENGTH,
 } from '../../shared/util/validators';
 import GridLayout from '../components/GridLayout';
-import { baseURL } from '../../shared/apis/server';
 import Div from '../../shared/styledComponent/Div';
 import { useForm } from '../../shared/hooks/form-hook';
 import FormContainer from '../components/FormContainer';
+import googleLogin from '../../img/login-with-google.jpg';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Input from '../../shared/components/FormElements/Input';
+import { baseURL, AuthFullUrl } from '../../shared/apis/server';
 import { Colors } from '../../shared/styledComponent/variables';
 import { AuthContext } from '../../shared/context/auth-context';
 import Sidebar from '../../shared/components/UIElements/Sidebar';
 import Button from '../../shared/components/FormElements/Button';
-import { GoogleIcon } from '../../shared/components/UIElements/Svgs';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { Span, Heading4 } from '../../shared/styledComponent/Typography';
 import ImageUpload from '../../shared/components/FormElements/ImageUpload';
@@ -25,9 +25,13 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const Auth = () => {
   const history = useHistory();
-  const { login } = useContext(AuthContext);
+  const { login, isLoggedin } = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  useEffect(() => {
+    if (isLoggedin) history.push('/account');
+  }, [history, isLoggedin]);
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -99,15 +103,14 @@ const Auth = () => {
           }
         );
         const { data } = responseData;
-        login(
-          data.user._id,
-          data.user.email,
-          data.user.mobile,
-          data.user.name,
-          data.user.photo,
-          new Date(new Date().getTime() + 1000 * 60 * 60),
-          data.user.role
-        );
+        login({
+          _id: data.user._id,
+          email: data.user.email,
+          mobile: data.user.mobile,
+          name: data.user.name,
+          photo: data.user.photo,
+          role: data.user.role,
+        });
         history.push('/account');
       } catch (err) {}
     } else {
@@ -130,19 +133,22 @@ const Auth = () => {
           formData
         );
 
-        login(
-          data.user._id,
-          data.user.email,
-          data.user.mobile,
-          data.user.name,
-          data.user.photo,
-          new Date(new Date().getTime() + 1000 * 60 * 60),
-          data.user.role
-        );
+        login({
+          _id: data.user._id,
+          email: data.user.email,
+          mobile: data.user.mobile,
+          name: data.user.name,
+          photo: data.user.photo,
+          role: data.user.role,
+        });
 
         history.push('/account');
       } catch (err) {}
     }
+  };
+
+  const loginWithGoogle = () => {
+    window.open(`${AuthFullUrl}/google`, '_self');
   };
 
   return (
@@ -248,21 +254,13 @@ const Auth = () => {
           )}
         </form>
         {
-          <Div
-            border={{
-              position: 'top',
-              width: '1px',
-              style: 'solid',
-              color: `${Colors.primary}`,
-            }}
-            width='100%'
-            SingleMargin='top,1rem'
-            row
-          >
-            <Heading4>
-              {true ? 'Log out from Google' : 'Login with Google'}
-            </Heading4>
-            <GoogleIcon className='googleIcon' onClick={() => {}} />
+          <Div width='100%' SingleMargin='top,1rem'>
+            <img
+              src={googleLogin}
+              alt='loginByGoogle'
+              className='google-login'
+              onClick={loginWithGoogle}
+            />
           </Div>
         }
       </FormContainer>

@@ -5,19 +5,13 @@ import { useAuth } from './shared/hooks/auth-hook';
 import { AuthContext } from './shared/context/auth-context';
 
 const App = () => {
-  const { userPhoto, username, userId, mobile, email, role, login, logout } =
-    useAuth();
+  const { user, isLoggedin, login, logout } = useAuth();
 
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn: !!username,
-        userPhoto,
-        username,
-        mobile,
-        userId,
-        email,
-        role,
+        user,
+        isLoggedin,
         login,
         logout,
       }}

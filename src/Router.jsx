@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 
 import Auth from './user/pages/Auth';
@@ -11,28 +11,18 @@ import { AuthContext } from './shared/context/auth-context';
 import { BrowserRouter } from 'react-router-dom';
 
 const Router = () => {
-  const { isLoggedIn } = useContext(AuthContext);
-  const [isloggedin, setisloggedin] = useState(false);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      setisloggedin(true);
-      return;
-    }
-    setisloggedin(false);
-  }, [isLoggedIn]);
-
+  const { isLoggedin } = useContext(AuthContext);
   return (
     <BrowserRouter>
       <Switch>
         <Route path='/' exact>
           <Home />
         </Route>
-        <Route path='/auth'>
+        <Route path='/authentication'>
           <Auth />
         </Route>
         <Route path='/account'>
-          {isloggedin ? <Account /> : <Redirect to='/auth' exact />}
+          {isLoggedin ? <Account /> : <Redirect to='/authentication' exact />}
         </Route>
         <Route path='/eventDetail/:showId' exact>
           <EventDetail />
@@ -41,7 +31,7 @@ const Router = () => {
           <BookEvent />
         </Route>
         <Route path='/payment/:eventId' exact>
-          {isloggedin ? <Payment /> : <Redirect to='/auth' exact />}
+          {isLoggedin ? <Payment /> : <Redirect to='/authentication' exact />}
         </Route>
 
         <Redirect to='/' exact />

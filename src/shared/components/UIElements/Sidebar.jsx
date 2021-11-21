@@ -14,19 +14,19 @@ import { imageAddress, randomApi } from '../../apis/server';
 import { Screen } from '../../styledComponent/mediaQueries';
 
 const Sidebar = () => {
-  const { isLoggedIn, userPhoto, username, userId } = useContext(AuthContext);
+  const { isLoggedin, user } = useContext(AuthContext);
 
-  const profileIcon = !isLoggedIn ? (
+  const getUserPhoto = () => {
+    if (!user.photo || user.photo === 'default.jpg') return randomApi(user._id);
+    if (user.photo.startsWith('user-'))
+      return `${imageAddress}/users/${user.photo}`;
+    return user.photo;
+  };
+
+  const profileIcon = !isLoggedin ? (
     <UserIcon />
   ) : (
-    <img
-      src={
-        userPhoto && userPhoto !== 'default.jpg'
-          ? `${imageAddress}/users/${userPhoto}`
-          : randomApi(userId)
-      }
-      alt={username || 'avatar'}
-    />
+    <img src={getUserPhoto()} alt={user.name || 'avatar'} />
   );
 
   return (
@@ -39,7 +39,9 @@ const Sidebar = () => {
         </div>
 
         <div className='navigation__button'>
-          <Link to={!isLoggedIn ? '/auth' : '/account'}>{profileIcon}</Link>
+          <Link to={!isLoggedin ? '/authentication' : '/account'}>
+            {profileIcon}
+          </Link>
         </div>
 
         <input

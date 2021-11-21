@@ -42,6 +42,7 @@ const Input = (props) => {
     placeholder,
     initialValue,
     initialValid,
+    autoComplete,
   } = props;
 
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -79,6 +80,7 @@ const Input = (props) => {
         onChange={changeHandler}
         onBlur={touchHandler}
         value={inputState.value}
+        autoComplete={autoComplete}
       />
     ) : (
       <textarea

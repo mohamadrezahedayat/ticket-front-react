@@ -7,10 +7,10 @@ import { setBoxShadow } from '../../shared/styledComponent/functions';
 import { Screen } from '../../shared/styledComponent/mediaQueries';
 
 const Accordions = ({ setFormName }) => {
-  const { logout, role } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
 
   const renderAccordions = () => {
-    if (role === 'user' || role === 'show-manager') {
+    if (user.role === 'user' || user.role === 'show-manager') {
       return (
         <div className='accordion-wrapper'>
           <Accordion
@@ -50,7 +50,7 @@ const Accordions = ({ setFormName }) => {
         </div>
       );
     }
-    if (role === 'admin') {
+    if (user.role === 'admin') {
       return (
         <div className='accordion-wrapper'>
           <Accordion
@@ -158,7 +158,7 @@ const Accordions = ({ setFormName }) => {
     }
   };
 
-  return <AccordionWrapper>{renderAccordions(role)}</AccordionWrapper>;
+  return <AccordionWrapper>{renderAccordions(user.role)}</AccordionWrapper>;
 };
 
 export default Accordions;

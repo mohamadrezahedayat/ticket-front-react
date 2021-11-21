@@ -1,91 +1,72 @@
 import { useCallback, useState, useEffect } from 'react';
+import { authApi } from '../apis/server';
 
 let logoutTimer;
 
 export const useAuth = () => {
-  const [role, setRole] = useState('user');
-  const [email, setEmail] = useState(false);
-  const [userId, setUserId] = useState(false);
-  const [mobile, setMobile] = useState(false);
-  const [username, setUsername] = useState(false);
-  const [userPhoto, setUserPhoto] = useState(false);
-  const [expirationDate, setExpirationDate] = useState(false);
+  const [user, setuser] = useState({});
+  const [isLoggedin, setisLoggedin] = useState(false);
 
-  const login = useCallback(
-    (userId, email, mobile, username, photo, expDate, role) => {
-      const expiration =
-        expDate || new Date(new Date().getTime() + 1000 * 8 * 60 * 60);
-      setExpirationDate(expiration);
-      setUserId(userId);
-      setEmail(email);
-      setMobile(mobile);
-      setUsername(username);
-      setUserPhoto(photo);
-      setRole(role);
+  const login = useCallback((user, _expDate) => {
+    const expDate =
+      _expDate || new Date(new Date().getTime() + 1000 * 8 * 60 * 60);
+    localStorage.setItem(
+      'userData',
+      JSON.stringify({ ...user, expirationDate: expDate.toISOString() })
+    );
 
-      localStorage.setItem(
-        'userData',
-        JSON.stringify({
-          userId,
-          username,
-          email,
-          mobile,
-          photo,
-          expirationDate: expiration.toISOString(),
-          role,
-        })
-      );
-    },
-    []
-  );
-
-  const logout = useCallback(() => {
-    setUserId(null);
-    setUsername(null);
-    setUserPhoto(null);
-    setMobile(null);
-    setEmail(null);
-    setExpirationDate(null);
-    setRole(null);
-    localStorage.removeItem('userData');
+    setuser({ ...user, expirationDate: expDate });
+    setisLoggedin(true);
   }, []);
 
+  const logout = useCallback((alsoInBackend = true) => {
+    localStorage.removeItem('userData');
+    setuser({});
+    setisLoggedin(false);
+    if (alsoInBackend) authApi.get('/google/logout');
+  }, []);
+
+  const getUserFromPassport = useCallback(async () => {
+    const { data } = await authApi.get('/current_user');
+    if (data._id) {
+      login(data);
+    }
+  }, [login]);
+
+  // [startup: local storage] check local storage if already loggedin
   useEffect(() => {
-    if (expirationDate) {
-      const remainingTime = expirationDate.getTime() - new Date().getTime();
+    const storedData = JSON.parse(localStorage.getItem('userData'));
+    if (!storedData?._id) return;
+    const expDate = new Date(storedData.expirationDate);
+    if (expDate < new Date()) {
+      logout(false);
+      return;
+    }
+    setuser(storedData);
+    setisLoggedin(true);
+  }, [logout]);
+
+  // [startup: google auth] send request to server to findout if google auth is logged on
+  useEffect(() => {
+    if (isLoggedin) return;
+    getUserFromPassport();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getUserFromPassport]);
+
+  // create and run a timer to automatically logout in expiration time
+  useEffect(() => {
+    if (user?.expirationDate) {
+      const remainingTime =
+        new Date(user.expirationDate).getTime() - new Date().getTime();
       logoutTimer = setTimeout(logout, remainingTime);
     } else {
       clearTimeout(logoutTimer);
     }
-  }, [logout, expirationDate]);
-
-  useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem('userData'));
-    if (
-      storedData?.userId &&
-      new Date(storedData.expirationDate) > new Date()
-    ) {
-      login(
-        storedData.userId,
-        storedData.email,
-        storedData.mobile,
-        storedData.username,
-        storedData.photo,
-        new Date(storedData.expirationDate),
-        storedData.role
-      );
-    } else {
-      setUserId(null);
-    }
-  }, [login]);
+  }, [logout, user?.expirationDate]);
 
   return {
-    userId,
-    userPhoto,
-    username,
-    email,
-    mobile,
-    role,
+    user,
+    isLoggedin,
     login,
     logout,
   };

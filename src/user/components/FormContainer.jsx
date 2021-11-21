@@ -312,11 +312,10 @@ const Container = styled.div`
       }
     }
   }
-  .googleIcon {
-    width: 5rem;
+  .google-login {
+    width: 100%;
+    height: 5rem;
     margin: 1rem 0.5rem;
-    fill: #dc4b39;
-    text-align: center;
     ${setBoxShadow()}
     ${setCursor('pointer')}
     &:hover {

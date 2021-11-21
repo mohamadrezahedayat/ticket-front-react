@@ -22,8 +22,15 @@ import Sidebar from '../../shared/components/UIElements/Sidebar';
 import { imageAddress, randomApi } from '../../shared/apis/server';
 
 const Account = () => {
-  const { username, userPhoto, userId } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [formName, setFormName] = useState(false);
+
+  const getUserPhoto = () => {
+    if (!user.photo || user.photo === 'default.jpg') return randomApi(user._id);
+    if (user.photo.startsWith('user-'))
+      return `${imageAddress}/users/${user.photo}`;
+    return user.photo;
+  };
 
   const renderForm = () => {
     let form, header;
@@ -100,12 +107,8 @@ const Account = () => {
             <div className='acount-view__detail'></div>
             <img
               className='acount-view__photo'
-              src={
-                userPhoto && userPhoto !== 'default.jpg'
-                  ? `${imageAddress}/users/${userPhoto}`
-                  : randomApi(userId)
-              }
-              alt={username}
+              src={getUserPhoto()}
+              alt={user.name}
             />
           </div>
         );
@@ -115,7 +118,7 @@ const Account = () => {
       <FormContainer
         gridColumn='6 / -2'
         gridColumnTabLand='5 / -2'
-        header={header ? header : username}
+        header={header ? header : user.name}
       >
         {form}
       </FormContainer>
